@@ -1,0 +1,179 @@
+/*
+ * Copyright 2025 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.google.genai.types.interactions.tools;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.google.auto.value.AutoValue;
+import com.google.errorprone.annotations.CanIgnoreReturnValue;
+import com.google.genai.JsonSerializable;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
+/**
+ * MCP (Model Context Protocol) server tool for the Interactions API.
+ *
+ * <p>Enables the model to interact with an MCP server.
+ *
+ * <p>Example usage:
+ *
+ * <pre>{@code
+ * McpServerTool mcpTool = McpServerTool.builder()
+ *     .name("my-mcp-server")
+ *     .url("https://mcp.example.com/endpoint")
+ *     .build();
+ * }</pre>
+ *
+ * <p>Note: The Interactions API is in beta and subject to change.
+ */
+@AutoValue
+@JsonDeserialize(builder = McpServerTool.Builder.class)
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
+@JsonTypeName("mcp_server")
+public abstract class McpServerTool extends JsonSerializable implements InteractionTool {
+
+  /** The name of the MCP server. */
+  @JsonProperty("name")
+  public abstract Optional<String> name();
+
+  /** The URL of the MCP server endpoint. */
+  @JsonProperty("url")
+  public abstract Optional<String> url();
+
+  /** Optional headers to include in requests to the MCP server. */
+  @JsonProperty("headers")
+  public abstract Optional<Map<String, String>> headers();
+
+  /** List of allowed tools from the MCP server. If empty, all tools are allowed. */
+  @JsonProperty("allowedTools")
+  public abstract Optional<List<String>> allowedTools();
+
+  /** Instantiates a builder for McpServerTool. */
+  
+  public static Builder builder() {
+    return new AutoValue_McpServerTool.Builder();
+  }
+
+  /** Creates a builder with the same values as this instance. */
+  public abstract Builder toBuilder();
+
+  /** Builder for McpServerTool. */
+  @AutoValue.Builder
+  public abstract static class Builder {
+    /** For internal usage. Please use {@code McpServerTool.builder()} for instantiation. */
+    @JsonCreator
+    private static Builder create() {
+      return new AutoValue_McpServerTool.Builder();
+    }
+
+    /**
+     * Setter for name.
+     *
+     * <p>name: The name of the MCP server.
+     */
+    @JsonProperty("name")
+    public abstract Builder name(String name);
+
+    
+    abstract Builder name(Optional<String> name);
+
+    /** Clears the value of name field. */
+    
+    @CanIgnoreReturnValue
+    public Builder clearName() {
+      return name(Optional.empty());
+    }
+
+    /**
+     * Setter for url.
+     *
+     * <p>url: The URL of the MCP server endpoint.
+     */
+    @JsonProperty("url")
+    public abstract Builder url(String url);
+
+    
+    abstract Builder url(Optional<String> url);
+
+    /** Clears the value of url field. */
+    
+    @CanIgnoreReturnValue
+    public Builder clearUrl() {
+      return url(Optional.empty());
+    }
+
+    /**
+     * Setter for headers.
+     *
+     * <p>headers: Optional headers to include in requests.
+     */
+    @JsonProperty("headers")
+    public abstract Builder headers(Map<String, String> headers);
+
+    
+    abstract Builder headers(Optional<Map<String, String>> headers);
+
+    /** Clears the value of headers field. */
+    
+    @CanIgnoreReturnValue
+    public Builder clearHeaders() {
+      return headers(Optional.empty());
+    }
+
+    /**
+     * Setter for allowedTools.
+     *
+     * <p>allowedTools: List of allowed tools from the MCP server.
+     */
+    @JsonProperty("allowedTools")
+    public abstract Builder allowedTools(List<String> allowedTools);
+
+    /**
+     * Setter for allowedTools (varargs convenience method).
+     *
+     * <p>allowedTools: List of allowed tools from the MCP server.
+     */
+    @CanIgnoreReturnValue
+    public Builder allowedTools(String... allowedTools) {
+      return allowedTools(Arrays.asList(allowedTools));
+    }
+
+    
+    abstract Builder allowedTools(Optional<List<String>> allowedTools);
+
+    /** Clears the value of allowedTools field. */
+    
+    @CanIgnoreReturnValue
+    public Builder clearAllowedTools() {
+      return allowedTools(Optional.empty());
+    }
+
+    public abstract McpServerTool build();
+  }
+
+  /** Deserializes a JSON string to a McpServerTool object. */
+  
+  public static McpServerTool fromJson(String jsonString) {
+    return JsonSerializable.fromJsonString(jsonString, McpServerTool.class);
+  }
+}

@@ -1,0 +1,129 @@
+/*
+ * Copyright 2025 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.google.genai.types.interactions;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.google.auto.value.AutoValue;
+import com.google.errorprone.annotations.CanIgnoreReturnValue;
+import com.google.genai.JsonSerializable;
+import java.util.Map;
+import java.util.Optional;
+
+@AutoValue
+@JsonDeserialize(builder = McpServerToolCallContent.Builder.class)
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
+@JsonTypeName("mcp_server_tool_call")
+public abstract class McpServerToolCallContent extends JsonSerializable
+    implements InteractionContent {
+
+  @JsonProperty("name")
+  public abstract Optional<String> name();
+
+  @JsonProperty("server_name")
+  public abstract Optional<String> serverName();
+
+  @JsonProperty("arguments")
+  public abstract Optional<Map<String, Object>> arguments();
+
+  @JsonProperty("id")
+  public abstract Optional<String> id();
+
+  @ExcludeFromGeneratedCoverageReport
+  public static Builder builder() {
+    return new AutoValue_McpServerToolCallContent.Builder();
+  }
+
+  public abstract Builder toBuilder();
+
+  @AutoValue.Builder
+  public abstract static class Builder {
+    @JsonCreator
+    private static Builder create() {
+      return new AutoValue_McpServerToolCallContent.Builder();
+    }
+
+    @JsonProperty("name")
+    public abstract Builder name(String name);
+
+    @ExcludeFromGeneratedCoverageReport
+    abstract Builder name(Optional<String> name);
+
+    @ExcludeFromGeneratedCoverageReport
+    @CanIgnoreReturnValue
+    public Builder clearName() {
+      return name(Optional.empty());
+    }
+
+    @JsonProperty("server_name")
+    public abstract Builder serverName(String serverName);
+
+    @ExcludeFromGeneratedCoverageReport
+    abstract Builder serverName(Optional<String> serverName);
+
+    @ExcludeFromGeneratedCoverageReport
+    @CanIgnoreReturnValue
+    public Builder clearServerName() {
+      return serverName(Optional.empty());
+    }
+
+    @JsonProperty("arguments")
+    public abstract Builder arguments(Map<String, Object> arguments);
+
+    @ExcludeFromGeneratedCoverageReport
+    abstract Builder arguments(Optional<Map<String, Object>> arguments);
+
+    @ExcludeFromGeneratedCoverageReport
+    @CanIgnoreReturnValue
+    public Builder clearArguments() {
+      return arguments(Optional.empty());
+    }
+
+    @JsonProperty("id")
+    public abstract Builder id(String id);
+
+    @ExcludeFromGeneratedCoverageReport
+    abstract Builder id(Optional<String> id);
+
+    @ExcludeFromGeneratedCoverageReport
+    @CanIgnoreReturnValue
+    public Builder clearId() {
+      return id(Optional.empty());
+    }
+
+    public abstract McpServerToolCallContent build();
+  }
+
+  @ExcludeFromGeneratedCoverageReport
+  public static McpServerToolCallContent fromJson(String jsonString) {
+    return JsonSerializable.fromJsonString(jsonString, McpServerToolCallContent.class);
+  }
+
+  @ExcludeFromGeneratedCoverageReport
+  public static McpServerToolCallContent of(
+      String name, String serverName, Map<String, Object> arguments, String id) {
+    return builder()
+        .name(name)
+        .serverName(serverName)
+        .arguments(arguments)
+        .id(id)
+        .build();
+  }
+}
