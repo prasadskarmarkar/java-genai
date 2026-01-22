@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.genai.types.interactions;
+package com.google.genai.types.interactions.content;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -24,21 +24,26 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.google.auto.value.AutoValue;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import com.google.genai.JsonSerializable;
+import com.google.genai.types.ExcludeFromGeneratedCoverageReport;
+import com.google.genai.types.interactions.CodeExecutionCallArguments;
 import java.util.Optional;
 
 @AutoValue
-@JsonDeserialize(builder = FileSearchResultContent.Builder.class)
+@JsonDeserialize(builder = CodeExecutionCallContent.Builder.class)
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
-@JsonTypeName("file_search_result")
-public abstract class FileSearchResultContent extends JsonSerializable
+@JsonTypeName("code_execution_call")
+public abstract class CodeExecutionCallContent extends JsonSerializable
     implements InteractionContent {
 
-  @JsonProperty("result")
-  public abstract Optional<FileSearchResult> result();
+  @JsonProperty("arguments")
+  public abstract Optional<CodeExecutionCallArguments> arguments();
+
+  @JsonProperty("id")
+  public abstract Optional<String> id();
 
   @ExcludeFromGeneratedCoverageReport
   public static Builder builder() {
-    return new AutoValue_FileSearchResultContent.Builder();
+    return new AutoValue_CodeExecutionCallContent.Builder();
   }
 
   public abstract Builder toBuilder();
@@ -47,31 +52,47 @@ public abstract class FileSearchResultContent extends JsonSerializable
   public abstract static class Builder {
     @JsonCreator
     private static Builder create() {
-      return new AutoValue_FileSearchResultContent.Builder();
+      return new AutoValue_CodeExecutionCallContent.Builder();
     }
 
-    @JsonProperty("result")
-    public abstract Builder result(FileSearchResult result);
+    @JsonProperty("arguments")
+    public abstract Builder arguments(CodeExecutionCallArguments arguments);
 
     @ExcludeFromGeneratedCoverageReport
-    abstract Builder result(Optional<FileSearchResult> result);
+    abstract Builder arguments(Optional<CodeExecutionCallArguments> arguments);
 
     @ExcludeFromGeneratedCoverageReport
     @CanIgnoreReturnValue
-    public Builder clearResult() {
-      return result(Optional.empty());
+    public Builder clearArguments() {
+      return arguments(Optional.empty());
     }
 
-    public abstract FileSearchResultContent build();
+    @JsonProperty("id")
+    public abstract Builder id(String id);
+
+    @ExcludeFromGeneratedCoverageReport
+    abstract Builder id(Optional<String> id);
+
+    @ExcludeFromGeneratedCoverageReport
+    @CanIgnoreReturnValue
+    public Builder clearId() {
+      return id(Optional.empty());
+    }
+
+    public abstract CodeExecutionCallContent build();
   }
 
   @ExcludeFromGeneratedCoverageReport
-  public static FileSearchResultContent fromJson(String jsonString) {
-    return JsonSerializable.fromJsonString(jsonString, FileSearchResultContent.class);
+  public static CodeExecutionCallContent fromJson(String jsonString) {
+    return JsonSerializable.fromJsonString(jsonString, CodeExecutionCallContent.class);
   }
 
   @ExcludeFromGeneratedCoverageReport
-  public static FileSearchResultContent of(FileSearchResult result) {
-    return builder().result(result).build();
+  public static CodeExecutionCallContent of(
+      String language, String code, String id) {
+    return builder()
+        .arguments(CodeExecutionCallArguments.of(language, code))
+        .id(id)
+        .build();
   }
 }

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.genai.types.interactions;
+package com.google.genai.types.interactions.content;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -24,20 +24,23 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.google.auto.value.AutoValue;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import com.google.genai.JsonSerializable;
+import com.google.genai.types.ExcludeFromGeneratedCoverageReport;
+import com.google.genai.types.interactions.GoogleSearchResult;
+import java.util.List;
 import java.util.Optional;
 
 @AutoValue
-@JsonDeserialize(builder = UrlContextResultContent.Builder.class)
+@JsonDeserialize(builder = GoogleSearchResultContent.Builder.class)
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
-@JsonTypeName("url_context_result")
-public abstract class UrlContextResultContent extends JsonSerializable
+@JsonTypeName("google_search_result")
+public abstract class GoogleSearchResultContent extends JsonSerializable
     implements InteractionContent {
 
   @JsonProperty("signature")
   public abstract Optional<String> signature();
 
   @JsonProperty("result")
-  public abstract Optional<UrlContextResult> result();
+  public abstract Optional<List<GoogleSearchResult>> result();
 
   @JsonProperty("is_error")
   public abstract Optional<Boolean> isError();
@@ -47,7 +50,7 @@ public abstract class UrlContextResultContent extends JsonSerializable
 
   @ExcludeFromGeneratedCoverageReport
   public static Builder builder() {
-    return new AutoValue_UrlContextResultContent.Builder();
+    return new AutoValue_GoogleSearchResultContent.Builder();
   }
 
   public abstract Builder toBuilder();
@@ -56,7 +59,7 @@ public abstract class UrlContextResultContent extends JsonSerializable
   public abstract static class Builder {
     @JsonCreator
     private static Builder create() {
-      return new AutoValue_UrlContextResultContent.Builder();
+      return new AutoValue_GoogleSearchResultContent.Builder();
     }
 
     @JsonProperty("signature")
@@ -72,10 +75,10 @@ public abstract class UrlContextResultContent extends JsonSerializable
     }
 
     @JsonProperty("result")
-    public abstract Builder result(UrlContextResult result);
+    public abstract Builder result(List<GoogleSearchResult> result);
 
     @ExcludeFromGeneratedCoverageReport
-    abstract Builder result(Optional<UrlContextResult> result);
+    abstract Builder result(Optional<List<GoogleSearchResult>> result);
 
     @ExcludeFromGeneratedCoverageReport
     @CanIgnoreReturnValue
@@ -107,16 +110,16 @@ public abstract class UrlContextResultContent extends JsonSerializable
       return callId(Optional.empty());
     }
 
-    public abstract UrlContextResultContent build();
+    public abstract GoogleSearchResultContent build();
   }
 
   @ExcludeFromGeneratedCoverageReport
-  public static UrlContextResultContent fromJson(String jsonString) {
-    return JsonSerializable.fromJsonString(jsonString, UrlContextResultContent.class);
+  public static GoogleSearchResultContent fromJson(String jsonString) {
+    return JsonSerializable.fromJsonString(jsonString, GoogleSearchResultContent.class);
   }
 
   @ExcludeFromGeneratedCoverageReport
-  public static UrlContextResultContent of(UrlContextResult result, String callId) {
+  public static GoogleSearchResultContent of(List<GoogleSearchResult> result, String callId) {
     return builder().result(result).callId(callId).isError(false).build();
   }
 }

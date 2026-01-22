@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.genai.types.interactions;
+package com.google.genai.types.interactions.content;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -24,13 +24,14 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.google.auto.value.AutoValue;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import com.google.genai.JsonSerializable;
+import com.google.genai.types.ExcludeFromGeneratedCoverageReport;
 import java.util.Optional;
 
 @AutoValue
-@JsonDeserialize(builder = ImageContent.Builder.class)
+@JsonDeserialize(builder = DocumentContent.Builder.class)
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
-@JsonTypeName("image")
-public abstract class ImageContent extends JsonSerializable implements InteractionContent {
+@JsonTypeName("document")
+public abstract class DocumentContent extends JsonSerializable implements InteractionContent {
 
   @JsonProperty("data")
   public abstract Optional<String> data();
@@ -41,12 +42,9 @@ public abstract class ImageContent extends JsonSerializable implements Interacti
   @JsonProperty("mime_type")
   public abstract Optional<String> mimeType();
 
-  @JsonProperty("resolution")
-  public abstract Optional<String> resolution();
-
   @ExcludeFromGeneratedCoverageReport
   public static Builder builder() {
-    return new AutoValue_ImageContent.Builder();
+    return new AutoValue_DocumentContent.Builder();
   }
 
   public abstract Builder toBuilder();
@@ -55,7 +53,7 @@ public abstract class ImageContent extends JsonSerializable implements Interacti
   public abstract static class Builder {
     @JsonCreator
     private static Builder create() {
-      return new AutoValue_ImageContent.Builder();
+      return new AutoValue_DocumentContent.Builder();
     }
 
     @JsonProperty("data")
@@ -94,33 +92,21 @@ public abstract class ImageContent extends JsonSerializable implements Interacti
       return mimeType(Optional.empty());
     }
 
-    @JsonProperty("resolution")
-    public abstract Builder resolution(String resolution);
-
-    @ExcludeFromGeneratedCoverageReport
-    abstract Builder resolution(Optional<String> resolution);
-
-    @ExcludeFromGeneratedCoverageReport
-    @CanIgnoreReturnValue
-    public Builder clearResolution() {
-      return resolution(Optional.empty());
-    }
-
-    public abstract ImageContent build();
+    public abstract DocumentContent build();
   }
 
   @ExcludeFromGeneratedCoverageReport
-  public static ImageContent fromJson(String jsonString) {
-    return JsonSerializable.fromJsonString(jsonString, ImageContent.class);
+  public static DocumentContent fromJson(String jsonString) {
+    return JsonSerializable.fromJsonString(jsonString, DocumentContent.class);
   }
 
   @ExcludeFromGeneratedCoverageReport
-  public static ImageContent fromData(String data, String mimeType) {
+  public static DocumentContent fromData(String data, String mimeType) {
     return builder().data(data).mimeType(mimeType).build();
   }
 
   @ExcludeFromGeneratedCoverageReport
-  public static ImageContent fromUri(String uri, String mimeType) {
+  public static DocumentContent fromUri(String uri, String mimeType) {
     return builder().uri(uri).mimeType(mimeType).build();
   }
 }

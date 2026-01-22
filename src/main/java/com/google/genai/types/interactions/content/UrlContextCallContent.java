@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.genai.types.interactions;
+package com.google.genai.types.interactions.content;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -24,25 +24,27 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.google.auto.value.AutoValue;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import com.google.genai.JsonSerializable;
+import com.google.genai.types.ExcludeFromGeneratedCoverageReport;
+import com.google.genai.types.interactions.UrlContextCallArguments;
 import java.util.List;
 import java.util.Optional;
 
 @AutoValue
-@JsonDeserialize(builder = GoogleSearchCallContent.Builder.class)
+@JsonDeserialize(builder = UrlContextCallContent.Builder.class)
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
-@JsonTypeName("google_search_call")
-public abstract class GoogleSearchCallContent extends JsonSerializable
+@JsonTypeName("url_context_call")
+public abstract class UrlContextCallContent extends JsonSerializable
     implements InteractionContent {
 
   @JsonProperty("arguments")
-  public abstract Optional<GoogleSearchCallArguments> arguments();
+  public abstract Optional<UrlContextCallArguments> arguments();
 
   @JsonProperty("id")
   public abstract Optional<String> id();
 
   @ExcludeFromGeneratedCoverageReport
   public static Builder builder() {
-    return new AutoValue_GoogleSearchCallContent.Builder();
+    return new AutoValue_UrlContextCallContent.Builder();
   }
 
   public abstract Builder toBuilder();
@@ -51,14 +53,14 @@ public abstract class GoogleSearchCallContent extends JsonSerializable
   public abstract static class Builder {
     @JsonCreator
     private static Builder create() {
-      return new AutoValue_GoogleSearchCallContent.Builder();
+      return new AutoValue_UrlContextCallContent.Builder();
     }
 
     @JsonProperty("arguments")
-    public abstract Builder arguments(GoogleSearchCallArguments arguments);
+    public abstract Builder arguments(UrlContextCallArguments arguments);
 
     @ExcludeFromGeneratedCoverageReport
-    abstract Builder arguments(Optional<GoogleSearchCallArguments> arguments);
+    abstract Builder arguments(Optional<UrlContextCallArguments> arguments);
 
     @ExcludeFromGeneratedCoverageReport
     @CanIgnoreReturnValue
@@ -78,18 +80,18 @@ public abstract class GoogleSearchCallContent extends JsonSerializable
       return id(Optional.empty());
     }
 
-    public abstract GoogleSearchCallContent build();
+    public abstract UrlContextCallContent build();
   }
 
   @ExcludeFromGeneratedCoverageReport
-  public static GoogleSearchCallContent fromJson(String jsonString) {
-    return JsonSerializable.fromJsonString(jsonString, GoogleSearchCallContent.class);
+  public static UrlContextCallContent fromJson(String jsonString) {
+    return JsonSerializable.fromJsonString(jsonString, UrlContextCallContent.class);
   }
 
   @ExcludeFromGeneratedCoverageReport
-  public static GoogleSearchCallContent of(List<String> queries, String id) {
+  public static UrlContextCallContent of(List<String> urls, String id) {
     return builder()
-        .arguments(GoogleSearchCallArguments.of(queries))
+        .arguments(UrlContextCallArguments.of(urls))
         .id(id)
         .build();
   }

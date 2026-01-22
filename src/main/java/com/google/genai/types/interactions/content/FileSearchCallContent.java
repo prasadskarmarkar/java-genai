@@ -14,26 +14,32 @@
  * limitations under the License.
  */
 
-package com.google.genai.types.interactions;
+package com.google.genai.types.interactions.content;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.google.auto.value.AutoValue;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import com.google.genai.JsonSerializable;
+import com.google.genai.types.ExcludeFromGeneratedCoverageReport;
 import java.util.Optional;
 
 @AutoValue
-@JsonDeserialize(builder = ThoughtSummary.Builder.class)
-public abstract class ThoughtSummary extends JsonSerializable {
+@JsonDeserialize(builder = FileSearchCallContent.Builder.class)
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
+@JsonTypeName("file_search_call")
+public abstract class FileSearchCallContent extends JsonSerializable
+    implements InteractionContent {
 
-  @JsonProperty("text")
-  public abstract Optional<String> text();
+  @JsonProperty("id")
+  public abstract Optional<String> id();
 
   @ExcludeFromGeneratedCoverageReport
   public static Builder builder() {
-    return new AutoValue_ThoughtSummary.Builder();
+    return new AutoValue_FileSearchCallContent.Builder();
   }
 
   public abstract Builder toBuilder();
@@ -42,31 +48,33 @@ public abstract class ThoughtSummary extends JsonSerializable {
   public abstract static class Builder {
     @JsonCreator
     private static Builder create() {
-      return new AutoValue_ThoughtSummary.Builder();
+      return new AutoValue_FileSearchCallContent.Builder();
     }
 
-    @JsonProperty("text")
-    public abstract Builder text(String text);
+    @JsonProperty("id")
+    public abstract Builder id(String id);
 
     @ExcludeFromGeneratedCoverageReport
-    abstract Builder text(Optional<String> text);
+    abstract Builder id(Optional<String> id);
 
     @ExcludeFromGeneratedCoverageReport
     @CanIgnoreReturnValue
-    public Builder clearText() {
-      return text(Optional.empty());
+    public Builder clearId() {
+      return id(Optional.empty());
     }
 
-    public abstract ThoughtSummary build();
+    public abstract FileSearchCallContent build();
   }
 
   @ExcludeFromGeneratedCoverageReport
-  public static ThoughtSummary fromJson(String jsonString) {
-    return JsonSerializable.fromJsonString(jsonString, ThoughtSummary.class);
+  public static FileSearchCallContent fromJson(String jsonString) {
+    return JsonSerializable.fromJsonString(jsonString, FileSearchCallContent.class);
   }
 
   @ExcludeFromGeneratedCoverageReport
-  public static ThoughtSummary of(String text) {
-    return builder().text(text).build();
+  public static FileSearchCallContent of(String id) {
+    return builder()
+        .id(id)
+        .build();
   }
 }

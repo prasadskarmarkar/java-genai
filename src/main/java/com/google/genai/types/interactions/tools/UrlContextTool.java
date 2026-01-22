@@ -22,6 +22,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.google.auto.value.AutoValue;
 import com.google.genai.JsonSerializable;
+import com.google.genai.types.ExcludeFromGeneratedCoverageReport;
 
 
 /**
@@ -45,6 +46,7 @@ public abstract class UrlContextTool extends JsonSerializable implements Interac
 
   /** Instantiates a builder for UrlContextTool. */
   
+  @ExcludeFromGeneratedCoverageReport
   public static Builder builder() {
     return new AutoValue_UrlContextTool.Builder();
   }
@@ -66,6 +68,7 @@ public abstract class UrlContextTool extends JsonSerializable implements Interac
 
   /** Deserializes a JSON string to a UrlContextTool object. */
   
+  @ExcludeFromGeneratedCoverageReport
   public static UrlContextTool fromJson(String jsonString) {
     return JsonSerializable.fromJsonString(jsonString, UrlContextTool.class);
   }

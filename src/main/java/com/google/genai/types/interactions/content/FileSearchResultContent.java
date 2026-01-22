@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.genai.types.interactions;
+package com.google.genai.types.interactions.content;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -24,25 +24,23 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.google.auto.value.AutoValue;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import com.google.genai.JsonSerializable;
-import java.util.List;
+import com.google.genai.types.ExcludeFromGeneratedCoverageReport;
+import com.google.genai.types.interactions.FileSearchResult;
 import java.util.Optional;
 
 @AutoValue
-@JsonDeserialize(builder = UrlContextCallContent.Builder.class)
+@JsonDeserialize(builder = FileSearchResultContent.Builder.class)
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
-@JsonTypeName("url_context_call")
-public abstract class UrlContextCallContent extends JsonSerializable
+@JsonTypeName("file_search_result")
+public abstract class FileSearchResultContent extends JsonSerializable
     implements InteractionContent {
 
-  @JsonProperty("arguments")
-  public abstract Optional<UrlContextCallArguments> arguments();
-
-  @JsonProperty("id")
-  public abstract Optional<String> id();
+  @JsonProperty("result")
+  public abstract Optional<FileSearchResult> result();
 
   @ExcludeFromGeneratedCoverageReport
   public static Builder builder() {
-    return new AutoValue_UrlContextCallContent.Builder();
+    return new AutoValue_FileSearchResultContent.Builder();
   }
 
   public abstract Builder toBuilder();
@@ -51,46 +49,31 @@ public abstract class UrlContextCallContent extends JsonSerializable
   public abstract static class Builder {
     @JsonCreator
     private static Builder create() {
-      return new AutoValue_UrlContextCallContent.Builder();
+      return new AutoValue_FileSearchResultContent.Builder();
     }
 
-    @JsonProperty("arguments")
-    public abstract Builder arguments(UrlContextCallArguments arguments);
+    @JsonProperty("result")
+    public abstract Builder result(FileSearchResult result);
 
     @ExcludeFromGeneratedCoverageReport
-    abstract Builder arguments(Optional<UrlContextCallArguments> arguments);
+    abstract Builder result(Optional<FileSearchResult> result);
 
     @ExcludeFromGeneratedCoverageReport
     @CanIgnoreReturnValue
-    public Builder clearArguments() {
-      return arguments(Optional.empty());
+    public Builder clearResult() {
+      return result(Optional.empty());
     }
 
-    @JsonProperty("id")
-    public abstract Builder id(String id);
-
-    @ExcludeFromGeneratedCoverageReport
-    abstract Builder id(Optional<String> id);
-
-    @ExcludeFromGeneratedCoverageReport
-    @CanIgnoreReturnValue
-    public Builder clearId() {
-      return id(Optional.empty());
-    }
-
-    public abstract UrlContextCallContent build();
+    public abstract FileSearchResultContent build();
   }
 
   @ExcludeFromGeneratedCoverageReport
-  public static UrlContextCallContent fromJson(String jsonString) {
-    return JsonSerializable.fromJsonString(jsonString, UrlContextCallContent.class);
+  public static FileSearchResultContent fromJson(String jsonString) {
+    return JsonSerializable.fromJsonString(jsonString, FileSearchResultContent.class);
   }
 
   @ExcludeFromGeneratedCoverageReport
-  public static UrlContextCallContent of(List<String> urls, String id) {
-    return builder()
-        .arguments(UrlContextCallArguments.of(urls))
-        .id(id)
-        .build();
+  public static FileSearchResultContent of(FileSearchResult result) {
+    return builder().result(result).build();
   }
 }

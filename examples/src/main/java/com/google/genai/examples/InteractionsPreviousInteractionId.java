@@ -38,8 +38,8 @@ import com.google.genai.Client;
 import com.google.genai.types.CreateInteractionConfig;
 import com.google.genai.types.GetInteractionConfig;
 import com.google.genai.types.Interaction;
-import com.google.genai.types.interactions.InteractionContent;
-import com.google.genai.types.interactions.TextContent;
+import com.google.genai.types.interactions.content.InteractionContent;
+import com.google.genai.types.interactions.content.TextContent;
 
 /**
  * Example 4: Conversation Continuity with previousInteractionId

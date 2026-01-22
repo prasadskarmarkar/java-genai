@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.genai.types.interactions;
+package com.google.genai.types.interactions.content;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -24,13 +24,14 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.google.auto.value.AutoValue;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import com.google.genai.JsonSerializable;
+import com.google.genai.types.ExcludeFromGeneratedCoverageReport;
 import java.util.Optional;
 
 @AutoValue
-@JsonDeserialize(builder = DocumentContent.Builder.class)
+@JsonDeserialize(builder = AudioContent.Builder.class)
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
-@JsonTypeName("document")
-public abstract class DocumentContent extends JsonSerializable implements InteractionContent {
+@JsonTypeName("audio")
+public abstract class AudioContent extends JsonSerializable implements InteractionContent {
 
   @JsonProperty("data")
   public abstract Optional<String> data();
@@ -43,7 +44,7 @@ public abstract class DocumentContent extends JsonSerializable implements Intera
 
   @ExcludeFromGeneratedCoverageReport
   public static Builder builder() {
-    return new AutoValue_DocumentContent.Builder();
+    return new AutoValue_AudioContent.Builder();
   }
 
   public abstract Builder toBuilder();
@@ -52,7 +53,7 @@ public abstract class DocumentContent extends JsonSerializable implements Intera
   public abstract static class Builder {
     @JsonCreator
     private static Builder create() {
-      return new AutoValue_DocumentContent.Builder();
+      return new AutoValue_AudioContent.Builder();
     }
 
     @JsonProperty("data")
@@ -91,21 +92,21 @@ public abstract class DocumentContent extends JsonSerializable implements Intera
       return mimeType(Optional.empty());
     }
 
-    public abstract DocumentContent build();
+    public abstract AudioContent build();
   }
 
   @ExcludeFromGeneratedCoverageReport
-  public static DocumentContent fromJson(String jsonString) {
-    return JsonSerializable.fromJsonString(jsonString, DocumentContent.class);
+  public static AudioContent fromJson(String jsonString) {
+    return JsonSerializable.fromJsonString(jsonString, AudioContent.class);
   }
 
   @ExcludeFromGeneratedCoverageReport
-  public static DocumentContent fromData(String data, String mimeType) {
+  public static AudioContent fromData(String data, String mimeType) {
     return builder().data(data).mimeType(mimeType).build();
   }
 
   @ExcludeFromGeneratedCoverageReport
-  public static DocumentContent fromUri(String uri, String mimeType) {
+  public static AudioContent fromUri(String uri, String mimeType) {
     return builder().uri(uri).mimeType(mimeType).build();
   }
 }

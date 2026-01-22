@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.genai.types.interactions;
+package com.google.genai.types.interactions.content;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -24,13 +24,14 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.google.auto.value.AutoValue;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import com.google.genai.JsonSerializable;
+import com.google.genai.types.ExcludeFromGeneratedCoverageReport;
 import java.util.Optional;
 
 @AutoValue
-@JsonDeserialize(builder = VideoContent.Builder.class)
+@JsonDeserialize(builder = ImageContent.Builder.class)
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
-@JsonTypeName("video")
-public abstract class VideoContent extends JsonSerializable implements InteractionContent {
+@JsonTypeName("image")
+public abstract class ImageContent extends JsonSerializable implements InteractionContent {
 
   @JsonProperty("data")
   public abstract Optional<String> data();
@@ -46,7 +47,7 @@ public abstract class VideoContent extends JsonSerializable implements Interacti
 
   @ExcludeFromGeneratedCoverageReport
   public static Builder builder() {
-    return new AutoValue_VideoContent.Builder();
+    return new AutoValue_ImageContent.Builder();
   }
 
   public abstract Builder toBuilder();
@@ -55,7 +56,7 @@ public abstract class VideoContent extends JsonSerializable implements Interacti
   public abstract static class Builder {
     @JsonCreator
     private static Builder create() {
-      return new AutoValue_VideoContent.Builder();
+      return new AutoValue_ImageContent.Builder();
     }
 
     @JsonProperty("data")
@@ -106,21 +107,21 @@ public abstract class VideoContent extends JsonSerializable implements Interacti
       return resolution(Optional.empty());
     }
 
-    public abstract VideoContent build();
+    public abstract ImageContent build();
   }
 
   @ExcludeFromGeneratedCoverageReport
-  public static VideoContent fromJson(String jsonString) {
-    return JsonSerializable.fromJsonString(jsonString, VideoContent.class);
+  public static ImageContent fromJson(String jsonString) {
+    return JsonSerializable.fromJsonString(jsonString, ImageContent.class);
   }
 
   @ExcludeFromGeneratedCoverageReport
-  public static VideoContent fromData(String data, String mimeType) {
+  public static ImageContent fromData(String data, String mimeType) {
     return builder().data(data).mimeType(mimeType).build();
   }
 
   @ExcludeFromGeneratedCoverageReport
-  public static VideoContent fromUri(String uri, String mimeType) {
+  public static ImageContent fromUri(String uri, String mimeType) {
     return builder().uri(uri).mimeType(mimeType).build();
   }
 }

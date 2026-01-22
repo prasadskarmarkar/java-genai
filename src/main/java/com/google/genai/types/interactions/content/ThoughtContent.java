@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.genai.types.interactions;
+package com.google.genai.types.interactions.content;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -24,30 +24,26 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.google.auto.value.AutoValue;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import com.google.genai.JsonSerializable;
+import com.google.genai.types.ExcludeFromGeneratedCoverageReport;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 @AutoValue
-@JsonDeserialize(builder = CodeExecutionResultContent.Builder.class)
+@JsonDeserialize(builder = ThoughtContent.Builder.class)
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
-@JsonTypeName("code_execution_result")
-public abstract class CodeExecutionResultContent extends JsonSerializable
-    implements InteractionContent {
-
-  @JsonProperty("result")
-  public abstract Optional<String> result();
-
-  @JsonProperty("is_error")
-  public abstract Optional<Boolean> isError();
+@JsonTypeName("thought")
+public abstract class ThoughtContent extends JsonSerializable implements InteractionContent {
 
   @JsonProperty("signature")
   public abstract Optional<String> signature();
 
-  @JsonProperty("call_id")
-  public abstract Optional<String> callId();
+  @JsonProperty("summary")
+  public abstract Optional<List<InteractionContent>> summary();
 
   @ExcludeFromGeneratedCoverageReport
   public static Builder builder() {
-    return new AutoValue_CodeExecutionResultContent.Builder();
+    return new AutoValue_ThoughtContent.Builder();
   }
 
   public abstract Builder toBuilder();
@@ -56,31 +52,7 @@ public abstract class CodeExecutionResultContent extends JsonSerializable
   public abstract static class Builder {
     @JsonCreator
     private static Builder create() {
-      return new AutoValue_CodeExecutionResultContent.Builder();
-    }
-
-    @JsonProperty("result")
-    public abstract Builder result(String result);
-
-    @ExcludeFromGeneratedCoverageReport
-    abstract Builder result(Optional<String> result);
-
-    @ExcludeFromGeneratedCoverageReport
-    @CanIgnoreReturnValue
-    public Builder clearResult() {
-      return result(Optional.empty());
-    }
-
-    @JsonProperty("is_error")
-    public abstract Builder isError(Boolean isError);
-
-    @ExcludeFromGeneratedCoverageReport
-    abstract Builder isError(Optional<Boolean> isError);
-
-    @ExcludeFromGeneratedCoverageReport
-    @CanIgnoreReturnValue
-    public Builder clearIsError() {
-      return isError(Optional.empty());
+      return new AutoValue_ThoughtContent.Builder();
     }
 
     @JsonProperty("signature")
@@ -95,33 +67,39 @@ public abstract class CodeExecutionResultContent extends JsonSerializable
       return signature(Optional.empty());
     }
 
-    @JsonProperty("call_id")
-    public abstract Builder callId(String callId);
+    @JsonProperty("summary")
+    public abstract Builder summary(List<InteractionContent> summary);
 
     @ExcludeFromGeneratedCoverageReport
-    abstract Builder callId(Optional<String> callId);
+    abstract Builder summary(Optional<List<InteractionContent>> summary);
 
     @ExcludeFromGeneratedCoverageReport
     @CanIgnoreReturnValue
-    public Builder clearCallId() {
-      return callId(Optional.empty());
+    public Builder clearSummary() {
+      return summary(Optional.empty());
     }
 
-    public abstract CodeExecutionResultContent build();
+    @ExcludeFromGeneratedCoverageReport
+    @CanIgnoreReturnValue
+    public Builder summary(InteractionContent... summary) {
+      return summary(Arrays.asList(summary));
+    }
+
+    public abstract ThoughtContent build();
   }
 
   @ExcludeFromGeneratedCoverageReport
-  public static CodeExecutionResultContent fromJson(String jsonString) {
-    return JsonSerializable.fromJsonString(jsonString, CodeExecutionResultContent.class);
+  public static ThoughtContent fromJson(String jsonString) {
+    return JsonSerializable.fromJsonString(jsonString, ThoughtContent.class);
   }
 
   @ExcludeFromGeneratedCoverageReport
-  public static CodeExecutionResultContent of(String result, String callId) {
-    return builder().result(result).callId(callId).isError(false).build();
+  public static ThoughtContent of(List<InteractionContent> summary) {
+    return builder().summary(summary).build();
   }
 
   @ExcludeFromGeneratedCoverageReport
-  public static CodeExecutionResultContent ofError(String result, String callId) {
-    return builder().result(result).callId(callId).isError(true).build();
+  public static ThoughtContent of(InteractionContent... summary) {
+    return builder().summary(summary).build();
   }
 }

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.genai.types.interactions;
+package com.google.genai.types.interactions.content;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
@@ -48,6 +48,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
   @JsonSubTypes.Type(value = McpServerToolCallContent.class, name = "mcp_server_tool_call"),
   @JsonSubTypes.Type(value = McpServerToolResultContent.class, name = "mcp_server_tool_result"),
   @JsonSubTypes.Type(value = ThoughtContent.class, name = "thought"),
+  @JsonSubTypes.Type(value = FileSearchCallContent.class, name = "file_search_call"),
   @JsonSubTypes.Type(value = FileSearchResultContent.class, name = "file_search_result")
 })
 public interface InteractionContent {

@@ -22,8 +22,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.google.genai.types.interactions.InteractionInput;
-import com.google.genai.types.interactions.TextContent;
-import com.google.genai.types.interactions.ThoughtContent;
+import com.google.genai.types.interactions.content.TextContent;
+import com.google.genai.types.interactions.content.ThoughtContent;
 import java.time.Instant;
 import org.junit.jupiter.api.Test;
 

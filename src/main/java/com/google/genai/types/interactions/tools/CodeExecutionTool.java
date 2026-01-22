@@ -22,6 +22,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.google.auto.value.AutoValue;
 import com.google.genai.JsonSerializable;
+import com.google.genai.types.ExcludeFromGeneratedCoverageReport;
 
 
 /**
@@ -44,7 +45,7 @@ import com.google.genai.JsonSerializable;
 public abstract class CodeExecutionTool extends JsonSerializable implements InteractionTool {
 
   /** Instantiates a builder for CodeExecutionTool. */
-  
+  @ExcludeFromGeneratedCoverageReport
   public static Builder builder() {
     return new AutoValue_CodeExecutionTool.Builder();
   }
@@ -65,7 +66,7 @@ public abstract class CodeExecutionTool extends JsonSerializable implements Inte
   }
 
   /** Deserializes a JSON string to a CodeExecutionTool object. */
-  
+  @ExcludeFromGeneratedCoverageReport
   public static CodeExecutionTool fromJson(String jsonString) {
     return JsonSerializable.fromJsonString(jsonString, CodeExecutionTool.class);
   }

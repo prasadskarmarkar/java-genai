@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.genai.types.interactions;
+package com.google.genai.types.interactions.content;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -24,6 +24,10 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.google.auto.value.AutoValue;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import com.google.genai.JsonSerializable;
+import com.google.genai.types.ExcludeFromGeneratedCoverageReport;
+import com.google.genai.types.interactions.Annotation;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 /** Text content for interactions. */
@@ -45,6 +49,10 @@ public abstract class TextContent extends JsonSerializable implements Interactio
   /** Returns the text content. */
   @JsonProperty("text")
   public abstract Optional<String> text();
+
+  /** Returns citation information for model-generated content. */
+  @JsonProperty("annotations")
+  public abstract Optional<List<Annotation>> annotations();
 
   /** Builder for TextContent. */
   @AutoValue.Builder
@@ -71,6 +79,35 @@ public abstract class TextContent extends JsonSerializable implements Interactio
     @CanIgnoreReturnValue
     public Builder clearText() {
       return text(Optional.empty());
+    }
+
+    /**
+     * Setter for annotations.
+     *
+     * <p>annotations: Citation information for model-generated content.
+     */
+    @JsonProperty("annotations")
+    public abstract Builder annotations(List<Annotation> annotations);
+
+    @ExcludeFromGeneratedCoverageReport
+    abstract Builder annotations(Optional<List<Annotation>> annotations);
+
+    /** Clears the value of annotations field. */
+    @ExcludeFromGeneratedCoverageReport
+    @CanIgnoreReturnValue
+    public Builder clearAnnotations() {
+      return annotations(Optional.empty());
+    }
+
+    /**
+     * Setter for annotations using varargs.
+     *
+     * <p>annotations: Citation information for model-generated content.
+     */
+    @ExcludeFromGeneratedCoverageReport
+    @CanIgnoreReturnValue
+    public Builder annotations(Annotation... annotations) {
+      return annotations(Arrays.asList(annotations));
     }
 
     public abstract TextContent build();

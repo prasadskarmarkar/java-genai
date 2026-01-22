@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.genai.types.interactions;
+package com.google.genai.types.interactions.content;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -24,30 +24,31 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.google.auto.value.AutoValue;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import com.google.genai.JsonSerializable;
+import com.google.genai.types.ExcludeFromGeneratedCoverageReport;
 import java.util.Optional;
 
 @AutoValue
-@JsonDeserialize(builder = McpServerToolResultContent.Builder.class)
+@JsonDeserialize(builder = CodeExecutionResultContent.Builder.class)
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
-@JsonTypeName("mcp_server_tool_result")
-public abstract class McpServerToolResultContent extends JsonSerializable
+@JsonTypeName("code_execution_result")
+public abstract class CodeExecutionResultContent extends JsonSerializable
     implements InteractionContent {
 
-  @JsonProperty("name")
-  public abstract Optional<String> name();
-
-  @JsonProperty("server_name")
-  public abstract Optional<String> serverName();
-
   @JsonProperty("result")
-  public abstract Optional<Object> result();
+  public abstract Optional<String> result();
+
+  @JsonProperty("is_error")
+  public abstract Optional<Boolean> isError();
+
+  @JsonProperty("signature")
+  public abstract Optional<String> signature();
 
   @JsonProperty("call_id")
   public abstract Optional<String> callId();
 
   @ExcludeFromGeneratedCoverageReport
   public static Builder builder() {
-    return new AutoValue_McpServerToolResultContent.Builder();
+    return new AutoValue_CodeExecutionResultContent.Builder();
   }
 
   public abstract Builder toBuilder();
@@ -56,43 +57,43 @@ public abstract class McpServerToolResultContent extends JsonSerializable
   public abstract static class Builder {
     @JsonCreator
     private static Builder create() {
-      return new AutoValue_McpServerToolResultContent.Builder();
-    }
-
-    @JsonProperty("name")
-    public abstract Builder name(String name);
-
-    @ExcludeFromGeneratedCoverageReport
-    abstract Builder name(Optional<String> name);
-
-    @ExcludeFromGeneratedCoverageReport
-    @CanIgnoreReturnValue
-    public Builder clearName() {
-      return name(Optional.empty());
-    }
-
-    @JsonProperty("server_name")
-    public abstract Builder serverName(String serverName);
-
-    @ExcludeFromGeneratedCoverageReport
-    abstract Builder serverName(Optional<String> serverName);
-
-    @ExcludeFromGeneratedCoverageReport
-    @CanIgnoreReturnValue
-    public Builder clearServerName() {
-      return serverName(Optional.empty());
+      return new AutoValue_CodeExecutionResultContent.Builder();
     }
 
     @JsonProperty("result")
-    public abstract Builder result(Object result);
+    public abstract Builder result(String result);
 
     @ExcludeFromGeneratedCoverageReport
-    abstract Builder result(Optional<Object> result);
+    abstract Builder result(Optional<String> result);
 
     @ExcludeFromGeneratedCoverageReport
     @CanIgnoreReturnValue
     public Builder clearResult() {
       return result(Optional.empty());
+    }
+
+    @JsonProperty("is_error")
+    public abstract Builder isError(Boolean isError);
+
+    @ExcludeFromGeneratedCoverageReport
+    abstract Builder isError(Optional<Boolean> isError);
+
+    @ExcludeFromGeneratedCoverageReport
+    @CanIgnoreReturnValue
+    public Builder clearIsError() {
+      return isError(Optional.empty());
+    }
+
+    @JsonProperty("signature")
+    public abstract Builder signature(String signature);
+
+    @ExcludeFromGeneratedCoverageReport
+    abstract Builder signature(Optional<String> signature);
+
+    @ExcludeFromGeneratedCoverageReport
+    @CanIgnoreReturnValue
+    public Builder clearSignature() {
+      return signature(Optional.empty());
     }
 
     @JsonProperty("call_id")
@@ -107,22 +108,21 @@ public abstract class McpServerToolResultContent extends JsonSerializable
       return callId(Optional.empty());
     }
 
-    public abstract McpServerToolResultContent build();
+    public abstract CodeExecutionResultContent build();
   }
 
   @ExcludeFromGeneratedCoverageReport
-  public static McpServerToolResultContent fromJson(String jsonString) {
-    return JsonSerializable.fromJsonString(jsonString, McpServerToolResultContent.class);
+  public static CodeExecutionResultContent fromJson(String jsonString) {
+    return JsonSerializable.fromJsonString(jsonString, CodeExecutionResultContent.class);
   }
 
   @ExcludeFromGeneratedCoverageReport
-  public static McpServerToolResultContent of(
-      String name, String serverName, Object result, String callId) {
-    return builder()
-        .name(name)
-        .serverName(serverName)
-        .result(result)
-        .callId(callId)
-        .build();
+  public static CodeExecutionResultContent of(String result, String callId) {
+    return builder().result(result).callId(callId).isError(false).build();
+  }
+
+  @ExcludeFromGeneratedCoverageReport
+  public static CodeExecutionResultContent ofError(String result, String callId) {
+    return builder().result(result).callId(callId).isError(true).build();
   }
 }

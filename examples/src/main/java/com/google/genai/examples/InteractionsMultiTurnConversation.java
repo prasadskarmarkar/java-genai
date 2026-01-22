@@ -36,9 +36,9 @@ package com.google.genai.examples;
 import com.google.genai.Client;
 import com.google.genai.types.CreateInteractionConfig;
 import com.google.genai.types.Interaction;
-import com.google.genai.types.interactions.InteractionContent;
+import com.google.genai.types.interactions.content.InteractionContent;
 import com.google.genai.types.interactions.InteractionTurn;
-import com.google.genai.types.interactions.TextContent;
+import com.google.genai.types.interactions.content.TextContent;
 
 /**
  * Example 3: Multi-Turn Conversation with InteractionTurn

@@ -24,6 +24,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.google.auto.value.AutoValue;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import com.google.genai.JsonSerializable;
+import com.google.genai.types.ExcludeFromGeneratedCoverageReport;
 
 import java.util.Arrays;
 import java.util.List;
@@ -69,7 +70,7 @@ public abstract class McpServerTool extends JsonSerializable implements Interact
   public abstract Optional<List<String>> allowedTools();
 
   /** Instantiates a builder for McpServerTool. */
-  
+  @ExcludeFromGeneratedCoverageReport
   public static Builder builder() {
     return new AutoValue_McpServerTool.Builder();
   }
@@ -172,7 +173,7 @@ public abstract class McpServerTool extends JsonSerializable implements Interact
   }
 
   /** Deserializes a JSON string to a McpServerTool object. */
-  
+  @ExcludeFromGeneratedCoverageReport
   public static McpServerTool fromJson(String jsonString) {
     return JsonSerializable.fromJsonString(jsonString, McpServerTool.class);
   }

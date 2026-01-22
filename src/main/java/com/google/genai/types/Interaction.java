@@ -27,7 +27,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.google.auto.value.AutoValue;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import com.google.genai.JsonSerializable;
-import com.google.genai.types.interactions.InteractionContent;
+import com.google.genai.types.interactions.content.InteractionContent;
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;

@@ -19,6 +19,7 @@ package com.google.genai.types.interactions;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
+import com.google.genai.types.interactions.content.InteractionContent;
 import java.io.IOException;
 import java.util.List;
 

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.genai.types.interactions;
+package com.google.genai.types.interactions.content;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -24,13 +24,14 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.google.auto.value.AutoValue;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import com.google.genai.JsonSerializable;
+import com.google.genai.types.ExcludeFromGeneratedCoverageReport;
 import java.util.Optional;
 
 @AutoValue
-@JsonDeserialize(builder = AudioContent.Builder.class)
+@JsonDeserialize(builder = VideoContent.Builder.class)
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
-@JsonTypeName("audio")
-public abstract class AudioContent extends JsonSerializable implements InteractionContent {
+@JsonTypeName("video")
+public abstract class VideoContent extends JsonSerializable implements InteractionContent {
 
   @JsonProperty("data")
   public abstract Optional<String> data();
@@ -41,9 +42,12 @@ public abstract class AudioContent extends JsonSerializable implements Interacti
   @JsonProperty("mime_type")
   public abstract Optional<String> mimeType();
 
+  @JsonProperty("resolution")
+  public abstract Optional<String> resolution();
+
   @ExcludeFromGeneratedCoverageReport
   public static Builder builder() {
-    return new AutoValue_AudioContent.Builder();
+    return new AutoValue_VideoContent.Builder();
   }
 
   public abstract Builder toBuilder();
@@ -52,7 +56,7 @@ public abstract class AudioContent extends JsonSerializable implements Interacti
   public abstract static class Builder {
     @JsonCreator
     private static Builder create() {
-      return new AutoValue_AudioContent.Builder();
+      return new AutoValue_VideoContent.Builder();
     }
 
     @JsonProperty("data")
@@ -91,21 +95,33 @@ public abstract class AudioContent extends JsonSerializable implements Interacti
       return mimeType(Optional.empty());
     }
 
-    public abstract AudioContent build();
+    @JsonProperty("resolution")
+    public abstract Builder resolution(String resolution);
+
+    @ExcludeFromGeneratedCoverageReport
+    abstract Builder resolution(Optional<String> resolution);
+
+    @ExcludeFromGeneratedCoverageReport
+    @CanIgnoreReturnValue
+    public Builder clearResolution() {
+      return resolution(Optional.empty());
+    }
+
+    public abstract VideoContent build();
   }
 
   @ExcludeFromGeneratedCoverageReport
-  public static AudioContent fromJson(String jsonString) {
-    return JsonSerializable.fromJsonString(jsonString, AudioContent.class);
+  public static VideoContent fromJson(String jsonString) {
+    return JsonSerializable.fromJsonString(jsonString, VideoContent.class);
   }
 
   @ExcludeFromGeneratedCoverageReport
-  public static AudioContent fromData(String data, String mimeType) {
+  public static VideoContent fromData(String data, String mimeType) {
     return builder().data(data).mimeType(mimeType).build();
   }
 
   @ExcludeFromGeneratedCoverageReport
-  public static AudioContent fromUri(String uri, String mimeType) {
+  public static VideoContent fromUri(String uri, String mimeType) {
     return builder().uri(uri).mimeType(mimeType).build();
   }
 }

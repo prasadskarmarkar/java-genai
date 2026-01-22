@@ -24,6 +24,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.google.auto.value.AutoValue;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import com.google.genai.JsonSerializable;
+import com.google.genai.types.ExcludeFromGeneratedCoverageReport;
 
 import java.util.Arrays;
 import java.util.List;
@@ -59,7 +60,7 @@ public abstract class ComputerUseTool extends JsonSerializable implements Intera
   public abstract Optional<List<String>> excludedPredefinedFunctions();
 
   /** Instantiates a builder for ComputerUseTool. */
-  
+  @ExcludeFromGeneratedCoverageReport
   public static Builder builder() {
     return new AutoValue_ComputerUseTool.Builder();
   }
@@ -126,7 +127,7 @@ public abstract class ComputerUseTool extends JsonSerializable implements Intera
   }
 
   /** Deserializes a JSON string to a ComputerUseTool object. */
-  
+  @ExcludeFromGeneratedCoverageReport
   public static ComputerUseTool fromJson(String jsonString) {
     return JsonSerializable.fromJsonString(jsonString, ComputerUseTool.class);
   }

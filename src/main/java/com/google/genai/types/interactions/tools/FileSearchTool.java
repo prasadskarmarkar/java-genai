@@ -24,6 +24,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.google.auto.value.AutoValue;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import com.google.genai.JsonSerializable;
+import com.google.genai.types.ExcludeFromGeneratedCoverageReport;
 
 import java.util.Arrays;
 import java.util.List;
@@ -65,7 +66,7 @@ public abstract class FileSearchTool extends JsonSerializable implements Interac
   public abstract Optional<Map<String, Object>> metadataFilter();
 
   /** Instantiates a builder for FileSearchTool. */
-  
+  @ExcludeFromGeneratedCoverageReport
   public static Builder builder() {
     return new AutoValue_FileSearchTool.Builder();
   }
@@ -150,7 +151,7 @@ public abstract class FileSearchTool extends JsonSerializable implements Interac
   }
 
   /** Deserializes a JSON string to a FileSearchTool object. */
-  
+  @ExcludeFromGeneratedCoverageReport
   public static FileSearchTool fromJson(String jsonString) {
     return JsonSerializable.fromJsonString(jsonString, FileSearchTool.class);
   }

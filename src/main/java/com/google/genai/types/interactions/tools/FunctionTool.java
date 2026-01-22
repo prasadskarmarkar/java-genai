@@ -25,6 +25,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.google.auto.value.AutoValue;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import com.google.genai.JsonSerializable;
+import com.google.genai.types.ExcludeFromGeneratedCoverageReport;
 
 import com.google.genai.types.FunctionDeclaration;
 import com.google.genai.types.Schema;
@@ -90,7 +91,7 @@ public abstract class FunctionTool extends JsonSerializable implements Interacti
   public abstract Optional<Method> method();
 
   /** Instantiates a builder for FunctionTool. */
-  
+  @ExcludeFromGeneratedCoverageReport
   public static Builder builder() {
     return new AutoValue_FunctionTool.Builder();
   }
@@ -193,7 +194,7 @@ public abstract class FunctionTool extends JsonSerializable implements Interacti
   }
 
   /** Deserializes a JSON string to a FunctionTool object. */
-  
+  @ExcludeFromGeneratedCoverageReport
   public static FunctionTool fromJson(String jsonString) {
     return JsonSerializable.fromJsonString(jsonString, FunctionTool.class);
   }

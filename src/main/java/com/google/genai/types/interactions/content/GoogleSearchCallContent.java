@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.genai.types.interactions;
+package com.google.genai.types.interactions.content;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -24,24 +24,27 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.google.auto.value.AutoValue;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import com.google.genai.JsonSerializable;
+import com.google.genai.types.ExcludeFromGeneratedCoverageReport;
+import com.google.genai.types.interactions.GoogleSearchCallArguments;
+import java.util.List;
 import java.util.Optional;
 
 @AutoValue
-@JsonDeserialize(builder = CodeExecutionCallContent.Builder.class)
+@JsonDeserialize(builder = GoogleSearchCallContent.Builder.class)
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
-@JsonTypeName("code_execution_call")
-public abstract class CodeExecutionCallContent extends JsonSerializable
+@JsonTypeName("google_search_call")
+public abstract class GoogleSearchCallContent extends JsonSerializable
     implements InteractionContent {
 
   @JsonProperty("arguments")
-  public abstract Optional<CodeExecutionCallArguments> arguments();
+  public abstract Optional<GoogleSearchCallArguments> arguments();
 
   @JsonProperty("id")
   public abstract Optional<String> id();
 
   @ExcludeFromGeneratedCoverageReport
   public static Builder builder() {
-    return new AutoValue_CodeExecutionCallContent.Builder();
+    return new AutoValue_GoogleSearchCallContent.Builder();
   }
 
   public abstract Builder toBuilder();
@@ -50,14 +53,14 @@ public abstract class CodeExecutionCallContent extends JsonSerializable
   public abstract static class Builder {
     @JsonCreator
     private static Builder create() {
-      return new AutoValue_CodeExecutionCallContent.Builder();
+      return new AutoValue_GoogleSearchCallContent.Builder();
     }
 
     @JsonProperty("arguments")
-    public abstract Builder arguments(CodeExecutionCallArguments arguments);
+    public abstract Builder arguments(GoogleSearchCallArguments arguments);
 
     @ExcludeFromGeneratedCoverageReport
-    abstract Builder arguments(Optional<CodeExecutionCallArguments> arguments);
+    abstract Builder arguments(Optional<GoogleSearchCallArguments> arguments);
 
     @ExcludeFromGeneratedCoverageReport
     @CanIgnoreReturnValue
@@ -77,19 +80,18 @@ public abstract class CodeExecutionCallContent extends JsonSerializable
       return id(Optional.empty());
     }
 
-    public abstract CodeExecutionCallContent build();
+    public abstract GoogleSearchCallContent build();
   }
 
   @ExcludeFromGeneratedCoverageReport
-  public static CodeExecutionCallContent fromJson(String jsonString) {
-    return JsonSerializable.fromJsonString(jsonString, CodeExecutionCallContent.class);
+  public static GoogleSearchCallContent fromJson(String jsonString) {
+    return JsonSerializable.fromJsonString(jsonString, GoogleSearchCallContent.class);
   }
 
   @ExcludeFromGeneratedCoverageReport
-  public static CodeExecutionCallContent of(
-      String language, String code, String id) {
+  public static GoogleSearchCallContent of(List<String> queries, String id) {
     return builder()
-        .arguments(CodeExecutionCallArguments.of(language, code))
+        .arguments(GoogleSearchCallArguments.of(queries))
         .id(id)
         .build();
   }
