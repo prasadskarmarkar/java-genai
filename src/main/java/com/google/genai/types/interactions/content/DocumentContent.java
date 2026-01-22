@@ -27,11 +27,29 @@ import com.google.genai.JsonSerializable;
 import com.google.genai.types.ExcludeFromGeneratedCoverageReport;
 import java.util.Optional;
 
+/**
+ * Document content for interactions.
+ *
+ * <p>Represents document data (e.g., PDF, text files) that can be included in interaction inputs or outputs.
+ * Documents can be provided either as base64-encoded data or as a URI.
+ *
+ * <p>Example usage with data:
+ *
+ * <pre>{@code
+ * DocumentContent doc = DocumentContent.fromData(base64Data, "application/pdf");
+ * }</pre>
+ *
+ * <p>Example usage with URI:
+ *
+ * <pre>{@code
+ * DocumentContent doc = DocumentContent.fromUri("https://example.com/doc.pdf", "application/pdf");
+ * }</pre>
+ */
 @AutoValue
 @JsonDeserialize(builder = DocumentContent.Builder.class)
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 @JsonTypeName("document")
-public abstract class DocumentContent extends JsonSerializable implements InteractionContent {
+public abstract class DocumentContent extends JsonSerializable implements Content {
 
   @JsonProperty("data")
   public abstract Optional<String> data();

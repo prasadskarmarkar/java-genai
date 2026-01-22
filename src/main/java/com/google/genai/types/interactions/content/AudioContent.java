@@ -27,11 +27,29 @@ import com.google.genai.JsonSerializable;
 import com.google.genai.types.ExcludeFromGeneratedCoverageReport;
 import java.util.Optional;
 
+/**
+ * Audio content for interactions.
+ *
+ * <p>Represents audio data that can be included in interaction inputs or outputs.
+ * Audio can be provided either as base64-encoded data or as a URI.
+ *
+ * <p>Example usage with data:
+ *
+ * <pre>{@code
+ * AudioContent audio = AudioContent.fromData(base64Data, "audio/mp3");
+ * }</pre>
+ *
+ * <p>Example usage with URI:
+ *
+ * <pre>{@code
+ * AudioContent audio = AudioContent.fromUri("https://example.com/audio.mp3", "audio/mp3");
+ * }</pre>
+ */
 @AutoValue
 @JsonDeserialize(builder = AudioContent.Builder.class)
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 @JsonTypeName("audio")
-public abstract class AudioContent extends JsonSerializable implements InteractionContent {
+public abstract class AudioContent extends JsonSerializable implements Content {
 
   @JsonProperty("data")
   public abstract Optional<String> data();

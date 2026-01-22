@@ -14,9 +14,7 @@
  * limitations under the License.
  */
 
-// Auto-generated code. Do not edit.
-
-package com.google.genai.types;
+package com.google.genai.types.interactions;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -25,45 +23,44 @@ import com.google.api.core.InternalApi;
 import com.google.auto.value.AutoValue;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import com.google.genai.JsonSerializable;
+import com.google.genai.types.ExcludeFromGeneratedCoverageReport;
 import java.util.Optional;
 
-/** Parameters for interactions.delete method. */
+/** Parameters for interactions.get method. */
 @AutoValue
 @InternalApi
-@JsonDeserialize(builder = DeleteInteractionParameters.Builder.class)
-public abstract class DeleteInteractionParameters extends JsonSerializable {
-  /** The ID of the interaction to delete. */
+@JsonDeserialize(builder = GetInteractionParameters.Builder.class)
+public abstract class GetInteractionParameters extends JsonSerializable {
+  /** The ID of the interaction to retrieve. */
   @JsonProperty("id")
   public abstract Optional<String> id();
 
   /** Optional parameters for the request. */
   @JsonProperty("config")
-  public abstract Optional<DeleteInteractionConfig> config();
+  public abstract Optional<GetInteractionConfig> config();
 
-  /** Instantiates a builder for DeleteInteractionParameters. */
+  /** Instantiates a builder for GetInteractionParameters. */
   @ExcludeFromGeneratedCoverageReport
   public static Builder builder() {
-    return new AutoValue_DeleteInteractionParameters.Builder();
+    return new AutoValue_GetInteractionParameters.Builder();
   }
 
   /** Creates a builder with the same values as this instance. */
   public abstract Builder toBuilder();
 
-  /** Builder for DeleteInteractionParameters. */
+  /** Builder for GetInteractionParameters. */
   @AutoValue.Builder
   public abstract static class Builder {
-    /**
-     * For internal usage. Please use `DeleteInteractionParameters.builder()` for instantiation.
-     */
+    /** For internal usage. Please use `GetInteractionParameters.builder()` for instantiation. */
     @JsonCreator
     private static Builder create() {
-      return new AutoValue_DeleteInteractionParameters.Builder();
+      return new AutoValue_GetInteractionParameters.Builder();
     }
 
     /**
      * Setter for id.
      *
-     * <p>id: The ID of the interaction to delete.
+     * <p>id: The ID of the interaction to retrieve.
      */
     @JsonProperty("id")
     public abstract Builder id(String id);
@@ -84,7 +81,7 @@ public abstract class DeleteInteractionParameters extends JsonSerializable {
      * <p>config: Optional parameters for the request.
      */
     @JsonProperty("config")
-    public abstract Builder config(DeleteInteractionConfig config);
+    public abstract Builder config(GetInteractionConfig config);
 
     /**
      * Setter for config builder.
@@ -92,12 +89,12 @@ public abstract class DeleteInteractionParameters extends JsonSerializable {
      * <p>config: Optional parameters for the request.
      */
     @CanIgnoreReturnValue
-    public Builder config(DeleteInteractionConfig.Builder configBuilder) {
+    public Builder config(GetInteractionConfig.Builder configBuilder) {
       return config(configBuilder.build());
     }
 
     @ExcludeFromGeneratedCoverageReport
-    abstract Builder config(Optional<DeleteInteractionConfig> config);
+    abstract Builder config(Optional<GetInteractionConfig> config);
 
     /** Clears the value of config field. */
     @ExcludeFromGeneratedCoverageReport
@@ -106,12 +103,12 @@ public abstract class DeleteInteractionParameters extends JsonSerializable {
       return config(Optional.empty());
     }
 
-    public abstract DeleteInteractionParameters build();
+    public abstract GetInteractionParameters build();
   }
 
-  /** Deserializes a JSON string to a DeleteInteractionParameters object. */
+  /** Deserializes a JSON string to a GetInteractionParameters object. */
   @ExcludeFromGeneratedCoverageReport
-  public static DeleteInteractionParameters fromJson(String jsonString) {
-    return JsonSerializable.fromJsonString(jsonString, DeleteInteractionParameters.class);
+  public static GetInteractionParameters fromJson(String jsonString) {
+    return JsonSerializable.fromJsonString(jsonString, GetInteractionParameters.class);
   }
 }

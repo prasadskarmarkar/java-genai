@@ -14,17 +14,21 @@
  * limitations under the License.
  */
 
-package com.google.genai.types;
+package com.google.genai.types.interactions;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.google.genai.types.interactions.InteractionInput;
+import com.google.genai.types.interactions.GenerationConfig;
+import com.google.genai.types.UsageMetadata;
+import com.google.genai.types.interactions.content.Content;
 import com.google.genai.types.interactions.content.TextContent;
 import com.google.genai.types.interactions.content.ThoughtContent;
 import java.time.Instant;
+import java.util.Arrays;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 
 /** Tests for Interaction type and related classes. */
@@ -42,10 +46,8 @@ public class InteractionTest {
             .build();
 
     // Assert
-    assertTrue(interaction.id().isPresent());
-    assertEquals("test-id", interaction.id().get());
-    assertTrue(interaction.status().isPresent());
-    assertEquals(InteractionStatus.COMPLETED, interaction.status().get());
+    assertEquals("test-id", interaction.id());
+    assertEquals(InteractionStatus.COMPLETED, interaction.status());
     assertTrue(interaction.model().isPresent());
     assertEquals("gemini-2.5-flash", interaction.model().get());
     assertTrue(interaction.role().isPresent());
@@ -80,6 +82,7 @@ public class InteractionTest {
     Interaction interaction =
         Interaction.builder()
             .id("test-id")
+            .status(InteractionStatus.COMPLETED)
             .created(now)
             .updated(now)
             .build();
@@ -105,6 +108,7 @@ public class InteractionTest {
     Interaction interaction =
         Interaction.builder()
             .id("test-id")
+            .status(InteractionStatus.COMPLETED)
             .usage(usage)
             .build();
 
@@ -157,8 +161,7 @@ public class InteractionTest {
     // Assert
     assertTrue(config.model().isPresent());
     assertEquals("gemini-2.5-flash", config.model().get());
-    assertTrue(config.input().isPresent());
-    assertNotNull(config.input().get());
+    assertNotNull(config.input());
   }
 
   @Test
@@ -174,7 +177,7 @@ public class InteractionTest {
     assertTrue(config.agent().isPresent());
     assertEquals("deep-research-pro-preview-12-2025", config.agent().get());
     assertFalse(config.model().isPresent());
-    assertTrue(config.input().isPresent());
+    assertNotNull(config.input());
   }
 
   @Test
@@ -194,6 +197,169 @@ public class InteractionTest {
     assertTrue(config.generationConfig().isPresent());
     assertEquals(0.7f, config.generationConfig().get().temperature().get());
     assertEquals(0.9f, config.generationConfig().get().topP().get());
+  }
+
+  @Test
+  public void testCreateInteractionConfig_InputIsRequired() {
+    // Arrange & Act
+    CreateInteractionConfig config =
+        CreateInteractionConfig.builder()
+            .model("gemini-2.5-flash")
+            .input("What is AI?")
+            .build();
+
+    // Assert - input() returns Input directly, not Optional<Input>
+    Input input = config.input(); // No Optional unwrapping needed
+    assertNotNull(input);
+    assertEquals("What is AI?", input.getValue());
+  }
+
+  @Test
+  public void testCreateInteractionConfig_InputFromString() {
+    // Arrange & Act
+    CreateInteractionConfig config =
+        CreateInteractionConfig.builder()
+            .model("gemini-2.5-flash")
+            .input("Hello, world!")
+            .build();
+
+    // Assert
+    assertNotNull(config.input());
+    assertEquals("Hello, world!", config.input().getValue());
+  }
+
+  @Test
+  public void testCreateInteractionConfig_InputFromContentsList() {
+    // Arrange
+    List<Content> contents =
+        Arrays.asList(
+            TextContent.builder().text("First part").build(),
+            TextContent.builder().text("Second part").build());
+
+    // Act
+    CreateInteractionConfig config =
+        CreateInteractionConfig.builder()
+            .model("gemini-2.5-flash")
+            .inputFromContents(contents)
+            .build();
+
+    // Assert
+    assertNotNull(config.input());
+    assertTrue(config.input().getValue() instanceof List);
+    @SuppressWarnings("unchecked")
+    List<Content> resultContents = (List<Content>) config.input().getValue();
+    assertEquals(2, resultContents.size());
+  }
+
+  @Test
+  public void testCreateInteractionConfig_InputFromContentsVarargs() {
+    // Arrange
+    TextContent content1 = TextContent.builder().text("Part 1").build();
+    TextContent content2 = TextContent.builder().text("Part 2").build();
+
+    // Act
+    CreateInteractionConfig config =
+        CreateInteractionConfig.builder()
+            .model("gemini-2.5-flash")
+            .inputFromContents(content1, content2)
+            .build();
+
+    // Assert
+    assertNotNull(config.input());
+    assertTrue(config.input().getValue() instanceof List);
+    @SuppressWarnings("unchecked")
+    List<Content> resultContents = (List<Content>) config.input().getValue();
+    assertEquals(2, resultContents.size());
+  }
+
+  @Test
+  public void testCreateInteractionConfig_InputFromTurnsList() {
+    // Arrange
+    List<Turn> turns =
+        Arrays.asList(
+            Turn.builder()
+                .role("user")
+                .content(TextContent.builder().text("Hello").build())
+                .build(),
+            Turn.builder()
+                .role("model")
+                .content(TextContent.builder().text("Hi there").build())
+                .build());
+
+    // Act
+    CreateInteractionConfig config =
+        CreateInteractionConfig.builder()
+            .model("gemini-2.5-flash")
+            .inputFromTurns(turns)
+            .build();
+
+    // Assert
+    assertNotNull(config.input());
+    assertTrue(config.input().getValue() instanceof List);
+    @SuppressWarnings("unchecked")
+    List<Turn> resultTurns = (List<Turn>) config.input().getValue();
+    assertEquals(2, resultTurns.size());
+  }
+
+  @Test
+  public void testCreateInteractionConfig_InputFromTurnsVarargs() {
+    // Arrange
+    Turn turn1 =
+        Turn.builder()
+            .role("user")
+            .content(TextContent.builder().text("Question").build())
+            .build();
+    Turn turn2 =
+        Turn.builder()
+            .role("model")
+            .content(TextContent.builder().text("Answer").build())
+            .build();
+
+    // Act
+    CreateInteractionConfig config =
+        CreateInteractionConfig.builder()
+            .model("gemini-2.5-flash")
+            .inputFromTurns(turn1, turn2)
+            .build();
+
+    // Assert
+    assertNotNull(config.input());
+    assertTrue(config.input().getValue() instanceof List);
+    @SuppressWarnings("unchecked")
+    List<Turn> resultTurns = (List<Turn>) config.input().getValue();
+    assertEquals(2, resultTurns.size());
+  }
+
+  @Test
+  public void testCreateInteractionConfig_InputDirectAccess() {
+    // Arrange & Act
+    CreateInteractionConfig config =
+        CreateInteractionConfig.builder()
+            .model("gemini-2.5-flash")
+            .input("Direct access test")
+            .build();
+
+    // Assert - No Optional unwrapping needed
+    // OLD way (when it was Optional<Input>): config.input().get().getValue()
+    // NEW way (required Input): config.input().getValue()
+    String inputValue = (String) config.input().getValue();
+    assertEquals("Direct access test", inputValue);
+  }
+
+  @Test
+  public void testCreateInteractionConfig_InputWithAgent() {
+    // Arrange & Act
+    CreateInteractionConfig config =
+        CreateInteractionConfig.builder()
+            .agent("deep-research-pro-preview-12-2025")
+            .input("Research quantum computing")
+            .build();
+
+    // Assert
+    assertNotNull(config.input());
+    assertEquals("Research quantum computing", config.input().getValue());
+    assertTrue(config.agent().isPresent());
+    assertFalse(config.model().isPresent());
   }
 
   @Test
@@ -224,7 +390,7 @@ public class InteractionTest {
   }
 
   @Test
-  public void testDeleteInteractionResponse() {
+  public void testDeleteInteraction() {
     // Act
     DeleteInteractionResponse response = DeleteInteractionResponse.builder().build();
 
@@ -246,8 +412,8 @@ public class InteractionTest {
     Interaction modified = original.toBuilder().role("assistant").build();
 
     // Assert
-    assertEquals("test-id", modified.id().get());
-    assertEquals(InteractionStatus.COMPLETED, modified.status().get());
+    assertEquals("test-id", modified.id());
+    assertEquals(InteractionStatus.COMPLETED, modified.status());
     assertEquals("gemini-2.5-flash", modified.model().get());
     assertTrue(modified.role().isPresent());
     assertEquals("assistant", modified.role().get());
@@ -259,13 +425,12 @@ public class InteractionTest {
     Interaction.Builder builder =
         Interaction.builder().id("test-id").status(InteractionStatus.COMPLETED).model("test-model");
 
-    // Act
-    Interaction interaction =
-        builder.clearId().clearStatus().clearModel().build();
+    // Act - Note: id() and status() are now required fields, so clearId() and clearStatus() no longer exist
+    Interaction interaction = builder.clearModel().build();
 
     // Assert
-    assertFalse(interaction.id().isPresent());
-    assertFalse(interaction.status().isPresent());
+    assertEquals("test-id", interaction.id());
+    assertEquals(InteractionStatus.COMPLETED, interaction.status());
     assertFalse(interaction.model().isPresent());
   }
 
@@ -274,7 +439,7 @@ public class InteractionTest {
     // Arrange - create multiple TextContent objects
     TextContent content1 = TextContent.builder().text("Hello").build();
     TextContent content2 = TextContent.builder().text("World").build();
-    InteractionInput input = InteractionInput.fromContents(content1, content2);
+    Input input = Input.fromContents(content1, content2);
 
     // Act - serialize to JSON
     String json = input.toJson();
@@ -292,7 +457,7 @@ public class InteractionTest {
   public void testInteractionInputSerializationWithSingleContent() {
     // Arrange - create a single TextContent object
     TextContent content = TextContent.builder().text("Hello").build();
-    InteractionInput input = InteractionInput.fromContent(content);
+    Input input = Input.fromContent(content);
 
     // Act - serialize to JSON
     String json = input.toJson();
@@ -308,7 +473,7 @@ public class InteractionTest {
   @Test
   public void testInteractionInputSerializationWithString() {
     // Arrange
-    InteractionInput input = InteractionInput.fromString("Hello, world!");
+    Input input = Input.fromString("Hello, world!");
 
     // Act - serialize to JSON
     String json = input.toJson();

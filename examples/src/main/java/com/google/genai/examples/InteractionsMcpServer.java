@@ -50,9 +50,9 @@ package com.google.genai.examples;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.genai.Client;
-import com.google.genai.types.CreateInteractionConfig;
-import com.google.genai.types.Interaction;
-import com.google.genai.types.interactions.content.InteractionContent;
+import com.google.genai.types.interactions.CreateInteractionConfig;
+import com.google.genai.types.interactions.Interaction;
+import com.google.genai.types.interactions.content.Content;
 import com.google.genai.types.interactions.content.McpServerToolCallContent;
 import com.google.genai.types.interactions.content.McpServerToolResultContent;
 import com.google.genai.types.interactions.content.TextContent;
@@ -75,7 +75,6 @@ public final class InteractionsMcpServer {
     // Instantiate the client. The client gets the API key from the environment variable
     // `GOOGLE_API_KEY`.
     //
-    // Note: Interactions API is currently only available in Gemini Developer API (not Vertex AI).
     Client client = new Client();
 
     System.out.println("=== Interactions API: MCP Server Tool Example ===\n");
@@ -140,29 +139,29 @@ public final class InteractionsMcpServer {
       System.out.println("---\n");
       System.out.println("STEP 3: Extract and display the results\n");
 
-      System.out.println("Response received. Interaction ID: " + response.id().orElse("N/A"));
+      System.out.println("Response received. Interaction ID: " + response.id());
       System.out.println();
 
       if (response.outputs().isPresent()) {
-        for (InteractionContent content : response.outputs().get()) {
+        for (Content content : response.outputs().get()) {
           if (content instanceof TextContent) {
             System.out.println("Text: " + ((TextContent) content).text().orElse("(empty)"));
             System.out.println();
           } else if (content instanceof McpServerToolCallContent) {
             McpServerToolCallContent mcpCall = (McpServerToolCallContent) content;
             System.out.println("MCP Server Tool Call:");
-            System.out.println("  ID: " + mcpCall.id().orElse("N/A"));
-            System.out.println("  Tool Name: " + mcpCall.name().orElse("N/A"));
-            System.out.println("  Server Name: " + mcpCall.serverName().orElse("N/A"));
-            System.out.println("  Arguments: " + mcpCall.arguments().orElse(null));
+            System.out.println("  ID: " + mcpCall.id());
+            System.out.println("  Tool Name: " + mcpCall.name());
+            System.out.println("  Server Name: " + mcpCall.serverName());
+            System.out.println("  Arguments: " + mcpCall.arguments());
             System.out.println();
           } else if (content instanceof McpServerToolResultContent) {
             McpServerToolResultContent mcpResult = (McpServerToolResultContent) content;
             System.out.println("MCP Server Tool Result:");
-            System.out.println("  Call ID: " + mcpResult.callId().orElse("N/A"));
+            System.out.println("  Call ID: " + mcpResult.callId());
             System.out.println("  Tool Name: " + mcpResult.name().orElse("N/A"));
             System.out.println("  Server Name: " + mcpResult.serverName().orElse("N/A"));
-            System.out.println("  Result: " + mcpResult.result().orElse(null));
+            System.out.println("  Result: " + mcpResult.result());
             System.out.println();
           }
         }

@@ -27,11 +27,29 @@ import com.google.genai.JsonSerializable;
 import com.google.genai.types.ExcludeFromGeneratedCoverageReport;
 import java.util.Optional;
 
+/**
+ * Video content for interactions.
+ *
+ * <p>Represents video data that can be included in interaction inputs or outputs.
+ * Videos can be provided either as base64-encoded data or as a URI.
+ *
+ * <p>Example usage with data:
+ *
+ * <pre>{@code
+ * VideoContent video = VideoContent.fromData(base64Data, "video/mp4");
+ * }</pre>
+ *
+ * <p>Example usage with URI:
+ *
+ * <pre>{@code
+ * VideoContent video = VideoContent.fromUri("https://example.com/video.mp4", "video/mp4");
+ * }</pre>
+ */
 @AutoValue
 @JsonDeserialize(builder = VideoContent.Builder.class)
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 @JsonTypeName("video")
-public abstract class VideoContent extends JsonSerializable implements InteractionContent {
+public abstract class VideoContent extends JsonSerializable implements Content {
 
   @JsonProperty("data")
   public abstract Optional<String> data();

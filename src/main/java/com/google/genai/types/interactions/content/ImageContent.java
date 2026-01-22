@@ -27,11 +27,30 @@ import com.google.genai.JsonSerializable;
 import com.google.genai.types.ExcludeFromGeneratedCoverageReport;
 import java.util.Optional;
 
+/**
+ * Image content for interactions.
+ *
+ * <p>Represents image data that can be included in interaction inputs or outputs.
+ * Images can be provided either as base64-encoded data or as a URI.
+ *
+ * <p>Example usage with data:
+ *
+ * <pre>{@code
+ * ImageContent image = ImageContent.fromData(base64Data, "image/png");
+ * }</pre>
+ *
+ * <p>Example usage with URI:
+ *
+ * <pre>{@code
+ * ImageContent image = ImageContent.fromUri("https://example.com/image.png", "image/png");
+ * }</pre>
+ */
 @AutoValue
 @JsonDeserialize(builder = ImageContent.Builder.class)
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 @JsonTypeName("image")
-public abstract class ImageContent extends JsonSerializable implements InteractionContent {
+public abstract class ImageContent extends JsonSerializable
+    implements Content, ThoughtSummaryContent {
 
   @JsonProperty("data")
   public abstract Optional<String> data();

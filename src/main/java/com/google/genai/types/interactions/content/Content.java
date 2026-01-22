@@ -20,7 +20,7 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 /**
- * Base interface for Interaction content types using a type discriminator.
+ * Base interface for content types using a type discriminator.
  *
  * <p>This follows Jackson best practices for polymorphism:
  *
@@ -51,6 +51,6 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
   @JsonSubTypes.Type(value = FileSearchCallContent.class, name = "file_search_call"),
   @JsonSubTypes.Type(value = FileSearchResultContent.class, name = "file_search_result")
 })
-public interface InteractionContent {
+public interface Content {
   // Marker interface - Jackson handles type discrimination via annotations
 }

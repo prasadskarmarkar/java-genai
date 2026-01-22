@@ -34,20 +34,20 @@
 package com.google.genai.examples;
 
 import com.google.genai.Client;
-import com.google.genai.types.CreateInteractionConfig;
-import com.google.genai.types.Interaction;
-import com.google.genai.types.interactions.content.InteractionContent;
-import com.google.genai.types.interactions.InteractionTurn;
+import com.google.genai.types.interactions.CreateInteractionConfig;
+import com.google.genai.types.interactions.Interaction;
+import com.google.genai.types.interactions.content.Content;
+import com.google.genai.types.interactions.Turn;
 import com.google.genai.types.interactions.content.TextContent;
 
 /**
- * Example 3: Multi-Turn Conversation with InteractionTurn
+ * Example 3: Multi-Turn Conversation with Turn
  *
- * <p>Demonstrates a multi-turn conversation using InteractionTurn objects with proper role
+ * <p>Demonstrates a multi-turn conversation using Turn objects with proper role
  * assignment. This shows how context from previous turns influences the response.
  *
- * <p>This example shows: - Using `.inputFromTurns(InteractionTurn...)` for multi-turn
- * conversations - Creating InteractionTurn objects with "user" and "model" roles - Building
+ * <p>This example shows: - Using `.inputFromTurns(Turn...)` for multi-turn
+ * conversations - Creating Turn objects with "user" and "model" roles - Building
  * conversation history - How context from previous turns affects the model's response
  *
  * <p>Note: The Interactions API is in beta and subject to change.
@@ -58,7 +58,6 @@ public final class InteractionsMultiTurnConversation {
     // Instantiate the client. The client gets the API key from the environment variable
     // `GOOGLE_API_KEY`.
     //
-    // Note: Interactions API is currently only available in Gemini Developer API (not Vertex AI).
     Client client = new Client();
 
     System.out.println("=== Example 3: Multi-Turn Conversation ===\n");
@@ -75,17 +74,17 @@ public final class InteractionsMultiTurnConversation {
             .model("gemini-2.5-flash")
             .inputFromTurns(
                 // First user turn
-                InteractionTurn.builder()
+                Turn.builder()
                     .role("user")
                     .content(TextContent.builder().text(turn1User).build())
                     .build(),
                 // Model response (simulating previous conversation)
-                InteractionTurn.builder()
+                Turn.builder()
                     .role("model")
                     .content(TextContent.builder().text(turn2Model).build())
                     .build(),
                 // Follow-up user turn (benefits from context)
-                InteractionTurn.builder()
+                Turn.builder()
                     .role("user")
                     .content(TextContent.builder().text(turn3User).build())
                     .build())
@@ -105,7 +104,7 @@ public final class InteractionsMultiTurnConversation {
     // Print response details
     System.out.println("RESPONSE:");
     System.out.println("  Status: " + response.status());
-    System.out.println("  Interaction ID: " + response.id().orElse("N/A"));
+    System.out.println("  Interaction ID: " + response.id());
     System.out.print("  Output: ");
     printOutputs(response);
 
@@ -119,7 +118,7 @@ public final class InteractionsMultiTurnConversation {
    */
   private static void printOutputs(Interaction interaction) {
     if (interaction.outputs().isPresent() && !interaction.outputs().get().isEmpty()) {
-      for (InteractionContent output : interaction.outputs().get()) {
+      for (Content output : interaction.outputs().get()) {
         if (output instanceof TextContent) {
           System.out.println(((TextContent) output).text().orElse("(empty)"));
           break;

@@ -21,13 +21,13 @@ import static java.util.Arrays.stream;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import com.google.genai.types.CreateInteractionConfig;
-import com.google.genai.types.Interaction;
+import com.google.genai.types.interactions.CreateInteractionConfig;
+import com.google.genai.types.interactions.Interaction;
 import com.google.genai.types.interactions.content.FunctionCallContent;
 import com.google.genai.types.interactions.content.FunctionResultContent;
-import com.google.genai.types.interactions.content.InteractionContent;
+import com.google.genai.types.interactions.content.Content;
 import com.google.genai.types.interactions.tools.FunctionTool;
-import com.google.genai.types.interactions.tools.InteractionTool;
+import com.google.genai.types.interactions.tools.Tool;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.HashMap;
@@ -55,7 +55,7 @@ final class InteractionsAfcUtil {
     if (config == null || !config.tools().isPresent()) {
       return false;
     }
-    for (InteractionTool tool : config.tools().get()) {
+    for (Tool tool : config.tools().get()) {
       if (tool instanceof FunctionTool) {
         FunctionTool ft = (FunctionTool) tool;
         if (ft.method().isPresent()) {
@@ -75,7 +75,7 @@ final class InteractionsAfcUtil {
   static ImmutableMap<String, Method> getFunctionMap(CreateInteractionConfig config) {
     ImmutableMap.Builder<String, Method> builder = ImmutableMap.builder();
     if (config != null && config.tools().isPresent()) {
-      for (InteractionTool tool : config.tools().get()) {
+      for (Tool tool : config.tools().get()) {
         if (tool instanceof FunctionTool) {
           FunctionTool ft = (FunctionTool) tool;
           if (ft.method().isPresent() && ft.name().isPresent()) {
@@ -112,14 +112,14 @@ final class InteractionsAfcUtil {
    */
   static FunctionResultContent executeFunctionCall(
       FunctionCallContent call, ImmutableMap<String, Method> functionMap) {
-    String funcName = call.name().orElse("");
+    String funcName = call.name();
     Method method = functionMap.get(funcName);
     if (method == null) {
       return null;
     }
 
-    Map<String, Object> args = call.arguments().orElse(new HashMap<>());
-    String callId = call.id().orElse("");
+    Map<String, Object> args = call.arguments();
+    String callId = call.id();
 
     try {
       Object result = invokeFunctionMethod(method, args);
@@ -199,13 +199,13 @@ final class InteractionsAfcUtil {
   }
 
   /**
-   * Convert a list of InteractionContent to include in input.
+   * Convert a list of Content to include in input.
    *
    * @param contents The contents to convert.
-   * @return The list of InteractionContent.
+   * @return The list of Content.
    */
-  static ImmutableList<InteractionContent> toInputContents(
-      List<? extends InteractionContent> contents) {
+  static ImmutableList<Content> toInputContents(
+      List<? extends Content> contents) {
     return ImmutableList.copyOf(contents);
   }
 }

@@ -14,9 +14,7 @@
  * limitations under the License.
  */
 
-// Auto-generated code. Do not edit.
-
-package com.google.genai.types;
+package com.google.genai.types.interactions;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -24,32 +22,34 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.google.auto.value.AutoValue;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import com.google.genai.JsonSerializable;
+import com.google.genai.types.ExcludeFromGeneratedCoverageReport;
+import com.google.genai.types.HttpOptions;
 import java.util.Optional;
 
-/** Optional parameters for interactions.cancel method. */
+/** Optional parameters for interactions.delete method. */
 @AutoValue
-@JsonDeserialize(builder = CancelInteractionConfig.Builder.class)
-public abstract class CancelInteractionConfig extends JsonSerializable {
+@JsonDeserialize(builder = DeleteInteractionConfig.Builder.class)
+public abstract class DeleteInteractionConfig extends JsonSerializable {
   /** Used to override HTTP request options. */
   @JsonProperty("httpOptions")
   public abstract Optional<HttpOptions> httpOptions();
 
-  /** Instantiates a builder for CancelInteractionConfig. */
+  /** Instantiates a builder for DeleteInteractionConfig. */
   @ExcludeFromGeneratedCoverageReport
   public static Builder builder() {
-    return new AutoValue_CancelInteractionConfig.Builder();
+    return new AutoValue_DeleteInteractionConfig.Builder();
   }
 
   /** Creates a builder with the same values as this instance. */
   public abstract Builder toBuilder();
 
-  /** Builder for CancelInteractionConfig. */
+  /** Builder for DeleteInteractionConfig. */
   @AutoValue.Builder
   public abstract static class Builder {
-    /** For internal usage. Please use `CancelInteractionConfig.builder()` for instantiation. */
+    /** For internal usage. Please use `DeleteInteractionConfig.builder()` for instantiation. */
     @JsonCreator
     private static Builder create() {
-      return new AutoValue_CancelInteractionConfig.Builder();
+      return new AutoValue_DeleteInteractionConfig.Builder();
     }
 
     /**
@@ -80,12 +80,12 @@ public abstract class CancelInteractionConfig extends JsonSerializable {
       return httpOptions(Optional.empty());
     }
 
-    public abstract CancelInteractionConfig build();
+    public abstract DeleteInteractionConfig build();
   }
 
-  /** Deserializes a JSON string to a CancelInteractionConfig object. */
+  /** Deserializes a JSON string to a DeleteInteractionConfig object. */
   @ExcludeFromGeneratedCoverageReport
-  public static CancelInteractionConfig fromJson(String jsonString) {
-    return JsonSerializable.fromJsonString(jsonString, CancelInteractionConfig.class);
+  public static DeleteInteractionConfig fromJson(String jsonString) {
+    return JsonSerializable.fromJsonString(jsonString, DeleteInteractionConfig.class);
   }
 }

@@ -27,12 +27,26 @@ import com.google.genai.JsonSerializable;
 import com.google.genai.types.ExcludeFromGeneratedCoverageReport;
 import java.util.Optional;
 
+/**
+ * File search call content for interactions.
+ *
+ * <p>Represents a request from the model to search through file stores. This content type appears in
+ * interaction outputs when the model wants to retrieve information from uploaded files.
+ *
+ * <p>Example usage:
+ *
+ * <pre>{@code
+ * FileSearchCallContent fileSearchCall = FileSearchCallContent.builder()
+ *     .id("call_123")
+ *     .build();
+ * }</pre>
+ */
 @AutoValue
 @JsonDeserialize(builder = FileSearchCallContent.Builder.class)
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 @JsonTypeName("file_search_call")
 public abstract class FileSearchCallContent extends JsonSerializable
-    implements InteractionContent {
+    implements Content {
 
   @JsonProperty("id")
   public abstract Optional<String> id();

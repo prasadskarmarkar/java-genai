@@ -25,6 +25,7 @@ import com.google.auto.value.AutoValue;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import com.google.genai.JsonSerializable;
 import com.google.genai.types.ExcludeFromGeneratedCoverageReport;
+import com.google.genai.types.interactions.AllowedTools;
 
 import java.util.Arrays;
 import java.util.List;
@@ -51,7 +52,7 @@ import java.util.Optional;
 @JsonDeserialize(builder = McpServerTool.Builder.class)
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 @JsonTypeName("mcp_server")
-public abstract class McpServerTool extends JsonSerializable implements InteractionTool {
+public abstract class McpServerTool extends JsonSerializable implements Tool {
 
   /** The name of the MCP server. */
   @JsonProperty("name")
@@ -65,9 +66,9 @@ public abstract class McpServerTool extends JsonSerializable implements Interact
   @JsonProperty("headers")
   public abstract Optional<Map<String, String>> headers();
 
-  /** List of allowed tools from the MCP server. If empty, all tools are allowed. */
-  @JsonProperty("allowedTools")
-  public abstract Optional<List<String>> allowedTools();
+  /** List of allowed tools configuration from the MCP server. */
+  @JsonProperty("allowed_tools")
+  public abstract Optional<List<AllowedTools>> allowedTools();
 
   /** Instantiates a builder for McpServerTool. */
   @ExcludeFromGeneratedCoverageReport
@@ -144,23 +145,23 @@ public abstract class McpServerTool extends JsonSerializable implements Interact
     /**
      * Setter for allowedTools.
      *
-     * <p>allowedTools: List of allowed tools from the MCP server.
+     * <p>allowedTools: List of allowed tools configuration from the MCP server.
      */
-    @JsonProperty("allowedTools")
-    public abstract Builder allowedTools(List<String> allowedTools);
+    @JsonProperty("allowed_tools")
+    public abstract Builder allowedTools(List<AllowedTools> allowedTools);
 
     /**
      * Setter for allowedTools (varargs convenience method).
      *
-     * <p>allowedTools: List of allowed tools from the MCP server.
+     * <p>allowedTools: List of allowed tools configuration from the MCP server.
      */
     @CanIgnoreReturnValue
-    public Builder allowedTools(String... allowedTools) {
+    public Builder allowedTools(AllowedTools... allowedTools) {
       return allowedTools(Arrays.asList(allowedTools));
     }
 
-    
-    abstract Builder allowedTools(Optional<List<String>> allowedTools);
+
+    abstract Builder allowedTools(Optional<List<AllowedTools>> allowedTools);
 
     /** Clears the value of allowedTools field. */
     

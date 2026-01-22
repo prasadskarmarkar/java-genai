@@ -19,7 +19,7 @@ package com.google.genai;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import com.google.genai.types.CreateInteractionConfig;
+import com.google.genai.types.interactions.CreateInteractionConfig;
 import org.junit.jupiter.api.Test;
 
 /** Tests for the Interactions resource. */
@@ -68,7 +68,7 @@ public class InteractionsTest {
             .agent("deep-research-pro-preview-12-2025")
             .input("Test input")
             .generationConfig(
-                com.google.genai.types.GenerationConfig.builder()
+                com.google.genai.types.interactions.GenerationConfig.builder()
                     .temperature(0.5f)
                     .build())
             .build();

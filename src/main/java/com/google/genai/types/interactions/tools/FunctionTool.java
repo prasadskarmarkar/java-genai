@@ -67,7 +67,7 @@ import java.util.Optional;
 @JsonDeserialize(builder = FunctionTool.Builder.class)
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 @JsonTypeName("function")
-public abstract class FunctionTool extends JsonSerializable implements InteractionTool {
+public abstract class FunctionTool extends JsonSerializable implements Tool {
 
   /** The name of the function to call. */
   @JsonProperty("name")

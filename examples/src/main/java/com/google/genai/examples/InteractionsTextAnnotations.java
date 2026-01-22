@@ -33,10 +33,10 @@
 package com.google.genai.examples;
 
 import com.google.genai.Client;
-import com.google.genai.types.CreateInteractionConfig;
-import com.google.genai.types.Interaction;
+import com.google.genai.types.interactions.CreateInteractionConfig;
+import com.google.genai.types.interactions.Interaction;
 import com.google.genai.types.interactions.Annotation;
-import com.google.genai.types.interactions.content.InteractionContent;
+import com.google.genai.types.interactions.content.Content;
 import com.google.genai.types.interactions.content.TextContent;
 import java.util.List;
 
@@ -142,7 +142,7 @@ public final class InteractionsTextAnnotations {
     int textContentCount = 0;
     int totalAnnotations = 0;
 
-    for (InteractionContent content : interaction.outputs().get()) {
+    for (Content content : interaction.outputs().get()) {
       if (content instanceof TextContent) {
         textContentCount++;
         TextContent textContent = (TextContent) content;

@@ -60,11 +60,11 @@
 package com.google.genai.examples;
 
 import com.google.genai.Client;
-import com.google.genai.types.CreateInteractionConfig;
-import com.google.genai.types.Interaction;
+import com.google.genai.types.interactions.CreateInteractionConfig;
+import com.google.genai.types.interactions.Interaction;
 import com.google.genai.types.interactions.FileSearchResult;
 import com.google.genai.types.interactions.content.FileSearchResultContent;
-import com.google.genai.types.interactions.content.InteractionContent;
+import com.google.genai.types.interactions.content.Content;
 import com.google.genai.types.interactions.content.TextContent;
 import com.google.genai.types.interactions.tools.FileSearchTool;
 
@@ -86,7 +86,6 @@ public final class InteractionsFileSearch {
     // Instantiate the client. The client gets the API key from the environment variable
     // `GOOGLE_API_KEY`.
     //
-    // Note: Interactions API is currently only available in Gemini Developer API (not Vertex AI).
     Client client = new Client();
 
     System.out.println("=== Interactions API: File Search Tool Example ===\n");
@@ -149,11 +148,11 @@ public final class InteractionsFileSearch {
       System.out.println("---\n");
       System.out.println("STEP 3: Extract and display the results\n");
 
-      System.out.println("Response received. Interaction ID: " + response.id().orElse("N/A"));
+      System.out.println("Response received. Interaction ID: " + response.id());
       System.out.println();
 
       if (response.outputs().isPresent()) {
-        for (InteractionContent content : response.outputs().get()) {
+        for (Content content : response.outputs().get()) {
           if (content instanceof TextContent) {
             System.out.println("Text: " + ((TextContent) content).text().orElse("(empty)"));
             System.out.println();
@@ -162,17 +161,18 @@ public final class InteractionsFileSearch {
             System.out.println("File Search Result:");
 
             if (searchResult.result().isPresent()) {
-              FileSearchResult result = searchResult.result().get();
-              System.out.println("  Title: " + result.title().orElse("N/A"));
-              System.out.println("  File Search Store: " + result.fileSearchStore().orElse("N/A"));
+              for (FileSearchResult result : searchResult.result().get()) {
+                System.out.println("  Title: " + result.title().orElse("N/A"));
+                System.out.println("  File Search Store: " + result.fileSearchStore().orElse("N/A"));
 
-              if (result.text().isPresent()) {
-                String text = result.text().get();
-                System.out.println("  Text (first 500 chars):");
-                System.out.println("  ---");
-                System.out.println(text.length() > 500 ? text.substring(0, 500) + "..." : text);
-                System.out.println("  ---");
-                System.out.println("  Total text length: " + text.length() + " chars");
+                if (result.text().isPresent()) {
+                  String text = result.text().get();
+                  System.out.println("  Text (first 500 chars):");
+                  System.out.println("  ---");
+                  System.out.println(text.length() > 500 ? text.substring(0, 500) + "..." : text);
+                  System.out.println("  ---");
+                  System.out.println("  Total text length: " + text.length() + " chars");
+                }
               }
             }
             System.out.println();

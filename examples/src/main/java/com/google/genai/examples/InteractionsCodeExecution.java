@@ -34,11 +34,11 @@
 package com.google.genai.examples;
 
 import com.google.genai.Client;
-import com.google.genai.types.CreateInteractionConfig;
-import com.google.genai.types.Interaction;
+import com.google.genai.types.interactions.CreateInteractionConfig;
+import com.google.genai.types.interactions.Interaction;
 import com.google.genai.types.interactions.content.CodeExecutionCallContent;
 import com.google.genai.types.interactions.content.CodeExecutionResultContent;
-import com.google.genai.types.interactions.content.InteractionContent;
+import com.google.genai.types.interactions.content.Content;
 import com.google.genai.types.interactions.content.TextContent;
 import com.google.genai.types.interactions.tools.CodeExecutionTool;
 
@@ -56,7 +56,6 @@ public final class InteractionsCodeExecution {
     // Instantiate the client. The client gets the API key from the environment variable
     // `GOOGLE_API_KEY`.
     //
-    // Note: Interactions API is currently only available in Gemini Developer API (not Vertex AI).
     Client client = new Client();
 
     System.out.println("=== Interactions API: Code Execution Tool Example ===\n");
@@ -100,18 +99,18 @@ public final class InteractionsCodeExecution {
     System.out.println("---\n");
     System.out.println("STEP 3: Extract and display the results\n");
 
-    System.out.println("Response received. Interaction ID: " + response.id().orElse("N/A"));
+    System.out.println("Response received. Interaction ID: " + response.id());
     System.out.println();
 
     if (response.outputs().isPresent()) {
-      for (InteractionContent content : response.outputs().get()) {
+      for (Content content : response.outputs().get()) {
         if (content instanceof TextContent) {
           System.out.println("Text: " + ((TextContent) content).text().orElse("(empty)"));
           System.out.println();
         } else if (content instanceof CodeExecutionCallContent) {
           CodeExecutionCallContent codeCall = (CodeExecutionCallContent) content;
           System.out.println("Code Execution Call:");
-          System.out.println("  ID: " + codeCall.id().orElse("N/A"));
+          System.out.println("  ID: " + codeCall.id());
           if (codeCall.arguments().isPresent()) {
             System.out.println("  Language: " + codeCall.arguments().get().language().orElse("N/A"));
             System.out.println("  Code:");

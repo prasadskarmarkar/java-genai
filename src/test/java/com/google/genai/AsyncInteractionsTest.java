@@ -20,7 +20,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.google.genai.types.CreateInteractionConfig;
+import com.google.genai.types.interactions.CreateInteractionConfig;
+import com.google.genai.types.interactions.GenerationConfig;
 import java.util.concurrent.CompletionException;
 import java.util.concurrent.ExecutionException;
 import org.junit.jupiter.api.Test;
@@ -75,7 +76,7 @@ public class AsyncInteractionsTest {
             .agent("deep-research-pro-preview-12-2025")
             .input("Test input")
             .generationConfig(
-                com.google.genai.types.GenerationConfig.builder().temperature(0.5f).build())
+                GenerationConfig.builder().temperature(0.5f).build())
             .build();
 
     // Act & Assert

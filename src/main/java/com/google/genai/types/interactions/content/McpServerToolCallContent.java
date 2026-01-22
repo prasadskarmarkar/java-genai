@@ -22,30 +22,28 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.google.auto.value.AutoValue;
-import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import com.google.genai.JsonSerializable;
 import com.google.genai.types.ExcludeFromGeneratedCoverageReport;
 import java.util.Map;
-import java.util.Optional;
 
 @AutoValue
 @JsonDeserialize(builder = McpServerToolCallContent.Builder.class)
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 @JsonTypeName("mcp_server_tool_call")
 public abstract class McpServerToolCallContent extends JsonSerializable
-    implements InteractionContent {
-
-  @JsonProperty("name")
-  public abstract Optional<String> name();
-
-  @JsonProperty("server_name")
-  public abstract Optional<String> serverName();
-
-  @JsonProperty("arguments")
-  public abstract Optional<Map<String, Object>> arguments();
+    implements Content {
 
   @JsonProperty("id")
-  public abstract Optional<String> id();
+  public abstract String id();
+
+  @JsonProperty("name")
+  public abstract String name();
+
+  @JsonProperty("server_name")
+  public abstract String serverName();
+
+  @JsonProperty("arguments")
+  public abstract Map<String, Object> arguments();
 
   @ExcludeFromGeneratedCoverageReport
   public static Builder builder() {
@@ -61,53 +59,17 @@ public abstract class McpServerToolCallContent extends JsonSerializable
       return new AutoValue_McpServerToolCallContent.Builder();
     }
 
+    @JsonProperty("id")
+    public abstract Builder id(String id);
+
     @JsonProperty("name")
     public abstract Builder name(String name);
-
-    @ExcludeFromGeneratedCoverageReport
-    abstract Builder name(Optional<String> name);
-
-    @ExcludeFromGeneratedCoverageReport
-    @CanIgnoreReturnValue
-    public Builder clearName() {
-      return name(Optional.empty());
-    }
 
     @JsonProperty("server_name")
     public abstract Builder serverName(String serverName);
 
-    @ExcludeFromGeneratedCoverageReport
-    abstract Builder serverName(Optional<String> serverName);
-
-    @ExcludeFromGeneratedCoverageReport
-    @CanIgnoreReturnValue
-    public Builder clearServerName() {
-      return serverName(Optional.empty());
-    }
-
     @JsonProperty("arguments")
     public abstract Builder arguments(Map<String, Object> arguments);
-
-    @ExcludeFromGeneratedCoverageReport
-    abstract Builder arguments(Optional<Map<String, Object>> arguments);
-
-    @ExcludeFromGeneratedCoverageReport
-    @CanIgnoreReturnValue
-    public Builder clearArguments() {
-      return arguments(Optional.empty());
-    }
-
-    @JsonProperty("id")
-    public abstract Builder id(String id);
-
-    @ExcludeFromGeneratedCoverageReport
-    abstract Builder id(Optional<String> id);
-
-    @ExcludeFromGeneratedCoverageReport
-    @CanIgnoreReturnValue
-    public Builder clearId() {
-      return id(Optional.empty());
-    }
 
     public abstract McpServerToolCallContent build();
   }
@@ -119,12 +81,12 @@ public abstract class McpServerToolCallContent extends JsonSerializable
 
   @ExcludeFromGeneratedCoverageReport
   public static McpServerToolCallContent of(
-      String name, String serverName, Map<String, Object> arguments, String id) {
+      String id, String name, String serverName, Map<String, Object> arguments) {
     return builder()
+        .id(id)
         .name(name)
         .serverName(serverName)
         .arguments(arguments)
-        .id(id)
         .build();
   }
 }

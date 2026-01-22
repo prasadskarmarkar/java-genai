@@ -42,7 +42,7 @@ import com.google.genai.types.ExcludeFromGeneratedCoverageReport;
 @JsonDeserialize(builder = CodeExecutionTool.Builder.class)
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 @JsonTypeName("code_execution")
-public abstract class CodeExecutionTool extends JsonSerializable implements InteractionTool {
+public abstract class CodeExecutionTool extends JsonSerializable implements Tool {
 
   /** Instantiates a builder for CodeExecutionTool. */
   @ExcludeFromGeneratedCoverageReport

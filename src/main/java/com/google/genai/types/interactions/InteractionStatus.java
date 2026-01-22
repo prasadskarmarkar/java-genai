@@ -14,9 +14,7 @@
  * limitations under the License.
  */
 
-// Auto-generated code. Do not edit.
-
-package com.google.genai.types;
+package com.google.genai.types.interactions;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

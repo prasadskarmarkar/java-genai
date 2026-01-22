@@ -35,12 +35,12 @@ package com.google.genai.examples;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.genai.Client;
-import com.google.genai.types.CreateInteractionConfig;
-import com.google.genai.types.Interaction;
+import com.google.genai.types.interactions.CreateInteractionConfig;
+import com.google.genai.types.interactions.Interaction;
 import com.google.genai.types.Schema;
 import com.google.genai.types.interactions.content.FunctionCallContent;
 import com.google.genai.types.interactions.content.FunctionResultContent;
-import com.google.genai.types.interactions.content.InteractionContent;
+import com.google.genai.types.interactions.content.Content;
 import com.google.genai.types.interactions.content.TextContent;
 import com.google.genai.types.interactions.tools.FunctionTool;
 import java.lang.reflect.Method;
@@ -67,7 +67,6 @@ public final class InteractionsFunctionCalling {
     // Instantiate the client. The client gets the API key from the environment variable
     // `GOOGLE_API_KEY`.
     //
-    // Note: Interactions API is currently only available in Gemini Developer API (not Vertex AI).
     Client client = new Client();
 
     System.out.println("=== Interactions API: Function Calling Example ===\n");
@@ -140,7 +139,7 @@ public final class InteractionsFunctionCalling {
 
     Interaction response1 = client.interactions.create(config1);
 
-    System.out.println("Response received. Interaction ID: " + response1.id().orElse("N/A"));
+    System.out.println("Response received. Interaction ID: " + response1.id());
     System.out.println();
 
     // ===== STEP 3: Extract the function call from the response =====
@@ -155,14 +154,14 @@ public final class InteractionsFunctionCalling {
     }
 
     System.out.println("Function call received:");
-    System.out.println("  ID: " + functionCall.id().orElse("N/A"));
-    System.out.println("  Name: " + functionCall.name().orElse("N/A"));
-    System.out.println("  Arguments: " + functionCall.arguments().orElse(Map.of()));
+    System.out.println("  ID: " + functionCall.id());
+    System.out.println("  Name: " + functionCall.name());
+    System.out.println("  Arguments: " + functionCall.arguments());
     System.out.println();
 
     // Execute the function (simulated)
     Map<String, Object> weatherResult =
-        executeGetWeather(functionCall.arguments().orElse(Map.of()));
+        executeGetWeather(functionCall.arguments());
     System.out.println("Function result: " + weatherResult);
     System.out.println();
 
@@ -172,8 +171,8 @@ public final class InteractionsFunctionCalling {
 
     FunctionResultContent functionResult =
         FunctionResultContent.builder()
-            .id(functionCall.id().get())
-            .name(functionCall.name().get())
+            .id(functionCall.id())
+            .name(functionCall.name())
             .result(weatherResult)
             .build();
 
@@ -181,7 +180,7 @@ public final class InteractionsFunctionCalling {
         CreateInteractionConfig.builder()
             .model("gemini-2.5-flash")
             .inputFromContents(functionResult)
-            .previousInteractionId(response1.id().get())
+            .previousInteractionId(response1.id())
             .tools(weatherTool)
             .build();
 
@@ -252,7 +251,7 @@ public final class InteractionsFunctionCalling {
       System.out.println("\nAFC History (" + history.size() + " interactions):");
       for (int i = 0; i < history.size(); i++) {
         Interaction hist = history.get(i);
-        System.out.println("  [" + (i + 1) + "] ID: " + hist.id().orElse("N/A"));
+        System.out.println("  [" + (i + 1) + "] ID: " + hist.id());
       }
     }
   }
@@ -299,7 +298,7 @@ public final class InteractionsFunctionCalling {
    */
   private static FunctionCallContent extractFunctionCall(Interaction interaction) {
     if (interaction.outputs().isPresent()) {
-      for (InteractionContent output : interaction.outputs().get()) {
+      for (Content output : interaction.outputs().get()) {
         if (output instanceof FunctionCallContent) {
           return (FunctionCallContent) output;
         }
@@ -315,12 +314,12 @@ public final class InteractionsFunctionCalling {
    */
   private static void printOutputs(Interaction interaction) {
     if (interaction.outputs().isPresent() && !interaction.outputs().get().isEmpty()) {
-      for (InteractionContent output : interaction.outputs().get()) {
+      for (Content output : interaction.outputs().get()) {
         if (output instanceof TextContent) {
           System.out.println(((TextContent) output).text().orElse("(empty)"));
         } else if (output instanceof FunctionCallContent) {
           FunctionCallContent fc = (FunctionCallContent) output;
-          System.out.println("[Function Call: " + fc.name().orElse("unknown") + "]");
+          System.out.println("[Function Call: " + fc.name() + "]");
         }
       }
     }

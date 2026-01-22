@@ -35,10 +35,10 @@
 package com.google.genai.examples;
 
 import com.google.genai.Client;
-import com.google.genai.types.CreateInteractionConfig;
-import com.google.genai.types.GetInteractionConfig;
-import com.google.genai.types.Interaction;
-import com.google.genai.types.interactions.content.InteractionContent;
+import com.google.genai.types.interactions.CreateInteractionConfig;
+import com.google.genai.types.interactions.GetInteractionConfig;
+import com.google.genai.types.interactions.Interaction;
+import com.google.genai.types.interactions.content.Content;
 import com.google.genai.types.interactions.content.TextContent;
 
 /**
@@ -59,7 +59,6 @@ public final class InteractionsPreviousInteractionId {
     // Instantiate the client. The client gets the API key from the environment variable
     // `GOOGLE_API_KEY`.
     //
-    // Note: Interactions API is currently only available in Gemini Developer API (not Vertex AI).
     Client client = new Client();
 
     System.out.println("=== Example 4: Conversation Continuity with previousInteractionId ===\n");
@@ -89,27 +88,26 @@ public final class InteractionsPreviousInteractionId {
     System.out.println();
     System.out.println("RESPONSE:");
     System.out.println("  Status: " + firstResponse.status());
-    System.out.println("  Interaction ID: " + firstResponse.id().orElse("N/A"));
+    System.out.println("  Interaction ID: " + firstResponse.id());
     System.out.print("  Output: ");
     printOutputs(firstResponse);
 
     // ===== SECOND INTERACTION (LINKED TO FIRST) =====
-    if (firstResponse.id().isPresent()) {
-      System.out.println("\n---\n");
-      String input2 = "Can you explain that in simpler terms?";
-      System.out.println("SECOND INTERACTION (LINKED):");
-      System.out.println("REQUEST:");
-      System.out.println("  Model: gemini-2.5-flash");
-      System.out.println("  Input: " + input2);
-      System.out.println("  Previous Interaction ID: " + firstResponse.id().get());
-      System.out.println();
+    System.out.println("\n---\n");
+    String input2 = "Can you explain that in simpler terms?";
+    System.out.println("SECOND INTERACTION (LINKED):");
+    System.out.println("REQUEST:");
+    System.out.println("  Model: gemini-2.5-flash");
+    System.out.println("  Input: " + input2);
+    System.out.println("  Previous Interaction ID: " + firstResponse.id());
+    System.out.println();
 
-      CreateInteractionConfig config2 =
-          CreateInteractionConfig.builder()
-              .model("gemini-2.5-flash")
-              .input(input2)
-              .previousInteractionId(firstResponse.id().get()) // Link to previous interaction
-              .build();
+    CreateInteractionConfig config2 =
+        CreateInteractionConfig.builder()
+            .model("gemini-2.5-flash")
+            .input(input2)
+            .previousInteractionId(firstResponse.id()) // Link to previous interaction
+            .build();
 
       System.out.println("REQUEST JSON:");
       System.out.println(config2.toJson());
@@ -122,33 +120,30 @@ public final class InteractionsPreviousInteractionId {
       System.out.println();
       System.out.println("RESPONSE:");
       System.out.println("  Status: " + secondResponse.status());
-      System.out.println("  Interaction ID: " + secondResponse.id().orElse("N/A"));
+      System.out.println("  Interaction ID: " + secondResponse.id());
       System.out.print("  Output: ");
       printOutputs(secondResponse);
 
-      // ===== GET INTERACTION (RETRIEVE SECOND INTERACTION BY ID) =====
-      if (secondResponse.id().isPresent()) {
-        System.out.println("\n---\n");
-        System.out.println("GET INTERACTION (RETRIEVE BY ID):");
-        System.out.println("REQUEST:");
-        System.out.println("  Interaction ID: " + secondResponse.id().get());
-        System.out.println();
+    // ===== GET INTERACTION (RETRIEVE SECOND INTERACTION BY ID) =====
+    System.out.println("\n---\n");
+    System.out.println("GET INTERACTION (RETRIEVE BY ID):");
+    System.out.println("REQUEST:");
+    System.out.println("  Interaction ID: " + secondResponse.id());
+    System.out.println();
 
-        Interaction retrievedInteraction =
-            client.interactions.get(secondResponse.id().get(), GetInteractionConfig.builder().build());
+    Interaction retrievedInteraction =
+        client.interactions.get(secondResponse.id(), GetInteractionConfig.builder().build());
 
-        System.out.println("RESPONSE JSON:");
-        System.out.println(retrievedInteraction.toJson());
-        System.out.println();
-        System.out.println("RESPONSE:");
-        System.out.println("  Status: " + retrievedInteraction.status());
-        System.out.println("  Interaction ID: " + retrievedInteraction.id().orElse("N/A"));
-        System.out.println(
-            "  Previous Interaction ID: " + retrievedInteraction.previousInteractionId().orElse("N/A"));
-        System.out.print("  Output: ");
-        printOutputs(retrievedInteraction);
-      }
-    }
+    System.out.println("RESPONSE JSON:");
+    System.out.println(retrievedInteraction.toJson());
+    System.out.println();
+    System.out.println("RESPONSE:");
+    System.out.println("  Status: " + retrievedInteraction.status());
+    System.out.println("  Interaction ID: " + retrievedInteraction.id());
+    System.out.println(
+        "  Previous Interaction ID: " + retrievedInteraction.previousInteractionId().orElse("N/A"));
+    System.out.print("  Output: ");
+    printOutputs(retrievedInteraction);
 
     System.out.println("\n=== Example completed ===");
   }
@@ -160,7 +155,7 @@ public final class InteractionsPreviousInteractionId {
    */
   private static void printOutputs(Interaction interaction) {
     if (interaction.outputs().isPresent() && !interaction.outputs().get().isEmpty()) {
-      for (InteractionContent output : interaction.outputs().get()) {
+      for (Content output : interaction.outputs().get()) {
         if (output instanceof TextContent) {
           System.out.println(((TextContent) output).text().orElse("(empty)"));
           break;

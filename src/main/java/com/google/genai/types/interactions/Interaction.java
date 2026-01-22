@@ -14,11 +14,7 @@
  * limitations under the License.
  */
 
-// Auto-generated code. Do not edit.
-
-package com.google.genai.types;
-
-import static com.google.common.collect.ImmutableList.toImmutableList;
+package com.google.genai.types.interactions;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -27,7 +23,9 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.google.auto.value.AutoValue;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import com.google.genai.JsonSerializable;
-import com.google.genai.types.interactions.content.InteractionContent;
+import com.google.genai.types.ExcludeFromGeneratedCoverageReport;
+import com.google.genai.types.UsageMetadata;
+import com.google.genai.types.interactions.content.Content;
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
@@ -41,13 +39,21 @@ import java.util.Optional;
 @AutoValue
 @JsonDeserialize(builder = Interaction.Builder.class)
 public abstract class Interaction extends JsonSerializable {
-  /** Unique identifier for the interaction. */
+  /**
+   * Unique identifier for the interaction.
+   *
+   * <p>This field is always present in API responses and is required.
+   */
   @JsonProperty("id")
-  public abstract Optional<String> id();
+  public abstract String id();
 
-  /** The status of the interaction. */
+  /**
+   * The status of the interaction.
+   *
+   * <p>This field is always present in API responses and is required.
+   */
   @JsonProperty("status")
-  public abstract Optional<InteractionStatus> status();
+  public abstract InteractionStatus status();
 
   /** The agent identifier (e.g., "deep-research-pro-preview-12-2025"). */
   @JsonProperty("agent")
@@ -60,11 +66,11 @@ public abstract class Interaction extends JsonSerializable {
   /**
    * The output content from the interaction.
    *
-   * <p>Note: Outputs use InteractionContent (discriminated union with type field), not the
+   * <p>Note: Outputs use Content (discriminated union with type field), not the
    * standard Content type with parts.
    */
   @JsonProperty("outputs")
-  public abstract Optional<List<InteractionContent>> outputs();
+  public abstract Optional<List<Content>> outputs();
 
   /** The ID of the previous interaction for conversation continuity. */
   @JsonProperty("previous_interaction_id")
@@ -118,48 +124,18 @@ public abstract class Interaction extends JsonSerializable {
     /**
      * Setter for id.
      *
-     * <p>id: Unique identifier for the interaction.
+     * <p>id: Unique identifier for the interaction. This field is required.
      */
     @JsonProperty("id")
     public abstract Builder id(String id);
 
-    /** Internal setter for id with Optional. */
-    @ExcludeFromGeneratedCoverageReport
-    abstract Builder id(Optional<String> id);
-
-    /**
-     * Clear method for id.
-     *
-     * <p>Removes the id field.
-     */
-    @ExcludeFromGeneratedCoverageReport
-    @CanIgnoreReturnValue
-    public Builder clearId() {
-      return id(Optional.empty());
-    }
-
     /**
      * Setter for status.
      *
-     * <p>status: The status of the interaction.
+     * <p>status: The status of the interaction. This field is required.
      */
     @JsonProperty("status")
     public abstract Builder status(InteractionStatus status);
-
-    /** Internal setter for status with Optional. */
-    @ExcludeFromGeneratedCoverageReport
-    abstract Builder status(Optional<InteractionStatus> status);
-
-    /**
-     * Clear method for status.
-     *
-     * <p>Removes the status field.
-     */
-    @ExcludeFromGeneratedCoverageReport
-    @CanIgnoreReturnValue
-    public Builder clearStatus() {
-      return status(Optional.empty());
-    }
 
     /**
      * Setter for agent.
@@ -213,7 +189,7 @@ public abstract class Interaction extends JsonSerializable {
      * <p>outputs: The output content from the interaction.
      */
     @JsonProperty("outputs")
-    public abstract Builder outputs(List<InteractionContent> outputs);
+    public abstract Builder outputs(List<Content> outputs);
 
     /**
      * Setter for outputs (varargs convenience method).
@@ -221,13 +197,13 @@ public abstract class Interaction extends JsonSerializable {
      * <p>outputs: The output content from the interaction.
      */
     @CanIgnoreReturnValue
-    public Builder outputs(InteractionContent... outputs) {
+    public Builder outputs(Content... outputs) {
       return outputs(Arrays.asList(outputs));
     }
 
     /** Internal setter for outputs with Optional. */
     @ExcludeFromGeneratedCoverageReport
-    abstract Builder outputs(Optional<List<InteractionContent>> outputs);
+    abstract Builder outputs(Optional<List<Content>> outputs);
 
     /**
      * Clear method for outputs.

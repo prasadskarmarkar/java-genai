@@ -33,19 +33,31 @@ import java.util.Optional;
 @JsonDeserialize(builder = FunctionCallContent.Builder.class)
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 @JsonTypeName("function_call")
-public abstract class FunctionCallContent extends JsonSerializable implements InteractionContent {
+public abstract class FunctionCallContent extends JsonSerializable implements Content {
 
-  /** The unique identifier for this function call. Used to match with FunctionResultContent. */
+  /**
+   * The unique identifier for this function call. Used to match with FunctionResultContent.
+   *
+   * <p>This field is always present when the model returns a function call and is required.
+   */
   @JsonProperty("id")
-  public abstract Optional<String> id();
+  public abstract String id();
 
-  /** The name of the function to call. */
+  /**
+   * The name of the function to call.
+   *
+   * <p>This field is always present when the model returns a function call and is required.
+   */
   @JsonProperty("name")
-  public abstract Optional<String> name();
+  public abstract String name();
 
-  /** The arguments to pass to the function, as a map of parameter names to values. */
+  /**
+   * The arguments to pass to the function, as a map of parameter names to values.
+   *
+   * <p>This field is always present when the model returns a function call and is required.
+   */
   @JsonProperty("arguments")
-  public abstract Optional<Map<String, Object>> arguments();
+  public abstract Map<String, Object> arguments();
 
   /** Instantiates a builder for FunctionCallContent. */
   @ExcludeFromGeneratedCoverageReport
@@ -68,56 +80,26 @@ public abstract class FunctionCallContent extends JsonSerializable implements In
     /**
      * Setter for id.
      *
-     * <p>id: The unique identifier for this function call.
+     * <p>id: The unique identifier for this function call. This field is required.
      */
     @JsonProperty("id")
     public abstract Builder id(String id);
 
-    @ExcludeFromGeneratedCoverageReport
-    abstract Builder id(Optional<String> id);
-
-    /** Clears the value of id field. */
-    @ExcludeFromGeneratedCoverageReport
-    @CanIgnoreReturnValue
-    public Builder clearId() {
-      return id(Optional.empty());
-    }
-
     /**
      * Setter for name.
      *
-     * <p>name: The name of the function to call.
+     * <p>name: The name of the function to call. This field is required.
      */
     @JsonProperty("name")
     public abstract Builder name(String name);
 
-    @ExcludeFromGeneratedCoverageReport
-    abstract Builder name(Optional<String> name);
-
-    /** Clears the value of name field. */
-    @ExcludeFromGeneratedCoverageReport
-    @CanIgnoreReturnValue
-    public Builder clearName() {
-      return name(Optional.empty());
-    }
-
     /**
      * Setter for arguments.
      *
-     * <p>arguments: The arguments to pass to the function.
+     * <p>arguments: The arguments to pass to the function. This field is required.
      */
     @JsonProperty("arguments")
     public abstract Builder arguments(Map<String, Object> arguments);
-
-    @ExcludeFromGeneratedCoverageReport
-    abstract Builder arguments(Optional<Map<String, Object>> arguments);
-
-    /** Clears the value of arguments field. */
-    @ExcludeFromGeneratedCoverageReport
-    @CanIgnoreReturnValue
-    public Builder clearArguments() {
-      return arguments(Optional.empty());
-    }
 
     public abstract FunctionCallContent build();
   }

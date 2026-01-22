@@ -49,7 +49,7 @@ import java.util.Optional;
 @JsonDeserialize(builder = ComputerUseTool.Builder.class)
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 @JsonTypeName("computer_use")
-public abstract class ComputerUseTool extends JsonSerializable implements InteractionTool {
+public abstract class ComputerUseTool extends JsonSerializable implements Tool {
 
   /** The environment for computer use (e.g., "browser", "desktop"). */
   @JsonProperty("environment")

@@ -14,9 +14,7 @@
  * limitations under the License.
  */
 
-// Auto-generated code. Do not edit.
-
-package com.google.genai.types;
+package com.google.genai.types.interactions;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -24,10 +22,11 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.google.auto.value.AutoValue;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import com.google.genai.JsonSerializable;
-import com.google.genai.types.interactions.content.InteractionContent;
-import com.google.genai.types.interactions.InteractionInput;
-import com.google.genai.types.interactions.InteractionTurn;
-import com.google.genai.types.interactions.tools.InteractionTool;
+import com.google.genai.types.AgentConfig;
+import com.google.genai.types.ExcludeFromGeneratedCoverageReport;
+import com.google.genai.types.HttpOptions;
+import com.google.genai.types.interactions.content.Content;
+import com.google.genai.types.interactions.tools.Tool;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -46,7 +45,7 @@ public abstract class CreateInteractionConfig extends JsonSerializable {
 
   /** Required: The input for the interaction. */
   @JsonProperty("input")
-  public abstract Optional<InteractionInput> input();
+  public abstract Input input();
 
   /** The model to use for the interaction. Either model or agent must be specified. */
   @JsonProperty("model")
@@ -94,7 +93,7 @@ public abstract class CreateInteractionConfig extends JsonSerializable {
 
   /** Developer set system instruction. */
   @JsonProperty("systemInstruction")
-  public abstract Optional<Content> systemInstruction();
+  public abstract Optional<com.google.genai.types.Content> systemInstruction();
 
   /**
    * A list of tools the model may use to generate the next response.
@@ -103,7 +102,7 @@ public abstract class CreateInteractionConfig extends JsonSerializable {
    * GoogleSearchTool}, {@code CodeExecutionTool}, etc.
    */
   @JsonProperty("tools")
-  public abstract Optional<List<InteractionTool>> tools();
+  public abstract Optional<List<Tool>> tools();
 
   /** Instantiates a builder for CreateInteractionConfig. */
   @ExcludeFromGeneratedCoverageReport
@@ -159,17 +158,8 @@ public abstract class CreateInteractionConfig extends JsonSerializable {
      * <p>input: The input for the interaction.
      */
     @JsonProperty("input")
-    public abstract Builder input(InteractionInput input);
+    public abstract Builder input(Input input);
 
-    @ExcludeFromGeneratedCoverageReport
-    abstract Builder input(Optional<InteractionInput> input);
-
-    /** Clears the value of input field. */
-    @ExcludeFromGeneratedCoverageReport
-    @CanIgnoreReturnValue
-    public Builder clearInput() {
-      return input(Optional.empty());
-    }
 
     /**
      * Convenience setter for input from a string.
@@ -178,47 +168,47 @@ public abstract class CreateInteractionConfig extends JsonSerializable {
      */
     @CanIgnoreReturnValue
     public Builder input(String text) {
-      return input(InteractionInput.fromString(text));
+      return input(Input.fromString(text));
     }
 
     /**
-     * Convenience setter for input from a list of InteractionContent.
+     * Convenience setter for input from a list of Content.
      *
      * <p>input: The input content for the interaction.
      */
     @CanIgnoreReturnValue
-    public Builder inputFromContents(List<InteractionContent> contents) {
-      return input(InteractionInput.fromContents(contents));
+    public Builder inputFromContents(List<Content> contents) {
+      return input(Input.fromContents(contents));
     }
 
     /**
-     * Convenience setter for input from InteractionContent objects (varargs).
+     * Convenience setter for input from Content objects (varargs).
      *
      * <p>input: The input content for the interaction.
      */
     @CanIgnoreReturnValue
-    public Builder inputFromContents(InteractionContent... contents) {
-      return input(InteractionInput.fromContents(contents));
+    public Builder inputFromContents(Content... contents) {
+      return input(Input.fromContents(contents));
     }
 
     /**
-     * Convenience setter for input from a list of InteractionTurn.
+     * Convenience setter for input from a list of Turn.
      *
      * <p>input: The input turns for the interaction.
      */
     @CanIgnoreReturnValue
-    public Builder inputFromTurns(List<InteractionTurn> turns) {
-      return input(InteractionInput.fromTurns(turns));
+    public Builder inputFromTurns(List<Turn> turns) {
+      return input(Input.fromTurns(turns));
     }
 
     /**
-     * Convenience setter for input from InteractionTurn objects (varargs).
+     * Convenience setter for input from Turn objects (varargs).
      *
      * <p>input: The input turns for the interaction.
      */
     @CanIgnoreReturnValue
-    public Builder inputFromTurns(InteractionTurn... turns) {
-      return input(InteractionInput.fromTurns(turns));
+    public Builder inputFromTurns(Turn... turns) {
+      return input(Input.fromTurns(turns));
     }
 
     /**
@@ -455,7 +445,7 @@ public abstract class CreateInteractionConfig extends JsonSerializable {
      * <p>systemInstruction: Developer set system instruction.
      */
     @JsonProperty("systemInstruction")
-    public abstract Builder systemInstruction(Content systemInstruction);
+    public abstract Builder systemInstruction(com.google.genai.types.Content systemInstruction);
 
     /**
      * Setter for systemInstruction builder.
@@ -463,12 +453,12 @@ public abstract class CreateInteractionConfig extends JsonSerializable {
      * <p>systemInstruction: Developer set system instruction.
      */
     @CanIgnoreReturnValue
-    public Builder systemInstruction(Content.Builder systemInstructionBuilder) {
+    public Builder systemInstruction(com.google.genai.types.Content.Builder systemInstructionBuilder) {
       return systemInstruction(systemInstructionBuilder.build());
     }
 
     @ExcludeFromGeneratedCoverageReport
-    abstract Builder systemInstruction(Optional<Content> systemInstruction);
+    abstract Builder systemInstruction(Optional<com.google.genai.types.Content> systemInstruction);
 
     /** Clears the value of systemInstruction field. */
     @ExcludeFromGeneratedCoverageReport
@@ -484,7 +474,7 @@ public abstract class CreateInteractionConfig extends JsonSerializable {
      * Interactions tool types such as {@code FunctionTool}, {@code GoogleSearchTool}, etc.
      */
     @JsonProperty("tools")
-    public abstract Builder tools(List<InteractionTool> tools);
+    public abstract Builder tools(List<Tool> tools);
 
     /**
      * Setter for tools (varargs convenience method).
@@ -492,12 +482,12 @@ public abstract class CreateInteractionConfig extends JsonSerializable {
      * <p>tools: A list of tools the model may use to generate the next response.
      */
     @CanIgnoreReturnValue
-    public Builder tools(InteractionTool... tools) {
+    public Builder tools(Tool... tools) {
       return tools(Arrays.asList(tools));
     }
 
     @ExcludeFromGeneratedCoverageReport
-    abstract Builder tools(Optional<List<InteractionTool>> tools);
+    abstract Builder tools(Optional<List<Tool>> tools);
 
     /** Clears the value of tools field. */
     @ExcludeFromGeneratedCoverageReport

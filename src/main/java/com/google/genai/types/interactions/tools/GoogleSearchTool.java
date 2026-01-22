@@ -42,7 +42,7 @@ import com.google.genai.types.ExcludeFromGeneratedCoverageReport;
 @JsonDeserialize(builder = GoogleSearchTool.Builder.class)
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 @JsonTypeName("google_search")
-public abstract class GoogleSearchTool extends JsonSerializable implements InteractionTool {
+public abstract class GoogleSearchTool extends JsonSerializable implements Tool {
 
   /** Instantiates a builder for GoogleSearchTool. */
   @ExcludeFromGeneratedCoverageReport

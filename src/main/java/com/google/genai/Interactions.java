@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-// Auto-generated code. Do not edit.
-
 package com.google.genai;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -24,21 +22,20 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.genai.Common.BuiltRequest;
 import com.google.genai.errors.GenAiIOException;
-import com.google.genai.types.CancelInteractionConfig;
-import com.google.genai.types.CancelInteractionParameters;
-import com.google.genai.types.CreateInteractionConfig;
-import com.google.genai.types.CreateInteractionParameters;
-import com.google.genai.types.DeleteInteractionConfig;
-import com.google.genai.types.DeleteInteractionParameters;
-import com.google.genai.types.DeleteInteractionResponse;
-import com.google.genai.types.GetInteractionConfig;
-import com.google.genai.types.GetInteractionParameters;
 import com.google.genai.types.HttpOptions;
 import com.google.genai.types.HttpResponse;
-import com.google.genai.types.Interaction;
+import com.google.genai.types.interactions.CancelInteractionConfig;
+import com.google.genai.types.interactions.CancelInteractionParameters;
+import com.google.genai.types.interactions.CreateInteractionConfig;
+import com.google.genai.types.interactions.CreateInteractionParameters;
+import com.google.genai.types.interactions.DeleteInteractionConfig;
+import com.google.genai.types.interactions.DeleteInteractionParameters;
+import com.google.genai.types.interactions.DeleteInteractionResponse;
+import com.google.genai.types.interactions.GetInteractionConfig;
+import com.google.genai.types.interactions.GetInteractionParameters;
+import com.google.genai.types.interactions.Interaction;
 import com.google.genai.types.interactions.content.FunctionCallContent;
 import com.google.genai.types.interactions.content.FunctionResultContent;
-import com.google.genai.types.interactions.InteractionInput;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -154,7 +151,7 @@ public final class Interactions {
               Common.getValueByPath(fromObject, new String[] {"systemInstruction"})));
     }
 
-    // InteractionTool types serialize directly with their type discriminator
+    // Tool types serialize directly with their type discriminator
     if (Common.getValueByPath(fromObject, new String[] {"tools"}) != null) {
       Common.setValueByPath(
           parentObject,
@@ -255,7 +252,7 @@ public final class Interactions {
               Common.getValueByPath(fromObject, new String[] {"systemInstruction"})));
     }
 
-    // InteractionTool types serialize directly with their type discriminator
+    // Tool types serialize directly with their type discriminator
     if (Common.getValueByPath(fromObject, new String[] {"tools"}) != null) {
       Common.setValueByPath(
           parentObject,
@@ -379,33 +376,13 @@ public final class Interactions {
   @ExcludeFromGeneratedCoverageReport
   ObjectNode getInteractionParametersToMldev(
       ApiClient apiClient, JsonNode fromObject, ObjectNode parentObject) {
-    ObjectNode toObject = JsonSerializable.objectMapper().createObjectNode();
-
-    if (Common.getValueByPath(fromObject, new String[] {"id"}) != null) {
-      Common.setValueByPath(
-          toObject,
-          new String[] {"_url", "id"},
-          Transformers.tInteractionId(
-              this.apiClient, Common.getValueByPath(fromObject, new String[] {"id"})));
-    }
-
-    return toObject;
+    return transformIdParameter(fromObject);
   }
 
   @ExcludeFromGeneratedCoverageReport
   ObjectNode getInteractionParametersToVertex(
       ApiClient apiClient, JsonNode fromObject, ObjectNode parentObject) {
-    ObjectNode toObject = JsonSerializable.objectMapper().createObjectNode();
-
-    if (Common.getValueByPath(fromObject, new String[] {"id"}) != null) {
-      Common.setValueByPath(
-          toObject,
-          new String[] {"_url", "id"},
-          Transformers.tInteractionId(
-              this.apiClient, Common.getValueByPath(fromObject, new String[] {"id"})));
-    }
-
-    return toObject;
+    return transformIdParameter(fromObject);
   }
 
   /** A shared buildRequest method for both sync and async methods. */
@@ -474,33 +451,13 @@ public final class Interactions {
   @ExcludeFromGeneratedCoverageReport
   ObjectNode cancelInteractionParametersToMldev(
       ApiClient apiClient, JsonNode fromObject, ObjectNode parentObject) {
-    ObjectNode toObject = JsonSerializable.objectMapper().createObjectNode();
-
-    if (Common.getValueByPath(fromObject, new String[] {"id"}) != null) {
-      Common.setValueByPath(
-          toObject,
-          new String[] {"_url", "id"},
-          Transformers.tInteractionId(
-              this.apiClient, Common.getValueByPath(fromObject, new String[] {"id"})));
-    }
-
-    return toObject;
+    return transformIdParameter(fromObject);
   }
 
   @ExcludeFromGeneratedCoverageReport
   ObjectNode cancelInteractionParametersToVertex(
       ApiClient apiClient, JsonNode fromObject, ObjectNode parentObject) {
-    ObjectNode toObject = JsonSerializable.objectMapper().createObjectNode();
-
-    if (Common.getValueByPath(fromObject, new String[] {"id"}) != null) {
-      Common.setValueByPath(
-          toObject,
-          new String[] {"_url", "id"},
-          Transformers.tInteractionId(
-              this.apiClient, Common.getValueByPath(fromObject, new String[] {"id"})));
-    }
-
-    return toObject;
+    return transformIdParameter(fromObject);
   }
 
   /** A shared buildRequest method for both sync and async methods. */
@@ -571,22 +528,34 @@ public final class Interactions {
   @ExcludeFromGeneratedCoverageReport
   ObjectNode deleteInteractionParametersToMldev(
       ApiClient apiClient, JsonNode fromObject, ObjectNode parentObject) {
-    ObjectNode toObject = JsonSerializable.objectMapper().createObjectNode();
-
-    if (Common.getValueByPath(fromObject, new String[] {"id"}) != null) {
-      Common.setValueByPath(
-          toObject,
-          new String[] {"_url", "id"},
-          Transformers.tInteractionId(
-              this.apiClient, Common.getValueByPath(fromObject, new String[] {"id"})));
-    }
-
-    return toObject;
+    return transformIdParameter(fromObject);
   }
 
   @ExcludeFromGeneratedCoverageReport
   ObjectNode deleteInteractionParametersToVertex(
       ApiClient apiClient, JsonNode fromObject, ObjectNode parentObject) {
+    return transformIdParameter(fromObject);
+  }
+
+  @ExcludeFromGeneratedCoverageReport
+  ObjectNode deleteInteractionFromMldev(JsonNode fromObject, ObjectNode parentObject) {
+    return transformDeleteInteractionResponse(fromObject);
+  }
+
+  @ExcludeFromGeneratedCoverageReport
+  ObjectNode deleteInteractionFromVertex(JsonNode fromObject, ObjectNode parentObject) {
+    return transformDeleteInteractionResponse(fromObject);
+  }
+
+  /**
+   * Shared transformer for interaction ID parameters (used by GET, CANCEL, DELETE operations).
+   * Transforms the "id" field from the input into a URL parameter.
+   *
+   * @param fromObject Source JSON node containing the ID
+   * @return Transformed ObjectNode with ID in _url.id path
+   */
+  @ExcludeFromGeneratedCoverageReport
+  private ObjectNode transformIdParameter(JsonNode fromObject) {
     ObjectNode toObject = JsonSerializable.objectMapper().createObjectNode();
 
     if (Common.getValueByPath(fromObject, new String[] {"id"}) != null) {
@@ -600,22 +569,15 @@ public final class Interactions {
     return toObject;
   }
 
+  /**
+   * Shared transformer for delete interaction responses.
+   * Extracts sdkHttpResponse from the API response.
+   *
+   * @param fromObject Source JSON node from the API response
+   * @return Transformed ObjectNode with sdkHttpResponse field
+   */
   @ExcludeFromGeneratedCoverageReport
-  ObjectNode deleteInteractionResponseFromMldev(JsonNode fromObject, ObjectNode parentObject) {
-    ObjectNode toObject = JsonSerializable.objectMapper().createObjectNode();
-
-    if (Common.getValueByPath(fromObject, new String[] {"sdkHttpResponse"}) != null) {
-      Common.setValueByPath(
-          toObject,
-          new String[] {"sdkHttpResponse"},
-          Common.getValueByPath(fromObject, new String[] {"sdkHttpResponse"}));
-    }
-
-    return toObject;
-  }
-
-  @ExcludeFromGeneratedCoverageReport
-  ObjectNode deleteInteractionResponseFromVertex(JsonNode fromObject, ObjectNode parentObject) {
+  private ObjectNode transformDeleteInteractionResponse(JsonNode fromObject) {
     ObjectNode toObject = JsonSerializable.objectMapper().createObjectNode();
 
     if (Common.getValueByPath(fromObject, new String[] {"sdkHttpResponse"}) != null) {
@@ -688,9 +650,9 @@ public final class Interactions {
     JsonNode responseNode = JsonSerializable.stringToJsonNode(responseString);
 
     if (this.apiClient.vertexAI()) {
-      responseNode = deleteInteractionResponseFromVertex(responseNode, null);
+      responseNode = deleteInteractionFromVertex(responseNode, null);
     } else {
-      responseNode = deleteInteractionResponseFromMldev(responseNode, null);
+      responseNode = deleteInteractionFromMldev(responseNode, null);
     }
 
     DeleteInteractionResponse sdkResponse =
@@ -823,7 +785,7 @@ public final class Interactions {
       }
 
       // Prepare next config with function results
-      previousInteractionId = response.id().orElse(previousInteractionId);
+      previousInteractionId = response.id();
 
       // Build new config with function results as input
       CreateInteractionConfig.Builder nextConfigBuilder =

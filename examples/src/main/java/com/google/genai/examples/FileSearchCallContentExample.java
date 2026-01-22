@@ -51,7 +51,7 @@ public class FileSearchCallContentExample {
     FileSearchCallContent deserialized = FileSearchCallContent.fromJson(json);
 
     System.out.println("Deserialized FileSearchCallContent:");
-    System.out.println("  ID: " + deserialized.id().orElse("N/A"));
+    System.out.println("  ID: " + deserialized.id());
     System.out.println();
 
     // Example 4: Create FileSearchCallContent without ID (optional)

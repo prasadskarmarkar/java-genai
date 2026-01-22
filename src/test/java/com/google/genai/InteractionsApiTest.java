@@ -21,12 +21,12 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.google.genai.types.CancelInteractionConfig;
-import com.google.genai.types.CreateInteractionConfig;
-import com.google.genai.types.DeleteInteractionConfig;
-import com.google.genai.types.GetInteractionConfig;
-import com.google.genai.types.Interaction;
-import com.google.genai.types.InteractionStatus;
+import com.google.genai.types.interactions.CancelInteractionConfig;
+import com.google.genai.types.interactions.CreateInteractionConfig;
+import com.google.genai.types.interactions.DeleteInteractionConfig;
+import com.google.genai.types.interactions.GetInteractionConfig;
+import com.google.genai.types.interactions.Interaction;
+import com.google.genai.types.interactions.InteractionStatus;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -119,7 +119,7 @@ public class InteractionsApiTest {
 
     // Assert
     assertTrue(config.model().isPresent());
-    assertTrue(config.input().isPresent());
+    assertNotNull(config.input());
   }
 
   @Test

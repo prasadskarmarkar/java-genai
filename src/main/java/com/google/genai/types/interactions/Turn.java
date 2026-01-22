@@ -16,8 +16,6 @@
 
 package com.google.genai.types.interactions;
 
-import static com.google.common.collect.ImmutableList.toImmutableList;
-
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -25,48 +23,48 @@ import com.google.auto.value.AutoValue;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import com.google.genai.JsonSerializable;
 import com.google.genai.types.ExcludeFromGeneratedCoverageReport;
-import com.google.genai.types.interactions.content.InteractionContent;
+import com.google.genai.types.interactions.content.Content;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-/** Represents a conversation turn with role and InteractionContent. */
+/** Represents a conversation turn with role and Content. */
 @AutoValue
-@JsonDeserialize(builder = InteractionTurn.Builder.class)
-public abstract class InteractionTurn extends JsonSerializable {
-  /** The content of the turn as a list of InteractionContent objects. */
+@JsonDeserialize(builder = Turn.Builder.class)
+public abstract class Turn extends JsonSerializable {
+  /** The content of the turn as a list of Content objects. */
   @JsonProperty("content")
-  public abstract Optional<List<InteractionContent>> content();
+  public abstract Optional<List<Content>> content();
 
   /** Optional. The role in the conversation ('user' or 'model'). */
   @JsonProperty("role")
   public abstract Optional<String> role();
 
-  /** Instantiates a builder for InteractionTurn. */
+  /** Instantiates a builder for Turn. */
   @ExcludeFromGeneratedCoverageReport
   public static Builder builder() {
-    return new AutoValue_InteractionTurn.Builder();
+    return new AutoValue_Turn.Builder();
   }
 
   /** Creates a builder with the same values as this instance. */
   public abstract Builder toBuilder();
 
-  /** Builder for InteractionTurn. */
+  /** Builder for Turn. */
   @AutoValue.Builder
   public abstract static class Builder {
-    /** For internal usage. Please use `InteractionTurn.builder()` for instantiation. */
+    /** For internal usage. Please use `Turn.builder()` for instantiation. */
     @JsonCreator
     private static Builder create() {
-      return new AutoValue_InteractionTurn.Builder();
+      return new AutoValue_Turn.Builder();
     }
 
     /**
      * Setter for content.
      *
-     * <p>content: The content of the turn as a list of InteractionContent objects.
+     * <p>content: The content of the turn as a list of Content objects.
      */
     @JsonProperty("content")
-    public abstract Builder content(List<InteractionContent> content);
+    public abstract Builder content(List<Content> content);
 
     /**
      * Setter for content (varargs convenience method).
@@ -74,13 +72,13 @@ public abstract class InteractionTurn extends JsonSerializable {
      * <p>content: The content of the turn.
      */
     @CanIgnoreReturnValue
-    public Builder content(InteractionContent... content) {
+    public Builder content(Content... content) {
       return content(Arrays.asList(content));
     }
 
     /** Internal setter for content with Optional. */
     @ExcludeFromGeneratedCoverageReport
-    abstract Builder content(Optional<List<InteractionContent>> content);
+    abstract Builder content(Optional<List<Content>> content);
 
     /**
      * Clear method for content.
@@ -116,13 +114,13 @@ public abstract class InteractionTurn extends JsonSerializable {
       return role(Optional.empty());
     }
 
-    /** Builds the InteractionTurn instance. */
-    public abstract InteractionTurn build();
+    /** Builds the Turn instance. */
+    public abstract Turn build();
   }
 
-  /** Deserializes an InteractionTurn from a JSON string. */
+  /** Deserializes an Turn from a JSON string. */
   @ExcludeFromGeneratedCoverageReport
-  public static InteractionTurn fromJson(String jsonString) {
-    return JsonSerializable.fromJsonString(jsonString, InteractionTurn.class);
+  public static Turn fromJson(String jsonString) {
+    return JsonSerializable.fromJsonString(jsonString, Turn.class);
   }
 }

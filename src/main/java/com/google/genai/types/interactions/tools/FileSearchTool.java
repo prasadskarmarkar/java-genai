@@ -28,7 +28,6 @@ import com.google.genai.types.ExcludeFromGeneratedCoverageReport;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -51,19 +50,19 @@ import java.util.Optional;
 @JsonDeserialize(builder = FileSearchTool.Builder.class)
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 @JsonTypeName("file_search")
-public abstract class FileSearchTool extends JsonSerializable implements InteractionTool {
+public abstract class FileSearchTool extends JsonSerializable implements Tool {
 
   /** The names of the file search stores to search. */
-  @JsonProperty("fileSearchStoreNames")
+  @JsonProperty("file_search_store_names")
   public abstract Optional<List<String>> fileSearchStoreNames();
 
   /** The maximum number of results to return. */
-  @JsonProperty("topK")
+  @JsonProperty("top_k")
   public abstract Optional<Integer> topK();
 
   /** Optional metadata filter for the search. */
-  @JsonProperty("metadataFilter")
-  public abstract Optional<Map<String, Object>> metadataFilter();
+  @JsonProperty("metadata_filter")
+  public abstract Optional<String> metadataFilter();
 
   /** Instantiates a builder for FileSearchTool. */
   @ExcludeFromGeneratedCoverageReport
@@ -88,7 +87,7 @@ public abstract class FileSearchTool extends JsonSerializable implements Interac
      *
      * <p>fileSearchStoreNames: The names of the file search stores to search.
      */
-    @JsonProperty("fileSearchStoreNames")
+    @JsonProperty("file_search_store_names")
     public abstract Builder fileSearchStoreNames(List<String> fileSearchStoreNames);
 
     /**
@@ -101,11 +100,11 @@ public abstract class FileSearchTool extends JsonSerializable implements Interac
       return fileSearchStoreNames(Arrays.asList(fileSearchStoreNames));
     }
 
-    
+
     abstract Builder fileSearchStoreNames(Optional<List<String>> fileSearchStoreNames);
 
     /** Clears the value of fileSearchStoreNames field. */
-    
+
     @CanIgnoreReturnValue
     public Builder clearFileSearchStoreNames() {
       return fileSearchStoreNames(Optional.empty());
@@ -116,14 +115,14 @@ public abstract class FileSearchTool extends JsonSerializable implements Interac
      *
      * <p>topK: The maximum number of results to return.
      */
-    @JsonProperty("topK")
+    @JsonProperty("top_k")
     public abstract Builder topK(Integer topK);
 
-    
+
     abstract Builder topK(Optional<Integer> topK);
 
     /** Clears the value of topK field. */
-    
+
     @CanIgnoreReturnValue
     public Builder clearTopK() {
       return topK(Optional.empty());
@@ -134,14 +133,14 @@ public abstract class FileSearchTool extends JsonSerializable implements Interac
      *
      * <p>metadataFilter: Optional metadata filter for the search.
      */
-    @JsonProperty("metadataFilter")
-    public abstract Builder metadataFilter(Map<String, Object> metadataFilter);
+    @JsonProperty("metadata_filter")
+    public abstract Builder metadataFilter(String metadataFilter);
 
-    
-    abstract Builder metadataFilter(Optional<Map<String, Object>> metadataFilter);
+
+    abstract Builder metadataFilter(Optional<String> metadataFilter);
 
     /** Clears the value of metadataFilter field. */
-    
+
     @CanIgnoreReturnValue
     public Builder clearMetadataFilter() {
       return metadataFilter(Optional.empty());

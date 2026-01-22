@@ -20,13 +20,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.google.genai.types.CancelInteractionConfig;
-import com.google.genai.types.CreateInteractionConfig;
-import com.google.genai.types.DeleteInteractionConfig;
-import com.google.genai.types.DeleteInteractionResponse;
-import com.google.genai.types.GetInteractionConfig;
-import com.google.genai.types.Interaction;
-import com.google.genai.types.InteractionStatus;
+import com.google.genai.types.interactions.CancelInteractionConfig;
+import com.google.genai.types.interactions.CreateInteractionConfig;
+import com.google.genai.types.interactions.DeleteInteractionConfig;
+import com.google.genai.types.interactions.DeleteInteractionResponse;
+import com.google.genai.types.interactions.GetInteractionConfig;
+import com.google.genai.types.interactions.Interaction;
+import com.google.genai.types.interactions.InteractionStatus;
 import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -68,8 +68,8 @@ public class InteractionsReplayTest {
 
     // Assert
     assertNotNull(interaction);
-    assertTrue(interaction.id().isPresent());
-    assertTrue(interaction.status().isPresent());
+    assertNotNull(interaction.id());
+    assertNotNull(interaction.status());
     assertTrue(interaction.model().isPresent());
   }
 
@@ -93,9 +93,9 @@ public class InteractionsReplayTest {
 
     // Assert
     assertNotNull(interaction);
-    assertTrue(interaction.id().isPresent());
-    assertEquals(interactionId, interaction.id().get());
-    assertTrue(interaction.status().isPresent());
+    assertNotNull(interaction.id());
+    assertEquals(interactionId, interaction.id());
+    assertNotNull(interaction.status());
   }
 
   @ParameterizedTest
@@ -118,14 +118,14 @@ public class InteractionsReplayTest {
 
     // Act - Get
     GetInteractionConfig getConfig = GetInteractionConfig.builder().build();
-    Interaction retrieved = client.interactions.get(created.id().get(), getConfig);
+    Interaction retrieved = client.interactions.get(created.id(), getConfig);
 
     // Assert
     assertNotNull(created);
     assertNotNull(retrieved);
     assertEquals(created.id(), retrieved.id());
-    assertTrue(created.status().isPresent());
-    assertTrue(retrieved.status().isPresent());
+    assertNotNull(created.status());
+    assertNotNull(retrieved.status());
   }
 
   @ParameterizedTest
@@ -148,8 +148,8 @@ public class InteractionsReplayTest {
 
     // Assert
     assertNotNull(interaction);
-    assertTrue(interaction.id().isPresent());
-    assertTrue(interaction.status().isPresent());
+    assertNotNull(interaction.id());
+    assertNotNull(interaction.status());
   }
 
   @ParameterizedTest
@@ -195,7 +195,7 @@ public class InteractionsReplayTest {
 
     // Assert
     assertNotNull(interaction);
-    assertTrue(interaction.id().isPresent());
+    assertNotNull(interaction.id());
   }
 
   @ParameterizedTest
@@ -218,7 +218,7 @@ public class InteractionsReplayTest {
 
     // Assert
     assertNotNull(interaction);
-    assertTrue(interaction.id().isPresent());
+    assertNotNull(interaction.id());
     assertTrue(interaction.agent().isPresent());
   }
 
@@ -242,7 +242,7 @@ public class InteractionsReplayTest {
 
     // Assert
     assertNotNull(interaction);
-    assertTrue(interaction.status().isPresent());
-    assertEquals(InteractionStatus.COMPLETED, interaction.status().get());
+    assertNotNull(interaction.status());
+    assertEquals(InteractionStatus.COMPLETED, interaction.status());
   }
 }

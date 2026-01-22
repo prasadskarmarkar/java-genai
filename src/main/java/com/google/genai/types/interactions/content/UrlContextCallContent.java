@@ -29,12 +29,29 @@ import com.google.genai.types.interactions.UrlContextCallArguments;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * URL context call content for interactions.
+ *
+ * <p>Represents a request from the model to retrieve and analyze content from URLs. This content type
+ * appears in interaction outputs when the model wants to access web pages for context.
+ *
+ * <p>Example usage:
+ *
+ * <pre>{@code
+ * UrlContextCallContent urlCall = UrlContextCallContent.builder()
+ *     .id("call_123")
+ *     .arguments(UrlContextCallArguments.builder()
+ *         .urls(Arrays.asList("https://example.com"))
+ *         .build())
+ *     .build();
+ * }</pre>
+ */
 @AutoValue
 @JsonDeserialize(builder = UrlContextCallContent.Builder.class)
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 @JsonTypeName("url_context_call")
 public abstract class UrlContextCallContent extends JsonSerializable
-    implements InteractionContent {
+    implements Content {
 
   @JsonProperty("arguments")
   public abstract Optional<UrlContextCallArguments> arguments();

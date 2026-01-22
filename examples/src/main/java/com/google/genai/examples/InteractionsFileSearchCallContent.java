@@ -44,12 +44,12 @@
 package com.google.genai.examples;
 
 import com.google.genai.Client;
-import com.google.genai.types.CreateInteractionConfig;
-import com.google.genai.types.Interaction;
+import com.google.genai.types.interactions.CreateInteractionConfig;
+import com.google.genai.types.interactions.Interaction;
 import com.google.genai.types.interactions.FileSearchResult;
 import com.google.genai.types.interactions.content.FileSearchCallContent;
 import com.google.genai.types.interactions.content.FileSearchResultContent;
-import com.google.genai.types.interactions.content.InteractionContent;
+import com.google.genai.types.interactions.content.Content;
 import com.google.genai.types.interactions.content.TextContent;
 import com.google.genai.types.interactions.tools.FileSearchTool;
 
@@ -134,10 +134,10 @@ public final class InteractionsFileSearchCallContent {
 
       System.out.println("PARSED RESPONSE:");
       System.out.println("  Status: " + response.status());
-      System.out.println("  Interaction ID: " + response.id().orElse("N/A"));
+      System.out.println("  Interaction ID: " + response.id());
       System.out.println();
 
-      analyzeInteractionContent(response);
+      analyzeContent(response);
 
     } catch (Exception e) {
       System.err.println("ERROR in Test Case 1:");
@@ -196,10 +196,10 @@ public final class InteractionsFileSearchCallContent {
 
       System.out.println("PARSED RESPONSE:");
       System.out.println("  Status: " + response.status());
-      System.out.println("  Interaction ID: " + response.id().orElse("N/A"));
+      System.out.println("  Interaction ID: " + response.id());
       System.out.println();
 
-      analyzeInteractionContent(response);
+      analyzeContent(response);
 
     } catch (Exception e) {
       System.err.println("ERROR in Test Case 2:");
@@ -225,7 +225,7 @@ public final class InteractionsFileSearchCallContent {
           FileSearchCallContent.of("file-search-call-123");
 
       System.out.println("CREATED FileSearchCallContent:");
-      System.out.println("  ID: " + content.id().orElse("N/A"));
+      System.out.println("  ID: " + content.id());
       System.out.println();
 
       // Serialize to JSON
@@ -237,7 +237,7 @@ public final class InteractionsFileSearchCallContent {
       // Deserialize from JSON
       FileSearchCallContent deserialized = FileSearchCallContent.fromJson(json);
       System.out.println("DESERIALIZED FileSearchCallContent:");
-      System.out.println("  ID: " + deserialized.id().orElse("N/A"));
+      System.out.println("  ID: " + deserialized.id());
       System.out.println();
 
       // Verify they match
@@ -264,7 +264,7 @@ public final class InteractionsFileSearchCallContent {
    * - Shows corresponding FileSearchResultContent
    * - Compares with expected structure
    */
-  private static void analyzeInteractionContent(Interaction interaction) {
+  private static void analyzeContent(Interaction interaction) {
     System.out.println("CONTENT ANALYSIS:");
 
     if (!interaction.outputs().isPresent() || interaction.outputs().get().isEmpty()) {
@@ -279,7 +279,7 @@ public final class InteractionsFileSearchCallContent {
 
     System.out.println("\n  Analyzing " + interaction.outputs().get().size() + " output(s):");
 
-    for (InteractionContent content : interaction.outputs().get()) {
+    for (Content content : interaction.outputs().get()) {
       System.out.println("\n    Content Type: " + content.getClass().getSimpleName());
 
       if (content instanceof FileSearchCallContent) {
@@ -287,7 +287,7 @@ public final class InteractionsFileSearchCallContent {
         FileSearchCallContent fileSearchCall = (FileSearchCallContent) content;
 
         System.out.println("    >>> FILE SEARCH CALL CONTENT FOUND <<<");
-        System.out.println("      Call ID: " + fileSearchCall.id().orElse("(none)"));
+        System.out.println("      Call ID: " + fileSearchCall.id());
         System.out.println("      Full FileSearchCallContent JSON:");
         System.out.println("      " + fileSearchCall.toJson());
 
@@ -298,16 +298,17 @@ public final class InteractionsFileSearchCallContent {
         System.out.println("    >>> FILE SEARCH RESULT CONTENT FOUND <<<");
 
         if (resultContent.result().isPresent()) {
-          FileSearchResult result = resultContent.result().get();
-          System.out.println("      Title: " + result.title().orElse("N/A"));
-          System.out.println(
-              "      File Search Store: " + result.fileSearchStore().orElse("N/A"));
+          for (FileSearchResult result : resultContent.result().get()) {
+            System.out.println("      Title: " + result.title().orElse("N/A"));
+            System.out.println(
+                "      File Search Store: " + result.fileSearchStore().orElse("N/A"));
 
-          if (result.text().isPresent()) {
-            String text = result.text().get();
-            String preview = text.length() > 200 ? text.substring(0, 200) + "..." : text;
-            System.out.println("      Text Preview: " + preview);
-            System.out.println("      Total text length: " + text.length() + " chars");
+            if (result.text().isPresent()) {
+              String text = result.text().get();
+              String preview = text.length() > 200 ? text.substring(0, 200) + "..." : text;
+              System.out.println("      Text Preview: " + preview);
+              System.out.println("      Total text length: " + text.length() + " chars");
+            }
           }
         } else {
           System.out.println("      Result: (none)");
@@ -344,7 +345,7 @@ public final class InteractionsFileSearchCallContent {
     // Display final text output
     if (interaction.outputs().isPresent() && !interaction.outputs().get().isEmpty()) {
       System.out.println("\n  FINAL TEXT OUTPUT:");
-      for (InteractionContent output : interaction.outputs().get()) {
+      for (Content output : interaction.outputs().get()) {
         if (output instanceof TextContent) {
           String text = ((TextContent) output).text().orElse("(empty)");
           String displayText = text.length() > 500 ? text.substring(0, 500) + "..." : text;

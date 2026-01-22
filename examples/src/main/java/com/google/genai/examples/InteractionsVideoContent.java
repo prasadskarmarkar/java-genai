@@ -17,9 +17,9 @@
 package com.google.genai.examples;
 
 import com.google.genai.Client;
-import com.google.genai.types.CreateInteractionConfig;
-import com.google.genai.types.Interaction;
-import com.google.genai.types.interactions.content.InteractionContent;
+import com.google.genai.types.interactions.CreateInteractionConfig;
+import com.google.genai.types.interactions.Interaction;
+import com.google.genai.types.interactions.content.Content;
 import com.google.genai.types.interactions.content.TextContent;
 import com.google.genai.types.interactions.content.VideoContent;
 
@@ -83,7 +83,7 @@ public final class InteractionsVideoContent {
     System.out.println(response.toJson());
     System.out.println("\nRESPONSE:");
     System.out.println("  Status: " + response.status());
-    System.out.println("  Interaction ID: " + response.id().orElse("N/A"));
+    System.out.println("  Interaction ID: " + response.id());
     System.out.print("  Output: ");
     printOutputs(response);
 
@@ -97,7 +97,7 @@ public final class InteractionsVideoContent {
    */
   private static void printOutputs(Interaction interaction) {
     if (interaction.outputs().isPresent() && !interaction.outputs().get().isEmpty()) {
-      for (InteractionContent output : interaction.outputs().get()) {
+      for (Content output : interaction.outputs().get()) {
         if (output instanceof TextContent) {
           System.out.println(((TextContent) output).text().orElse("(empty)"));
           break;

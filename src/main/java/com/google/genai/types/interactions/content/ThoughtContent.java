@@ -33,13 +33,13 @@ import java.util.Optional;
 @JsonDeserialize(builder = ThoughtContent.Builder.class)
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 @JsonTypeName("thought")
-public abstract class ThoughtContent extends JsonSerializable implements InteractionContent {
+public abstract class ThoughtContent extends JsonSerializable implements Content {
 
   @JsonProperty("signature")
   public abstract Optional<String> signature();
 
   @JsonProperty("summary")
-  public abstract Optional<List<InteractionContent>> summary();
+  public abstract Optional<List<ThoughtSummaryContent>> summary();
 
   @ExcludeFromGeneratedCoverageReport
   public static Builder builder() {
@@ -68,10 +68,10 @@ public abstract class ThoughtContent extends JsonSerializable implements Interac
     }
 
     @JsonProperty("summary")
-    public abstract Builder summary(List<InteractionContent> summary);
+    public abstract Builder summary(List<ThoughtSummaryContent> summary);
 
     @ExcludeFromGeneratedCoverageReport
-    abstract Builder summary(Optional<List<InteractionContent>> summary);
+    abstract Builder summary(Optional<List<ThoughtSummaryContent>> summary);
 
     @ExcludeFromGeneratedCoverageReport
     @CanIgnoreReturnValue
@@ -81,7 +81,7 @@ public abstract class ThoughtContent extends JsonSerializable implements Interac
 
     @ExcludeFromGeneratedCoverageReport
     @CanIgnoreReturnValue
-    public Builder summary(InteractionContent... summary) {
+    public Builder summary(ThoughtSummaryContent... summary) {
       return summary(Arrays.asList(summary));
     }
 
@@ -94,12 +94,12 @@ public abstract class ThoughtContent extends JsonSerializable implements Interac
   }
 
   @ExcludeFromGeneratedCoverageReport
-  public static ThoughtContent of(List<InteractionContent> summary) {
+  public static ThoughtContent of(List<ThoughtSummaryContent> summary) {
     return builder().summary(summary).build();
   }
 
   @ExcludeFromGeneratedCoverageReport
-  public static ThoughtContent of(InteractionContent... summary) {
+  public static ThoughtContent of(ThoughtSummaryContent... summary) {
     return builder().summary(summary).build();
   }
 }

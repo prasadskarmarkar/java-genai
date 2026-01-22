@@ -28,12 +28,30 @@ import com.google.genai.types.ExcludeFromGeneratedCoverageReport;
 import com.google.genai.types.interactions.CodeExecutionCallArguments;
 import java.util.Optional;
 
+/**
+ * Code execution call content for interactions.
+ *
+ * <p>Represents a request from the model to execute code. This content type appears in interaction
+ * outputs when the model wants to run code as part of its reasoning process.
+ *
+ * <p>Example usage:
+ *
+ * <pre>{@code
+ * CodeExecutionCallContent codeCall = CodeExecutionCallContent.builder()
+ *     .id("call_123")
+ *     .arguments(CodeExecutionCallArguments.builder()
+ *         .code("print('Hello, World!')")
+ *         .language("python")
+ *         .build())
+ *     .build();
+ * }</pre>
+ */
 @AutoValue
 @JsonDeserialize(builder = CodeExecutionCallContent.Builder.class)
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 @JsonTypeName("code_execution_call")
 public abstract class CodeExecutionCallContent extends JsonSerializable
-    implements InteractionContent {
+    implements Content {
 
   @JsonProperty("arguments")
   public abstract Optional<CodeExecutionCallArguments> arguments();

@@ -20,7 +20,7 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 /**
- * Base interface for Interaction tool types using a type discriminator.
+ * Base interface for tool types using a type discriminator.
  *
  * <p>This follows Jackson best practices for polymorphism:
  *
@@ -42,6 +42,6 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
   @JsonSubTypes.Type(value = McpServerTool.class, name = "mcp_server"),
   @JsonSubTypes.Type(value = FileSearchTool.class, name = "file_search"),
 })
-public interface InteractionTool {
+public interface Tool {
   // Marker interface - Jackson handles type discrimination via annotations
 }

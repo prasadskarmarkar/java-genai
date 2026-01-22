@@ -35,9 +35,9 @@
 package com.google.genai.examples;
 
 import com.google.genai.Client;
-import com.google.genai.types.CreateInteractionConfig;
-import com.google.genai.types.Interaction;
-import com.google.genai.types.interactions.content.InteractionContent;
+import com.google.genai.types.interactions.CreateInteractionConfig;
+import com.google.genai.types.interactions.Interaction;
+import com.google.genai.types.interactions.content.Content;
 import com.google.genai.types.interactions.content.TextContent;
 
 /**
@@ -56,7 +56,6 @@ public final class InteractionsSimpleStringInput {
     // Instantiate the client. The client gets the API key from the environment variable
     // `GOOGLE_API_KEY`.
     //
-    // Note: Interactions API is currently only available in Gemini Developer API (not Vertex AI).
     Client client = new Client();
 
     System.out.println("=== Example 1: Simple String Input ===\n");
@@ -87,7 +86,7 @@ public final class InteractionsSimpleStringInput {
     System.out.println();
     System.out.println("RESPONSE:");
     System.out.println("  Status: " + response.status());
-    System.out.println("  Interaction ID: " + response.id().orElse("N/A"));
+    System.out.println("  Interaction ID: " + response.id());
     System.out.print("  Output: ");
     printOutputs(response);
 
@@ -101,7 +100,7 @@ public final class InteractionsSimpleStringInput {
    */
   private static void printOutputs(Interaction interaction) {
     if (interaction.outputs().isPresent() && !interaction.outputs().get().isEmpty()) {
-      for (InteractionContent output : interaction.outputs().get()) {
+      for (Content output : interaction.outputs().get()) {
         if (output instanceof TextContent) {
           System.out.println(((TextContent) output).text().orElse("(empty)"));
           break;

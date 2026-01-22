@@ -19,23 +19,23 @@ package com.google.genai.types.interactions;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
-import com.google.genai.types.interactions.content.InteractionContent;
+import com.google.genai.types.interactions.content.Content;
 import java.io.IOException;
 import java.util.List;
 
 /**
- * Custom serializer for InteractionInput that ensures proper polymorphic type information is
- * included when serializing lists of InteractionContent or InteractionTurn objects.
+ * Custom serializer for Input that ensures proper polymorphic type information is
+ * included when serializing lists of Content or Turn objects.
  *
  * <p>This is necessary because the @JsonValue annotation on a field typed as Object loses type
  * information for contained elements. This serializer explicitly handles the different cases
- * (String, List of InteractionContent, List of InteractionTurn) and ensures that polymorphic
+ * (String, List of Content, List of Turn) and ensures that polymorphic
  * content types include their "type" property.
  */
-public class InteractionInputSerializer extends JsonSerializer<InteractionInput> {
+public class InputSerializer extends JsonSerializer<Input> {
 
   @Override
-  public void serialize(InteractionInput value, JsonGenerator gen, SerializerProvider serializers)
+  public void serialize(Input value, JsonGenerator gen, SerializerProvider serializers)
       throws IOException {
     Object innerValue = value.getValue();
 
@@ -44,8 +44,8 @@ public class InteractionInputSerializer extends JsonSerializer<InteractionInput>
     } else if (innerValue instanceof String) {
       // String input - write directly
       gen.writeString((String) innerValue);
-    } else if (innerValue instanceof InteractionContent) {
-      // Single InteractionContent - serialize with type info
+    } else if (innerValue instanceof Content) {
+      // Single Content - serialize with type info
       serializers.defaultSerializeValue(innerValue, gen);
     } else if (innerValue instanceof List) {
       // List input - serialize with proper type handling

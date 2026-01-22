@@ -29,12 +29,29 @@ import com.google.genai.types.interactions.GoogleSearchCallArguments;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Google Search call content for interactions.
+ *
+ * <p>Represents a request from the model to perform a Google Search. This content type appears in
+ * interaction outputs when the model wants to search the web for information.
+ *
+ * <p>Example usage:
+ *
+ * <pre>{@code
+ * GoogleSearchCallContent searchCall = GoogleSearchCallContent.builder()
+ *     .id("call_123")
+ *     .arguments(GoogleSearchCallArguments.builder()
+ *         .query("latest AI developments")
+ *         .build())
+ *     .build();
+ * }</pre>
+ */
 @AutoValue
 @JsonDeserialize(builder = GoogleSearchCallContent.Builder.class)
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 @JsonTypeName("google_search_call")
 public abstract class GoogleSearchCallContent extends JsonSerializable
-    implements InteractionContent {
+    implements Content {
 
   @JsonProperty("arguments")
   public abstract Optional<GoogleSearchCallArguments> arguments();

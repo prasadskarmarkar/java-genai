@@ -25,6 +25,7 @@ import com.google.auto.value.AutoValue;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import com.google.genai.JsonSerializable;
 import com.google.genai.types.ExcludeFromGeneratedCoverageReport;
+import com.google.genai.types.interactions.ResultItems;
 import java.util.Map;
 import java.util.Optional;
 
@@ -33,19 +34,98 @@ import java.util.Optional;
 @JsonDeserialize(builder = FunctionResultContent.Builder.class)
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 @JsonTypeName("function_result")
-public abstract class FunctionResultContent extends JsonSerializable implements InteractionContent {
+public abstract class FunctionResultContent extends JsonSerializable implements Content {
 
-  /** The unique identifier matching the corresponding FunctionCallContent. */
+  /**
+   * The unique identifier matching the corresponding FunctionCallContent.
+   *
+   * <p>This field is always present and is required.
+   */
   @JsonProperty("call_id")
-  public abstract Optional<String> id();
+  public abstract String id();
 
-  /** The name of the function that was called. */
+  /**
+   * The name of the function that was called.
+   *
+   * <p>This field is optional.
+   */
   @JsonProperty("name")
   public abstract Optional<String> name();
 
-  /** The result returned by the function, as a map of key-value pairs. */
+  /**
+   * Whether the tool call resulted in an error.
+   *
+   * <p>This field is optional.
+   */
+  @JsonProperty("is_error")
+  public abstract Optional<Boolean> isError();
+
+  /**
+   * The result returned by the function.
+   *
+   * <p>This field is always present and is required. The result can be one of three types:
+   *
+   * <ul>
+   *   <li>{@link ResultItems} - structured data with an items array
+   *   <li>{@link String} - a plain string result
+   *   <li>{@link Map} or other object - arbitrary structured data
+   * </ul>
+   *
+   * <p>This matches the Python SDK's Result type: {@code Union[ResultItems, str, object]}
+   *
+   * <p>Use {@link #resultAsString()}, {@link #resultAsResultItems()}, or {@link #resultAsMap()} for
+   * type-safe access.
+   */
   @JsonProperty("result")
-  public abstract Optional<Map<String, Object>> result();
+  public abstract Object result();
+
+  /**
+   * Returns the result as a String if it is a String, otherwise returns empty.
+   *
+   * @return Optional containing the result as a String, or empty if result is not a String
+   */
+  public Optional<String> resultAsString() {
+    if (result() instanceof String) {
+      return Optional.of((String) result());
+    }
+    return Optional.empty();
+  }
+
+  /**
+   * Returns the result as a ResultItems if it matches the ResultItems structure, otherwise returns
+   * empty.
+   *
+   * @return Optional containing the result as ResultItems, or empty if result is not ResultItems
+   */
+  public Optional<ResultItems> resultAsResultItems() {
+    if (result() instanceof ResultItems) {
+      return Optional.of((ResultItems) result());
+    }
+    // Handle case where Jackson deserializes as Map with "items" key
+    if (result() instanceof Map) {
+      @SuppressWarnings("unchecked")
+      Map<String, Object> map = (Map<String, Object>) result();
+      if (map.containsKey("items") && map.get("items") instanceof java.util.List) {
+        @SuppressWarnings("unchecked")
+        java.util.List<Object> items = (java.util.List<Object>) map.get("items");
+        return Optional.of(ResultItems.of(items));
+      }
+    }
+    return Optional.empty();
+  }
+
+  /**
+   * Returns the result as a Map if it is a Map, otherwise returns empty.
+   *
+   * @return Optional containing the result as a Map, or empty if result is not a Map
+   */
+  @SuppressWarnings("unchecked")
+  public Optional<Map<String, Object>> resultAsMap() {
+    if (result() instanceof Map) {
+      return Optional.of((Map<String, Object>) result());
+    }
+    return Optional.empty();
+  }
 
   /** Instantiates a builder for FunctionResultContent. */
   @ExcludeFromGeneratedCoverageReport
@@ -68,20 +148,10 @@ public abstract class FunctionResultContent extends JsonSerializable implements 
     /**
      * Setter for id.
      *
-     * <p>id: The unique identifier matching the corresponding FunctionCallContent.
+     * <p>id: The unique identifier matching the corresponding FunctionCallContent. This field is required.
      */
     @JsonProperty("call_id")
     public abstract Builder id(String id);
-
-    @ExcludeFromGeneratedCoverageReport
-    abstract Builder id(Optional<String> id);
-
-    /** Clears the value of id field. */
-    @ExcludeFromGeneratedCoverageReport
-    @CanIgnoreReturnValue
-    public Builder clearId() {
-      return id(Optional.empty());
-    }
 
     /**
      * Setter for name.
@@ -102,22 +172,31 @@ public abstract class FunctionResultContent extends JsonSerializable implements 
     }
 
     /**
-     * Setter for result.
+     * Setter for isError.
      *
-     * <p>result: The result returned by the function.
+     * <p>isError: Whether the tool call resulted in an error.
      */
-    @JsonProperty("result")
-    public abstract Builder result(Map<String, Object> result);
+    @JsonProperty("is_error")
+    public abstract Builder isError(Boolean isError);
 
     @ExcludeFromGeneratedCoverageReport
-    abstract Builder result(Optional<Map<String, Object>> result);
+    abstract Builder isError(Optional<Boolean> isError);
 
-    /** Clears the value of result field. */
+    /** Clears the value of isError field. */
     @ExcludeFromGeneratedCoverageReport
     @CanIgnoreReturnValue
-    public Builder clearResult() {
-      return result(Optional.empty());
+    public Builder clearIsError() {
+      return isError(Optional.empty());
     }
+
+    /**
+     * Setter for result.
+     *
+     * <p>result: The result returned by the function. This field is required. Can be a string, an
+     * object, or structured data.
+     */
+    @JsonProperty("result")
+    public abstract Builder result(Object result);
 
     public abstract FunctionResultContent build();
   }
@@ -132,5 +211,55 @@ public abstract class FunctionResultContent extends JsonSerializable implements 
   @ExcludeFromGeneratedCoverageReport
   public static FunctionResultContent of(String id, String name, Map<String, Object> result) {
     return builder().id(id).name(name).result(result).build();
+  }
+
+  /** Convenience factory method for successful result. */
+  @ExcludeFromGeneratedCoverageReport
+  public static FunctionResultContent ofSuccess(
+      String callId, String name, Map<String, Object> result) {
+    return builder().id(callId).name(name).result(result).isError(false).build();
+  }
+
+  /** Convenience factory method for error result. */
+  @ExcludeFromGeneratedCoverageReport
+  public static FunctionResultContent ofError(
+      String callId, String name, Map<String, Object> result) {
+    return builder().id(callId).name(name).result(result).isError(true).build();
+  }
+
+  /** Convenience factory method with String result. */
+  @ExcludeFromGeneratedCoverageReport
+  public static FunctionResultContent of(String callId, String name, String result) {
+    return builder().id(callId).name(name).result(result).build();
+  }
+
+  /** Convenience factory method with ResultItems result. */
+  @ExcludeFromGeneratedCoverageReport
+  public static FunctionResultContent of(String callId, String name, ResultItems result) {
+    return builder().id(callId).name(name).result(result).build();
+  }
+
+  /** Convenience factory method for successful result with String. */
+  @ExcludeFromGeneratedCoverageReport
+  public static FunctionResultContent ofSuccess(String callId, String name, String result) {
+    return builder().id(callId).name(name).result(result).isError(false).build();
+  }
+
+  /** Convenience factory method for successful result with ResultItems. */
+  @ExcludeFromGeneratedCoverageReport
+  public static FunctionResultContent ofSuccess(String callId, String name, ResultItems result) {
+    return builder().id(callId).name(name).result(result).isError(false).build();
+  }
+
+  /** Convenience factory method for error result with String. */
+  @ExcludeFromGeneratedCoverageReport
+  public static FunctionResultContent ofError(String callId, String name, String result) {
+    return builder().id(callId).name(name).result(result).isError(true).build();
+  }
+
+  /** Convenience factory method for error result with ResultItems. */
+  @ExcludeFromGeneratedCoverageReport
+  public static FunctionResultContent ofError(String callId, String name, ResultItems result) {
+    return builder().id(callId).name(name).result(result).isError(true).build();
   }
 }

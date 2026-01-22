@@ -35,12 +35,13 @@
 package com.google.genai.examples;
 
 import com.google.genai.Client;
-import com.google.genai.types.CreateInteractionConfig;
-import com.google.genai.types.Interaction;
+import com.google.genai.types.interactions.CreateInteractionConfig;
+import com.google.genai.types.interactions.Interaction;
 import com.google.genai.types.interactions.content.ImageContent;
-import com.google.genai.types.interactions.content.InteractionContent;
+import com.google.genai.types.interactions.content.Content;
 import com.google.genai.types.interactions.content.TextContent;
 import com.google.genai.types.interactions.content.ThoughtContent;
+import com.google.genai.types.interactions.content.ThoughtSummaryContent;
 import java.util.List;
 
 /**
@@ -51,7 +52,7 @@ import java.util.List;
  *
  * <p>Structure: ThoughtContent contains:
  * - signature: A cryptographic signature for the thought
- * - summary: Optional list of InteractionContent (TextContent, ImageContent, etc.)
+ * - summary: Optional list of Content (TextContent, ImageContent, etc.)
  *
  * <p>The summary field matches Python's structure: Optional[List[Union[TextContent, ImageContent]]]
  * allowing the model to provide reasoning summaries with both text and visual elements.
@@ -96,6 +97,11 @@ public final class InteractionsThoughtContent {
     System.out.println("REQUEST:");
     System.out.println("  Prompt: " + prompt);
     System.out.println();
+    System.out.println("REQUEST JSON (sent to POST /v1beta/interactions):");
+    System.out.println(config.toJson());
+    System.out.println();
+    System.out.println("ENDPOINT: https://generativelanguage.googleapis.com/v1beta/interactions");
+    System.out.println();
 
     try {
       Interaction response = client.interactions.create(config);
@@ -106,10 +112,10 @@ public final class InteractionsThoughtContent {
 
       System.out.println("PARSED RESPONSE:");
       System.out.println("  Status: " + response.status());
-      System.out.println("  Interaction ID: " + response.id().orElse("N/A"));
+      System.out.println("  Interaction ID: " + response.id());
       System.out.println();
 
-      analyzeInteractionContent(response);
+      analyzeContent(response);
 
     } catch (Exception e) {
       System.err.println("ERROR in Test Case 1:");
@@ -152,10 +158,10 @@ public final class InteractionsThoughtContent {
 
       System.out.println("PARSED RESPONSE:");
       System.out.println("  Status: " + response.status());
-      System.out.println("  Interaction ID: " + response.id().orElse("N/A"));
+      System.out.println("  Interaction ID: " + response.id());
       System.out.println();
 
-      analyzeInteractionContent(response);
+      analyzeContent(response);
 
     } catch (Exception e) {
       System.err.println("ERROR in Test Case 2:");
@@ -198,10 +204,10 @@ public final class InteractionsThoughtContent {
 
       System.out.println("PARSED RESPONSE:");
       System.out.println("  Status: " + response.status());
-      System.out.println("  Interaction ID: " + response.id().orElse("N/A"));
+      System.out.println("  Interaction ID: " + response.id());
       System.out.println();
 
-      analyzeInteractionContent(response);
+      analyzeContent(response);
 
     } catch (Exception e) {
       System.err.println("ERROR in Test Case 3:");
@@ -218,7 +224,7 @@ public final class InteractionsThoughtContent {
    * instances - Displays thought signatures and summaries - Compares actual structure with expected
    * structure
    */
-  private static void analyzeInteractionContent(Interaction interaction) {
+  private static void analyzeContent(Interaction interaction) {
     System.out.println("CONTENT ANALYSIS:");
 
     if (!interaction.outputs().isPresent() || interaction.outputs().get().isEmpty()) {
@@ -232,7 +238,7 @@ public final class InteractionsThoughtContent {
 
     System.out.println("\n  Analyzing " + interaction.outputs().get().size() + " output(s):");
 
-    for (InteractionContent content : interaction.outputs().get()) {
+    for (Content content : interaction.outputs().get()) {
       System.out.println("\n    Content Type: " + content.getClass().getSimpleName());
 
       if (content instanceof ThoughtContent) {
@@ -243,11 +249,11 @@ public final class InteractionsThoughtContent {
         System.out.println("      Signature: " + thought.signature().orElse("(none)"));
 
         if (thought.summary().isPresent()) {
-          List<InteractionContent> summaryContents = thought.summary().get();
+          List<ThoughtSummaryContent> summaryContents = thought.summary().get();
           System.out.println("      Summary: " + summaryContents.size() + " item(s)");
 
           for (int i = 0; i < summaryContents.size(); i++) {
-            InteractionContent summaryItem = summaryContents.get(i);
+            ThoughtSummaryContent summaryItem = summaryContents.get(i);
             System.out.println("        Item " + (i + 1) + ": " + summaryItem.getClass().getSimpleName());
 
             if (summaryItem instanceof TextContent) {
@@ -291,7 +297,7 @@ public final class InteractionsThoughtContent {
     // Display final text output
     if (interaction.outputs().isPresent() && !interaction.outputs().get().isEmpty()) {
       System.out.println("\n  FINAL TEXT OUTPUT:");
-      for (InteractionContent output : interaction.outputs().get()) {
+      for (Content output : interaction.outputs().get()) {
         if (output instanceof TextContent) {
           System.out.println("    " + ((TextContent) output).text().orElse("(empty)"));
         }

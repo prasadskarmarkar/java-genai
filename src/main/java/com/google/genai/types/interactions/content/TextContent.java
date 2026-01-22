@@ -35,7 +35,8 @@ import java.util.Optional;
 @JsonDeserialize(builder = TextContent.Builder.class)
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 @JsonTypeName("text")
-public abstract class TextContent extends JsonSerializable implements InteractionContent {
+public abstract class TextContent extends JsonSerializable
+    implements Content, ThoughtSummaryContent {
 
   /** Instantiates a builder for TextContent. */
   @ExcludeFromGeneratedCoverageReport

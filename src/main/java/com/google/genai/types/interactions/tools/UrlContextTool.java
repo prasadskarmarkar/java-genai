@@ -42,10 +42,9 @@ import com.google.genai.types.ExcludeFromGeneratedCoverageReport;
 @JsonDeserialize(builder = UrlContextTool.Builder.class)
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 @JsonTypeName("url_context")
-public abstract class UrlContextTool extends JsonSerializable implements InteractionTool {
+public abstract class UrlContextTool extends JsonSerializable implements Tool {
 
   /** Instantiates a builder for UrlContextTool. */
-  
   @ExcludeFromGeneratedCoverageReport
   public static Builder builder() {
     return new AutoValue_UrlContextTool.Builder();
@@ -67,7 +66,6 @@ public abstract class UrlContextTool extends JsonSerializable implements Interac
   }
 
   /** Deserializes a JSON string to a UrlContextTool object. */
-  
   @ExcludeFromGeneratedCoverageReport
   public static UrlContextTool fromJson(String jsonString) {
     return JsonSerializable.fromJsonString(jsonString, UrlContextTool.class);

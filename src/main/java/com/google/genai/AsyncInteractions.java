@@ -19,12 +19,12 @@
 package com.google.genai;
 
 import com.google.genai.Common.BuiltRequest;
-import com.google.genai.types.CancelInteractionConfig;
-import com.google.genai.types.CreateInteractionConfig;
-import com.google.genai.types.DeleteInteractionConfig;
-import com.google.genai.types.DeleteInteractionResponse;
-import com.google.genai.types.GetInteractionConfig;
-import com.google.genai.types.Interaction;
+import com.google.genai.types.interactions.CancelInteractionConfig;
+import com.google.genai.types.interactions.CreateInteractionConfig;
+import com.google.genai.types.interactions.DeleteInteractionConfig;
+import com.google.genai.types.interactions.DeleteInteractionResponse;
+import com.google.genai.types.interactions.GetInteractionConfig;
+import com.google.genai.types.interactions.Interaction;
 import java.util.concurrent.CompletableFuture;
 
 /**
