@@ -30,7 +30,29 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-/** Text content for interactions. */
+/**
+ * Text content for the Interactions API.
+ *
+ * <p>Represents textual information in interactions, either from user input or model output.
+ * Text content can include optional annotations for citations and source attribution.
+ *
+ * <p>Example usage:
+ *
+ * <pre>{@code
+ * // Simple text content
+ * TextContent text = TextContent.of("Hello, how can I help you?");
+ *
+ * // Text with annotations
+ * TextContent textWithAnnotations = TextContent.builder()
+ *     .text("According to recent research...")
+ *     .annotations(Annotation.of(0, 25, "https://example.com/research"))
+ *     .build();
+ * }</pre>
+ *
+ * <p>The Interactions API is available in both Vertex AI and Gemini API.
+ *
+ * <p>Note: The Interactions API is in beta and subject to change.
+ */
 @AutoValue
 @JsonDeserialize(builder = TextContent.Builder.class)
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")

@@ -30,17 +30,19 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
  *   <li>Jackson handles type discrimination via annotations
  * </ul>
  *
+ * <p>The Interactions API is available in both Vertex AI and Gemini API.
+ *
  * <p>Note: The Interactions API is in beta and subject to change.
  */
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 @JsonSubTypes({
-  @JsonSubTypes.Type(value = FunctionTool.class, name = "function"),
-  @JsonSubTypes.Type(value = GoogleSearchTool.class, name = "google_search"),
-  @JsonSubTypes.Type(value = CodeExecutionTool.class, name = "code_execution"),
-  @JsonSubTypes.Type(value = UrlContextTool.class, name = "url_context"),
-  @JsonSubTypes.Type(value = ComputerUseTool.class, name = "computer_use"),
-  @JsonSubTypes.Type(value = McpServerTool.class, name = "mcp_server"),
-  @JsonSubTypes.Type(value = FileSearchTool.class, name = "file_search"),
+  @JsonSubTypes.Type(value = Function.class, name = "function"),
+  @JsonSubTypes.Type(value = GoogleSearch.class, name = "google_search"),
+  @JsonSubTypes.Type(value = CodeExecution.class, name = "code_execution"),
+  @JsonSubTypes.Type(value = UrlContext.class, name = "url_context"),
+  @JsonSubTypes.Type(value = ComputerUse.class, name = "computer_use"),
+  @JsonSubTypes.Type(value = McpServer.class, name = "mcp_server"),
+  @JsonSubTypes.Type(value = FileSearch.class, name = "file_search"),
 })
 public interface Tool {
   // Marker interface - Jackson handles type discrimination via annotations

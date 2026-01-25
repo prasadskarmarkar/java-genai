@@ -41,19 +41,19 @@ import com.google.genai.types.interactions.CreateInteractionConfig;
 import com.google.genai.types.interactions.Interaction;
 import com.google.genai.types.interactions.content.Content;
 import com.google.genai.types.interactions.content.TextContent;
-import com.google.genai.types.interactions.tools.ComputerUseTool;
+import com.google.genai.types.interactions.tools.ComputerUse;
 
 /**
  * Example: Computer Use Tool with the Interactions API
  *
- * <p>Demonstrates how to use the ComputerUseTool to enable the model to interact with a computer
+ * <p>Demonstrates how to use the ComputerUse to enable the model to interact with a computer
  * environment. This tool allows the model to control applications, browse web pages, and perform
  * other computer-based tasks.
  *
  * <p>IMPORTANT NOTES:
  * <ul>
  *   <li>This feature may require special API access and authorization.</li>
- *   <li>ComputerUseTool is a <b>configuration-only</b> tool - it enables a capability but does not
+ *   <li>ComputerUse is a <b>configuration-only</b> tool - it enables a capability but does not
  *       have explicit call/result content types in the SDK.</li>
  *   <li>Results from computer use operations are returned as standard content types like
  *       TextContent or ImageContent (e.g., screenshots).</li>
@@ -76,24 +76,24 @@ public final class InteractionsComputerUse {
     System.out.println(
         "IMPORTANT: Computer Use tool may require special API access and authorization.\n");
 
-    // ===== STEP 1: Create ComputerUseTool =====
-    System.out.println("STEP 1: Create ComputerUseTool\n");
+    // ===== STEP 1: Create ComputerUse =====
+    System.out.println("STEP 1: Create ComputerUse\n");
 
     // Configure the computer use environment
     // Common environments: "browser" for web browsing, "desktop" for full desktop access
     //
-    // IMPORTANT: ComputerUseTool is a configuration that enables computer use capabilities.
+    // IMPORTANT: ComputerUse is a configuration that enables computer use capabilities.
     // Unlike FunctionCall or CodeExecution, it does NOT have corresponding
     // ComputerUseCallContent or ComputerUseResultContent types.
     // Results are returned as standard content types (TextContent, ImageContent, etc.)
-    ComputerUseTool computerTool =
-        ComputerUseTool.builder()
+    ComputerUse computerTool =
+        ComputerUse.builder()
             .environment("browser")
             // Optionally exclude predefined functions
             // .excludedPredefinedFunctions("function1", "function2")
             .build();
 
-    System.out.println("ComputerUseTool created successfully");
+    System.out.println("ComputerUse created successfully");
     System.out.println("Environment: " + computerTool.environment().orElse("default"));
     System.out.println();
 
@@ -140,7 +140,7 @@ public final class InteractionsComputerUse {
             System.out.println();
           }
 
-          // IMPORTANT: ComputerUseTool does NOT have dedicated content types
+          // IMPORTANT: ComputerUse does NOT have dedicated content types
           // (no ComputerUseCallContent or ComputerUseResultContent).
           //
           // Instead, computer use operations return results as:

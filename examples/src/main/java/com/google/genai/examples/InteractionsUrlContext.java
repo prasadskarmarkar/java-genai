@@ -41,13 +41,13 @@ import com.google.genai.types.interactions.content.Content;
 import com.google.genai.types.interactions.content.TextContent;
 import com.google.genai.types.interactions.content.UrlContextCallContent;
 import com.google.genai.types.interactions.content.UrlContextResultContent;
-import com.google.genai.types.interactions.tools.UrlContextTool;
+import com.google.genai.types.interactions.tools.UrlContext;
 import java.util.List;
 
 /**
  * Example: URL Context Tool with the Interactions API
  *
- * <p>Demonstrates how to use the UrlContextTool to enable the model to retrieve and use context
+ * <p>Demonstrates how to use the UrlContext to enable the model to retrieve and use context
  * from URLs. The model can fetch web pages and use their content to answer questions.
  *
  * <p>Note: The Interactions API is in beta and subject to change.
@@ -62,12 +62,12 @@ public final class InteractionsUrlContext {
 
     System.out.println("=== Interactions API: URL Context Tool Example ===\n");
 
-    // ===== STEP 1: Create UrlContextTool =====
-    System.out.println("STEP 1: Create UrlContextTool\n");
+    // ===== STEP 1: Create UrlContext =====
+    System.out.println("STEP 1: Create UrlContext\n");
 
-    UrlContextTool urlTool = UrlContextTool.builder().build();
+    UrlContext urlTool = UrlContext.builder().build();
 
-    System.out.println("UrlContextTool created successfully\n");
+    System.out.println("UrlContext created successfully\n");
 
     // ===== STEP 2: Create interaction with URL Context enabled =====
     System.out.println("---\n");

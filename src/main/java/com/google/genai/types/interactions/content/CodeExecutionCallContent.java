@@ -29,7 +29,7 @@ import com.google.genai.types.interactions.CodeExecutionCallArguments;
 import java.util.Optional;
 
 /**
- * Code execution call content for interactions.
+ * Code execution call content for the Interactions API.
  *
  * <p>Represents a request from the model to execute code. This content type appears in interaction
  * outputs when the model wants to run code as part of its reasoning process.
@@ -45,6 +45,10 @@ import java.util.Optional;
  *         .build())
  *     .build();
  * }</pre>
+ *
+ * <p>The Interactions API is available in both Vertex AI and Gemini API.
+ *
+ * <p>Note: The Interactions API is in beta and subject to change.
  */
 @AutoValue
 @JsonDeserialize(builder = CodeExecutionCallContent.Builder.class)

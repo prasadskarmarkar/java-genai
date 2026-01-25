@@ -28,7 +28,7 @@ import com.google.genai.types.ExcludeFromGeneratedCoverageReport;
 import java.util.Optional;
 
 /**
- * Code execution result content for interactions.
+ * Code execution result content for the Interactions API.
  *
  * <p>Represents the result of executing code requested by the model. This content type appears
  * when providing the output from a code execution call back to the model.
@@ -41,6 +41,10 @@ import java.util.Optional;
  *     .result("Hello, World!")
  *     .build();
  * }</pre>
+ *
+ * <p>The Interactions API is available in both Vertex AI and Gemini API.
+ *
+ * <p>Note: The Interactions API is in beta and subject to change.
  */
 @AutoValue
 @JsonDeserialize(builder = CodeExecutionResultContent.Builder.class)

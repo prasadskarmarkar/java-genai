@@ -32,6 +32,8 @@ import java.util.concurrent.CompletableFuture;
  * required. After instantiating a {@link Client}, access methods through
  * `client.async.interactions.methodName(...)` directly.
  *
+ * <p>The Interactions API is available in both Vertex AI and Gemini API.
+ *
  * <p>Note: The Interactions API is in beta and subject to change.
  */
 public final class AsyncInteractions {

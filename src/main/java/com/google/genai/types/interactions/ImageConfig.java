@@ -32,6 +32,8 @@ import java.util.Optional;
  * resolution. It is specific to the Interactions API and provides a simplified interface compared
  * to image configuration in other APIs.
  *
+ * <p>The Interactions API is available in both Vertex AI and Gemini API.
+ *
  * <p>Supported aspect ratios include:
  *
  * <ul>
@@ -72,15 +74,38 @@ public abstract class ImageConfig extends JsonSerializable {
   /**
    * Aspect ratio of the generated images.
    *
-   * <p>Supported values include "1:1", "2:3", "3:2", "3:4", "4:3", "9:16", "16:9", and "21:9".
+   * <p>Supported values:
+   * <ul>
+   *   <li>{@code "1:1"} - Square (1:1)
+   *   <li>{@code "2:3"} - Portrait (2:3)
+   *   <li>{@code "3:2"} - Landscape (3:2)
+   *   <li>{@code "3:4"} - Portrait (3:4)
+   *   <li>{@code "4:3"} - Landscape (4:3)
+   *   <li>{@code "4:5"} - Portrait (4:5)
+   *   <li>{@code "5:4"} - Landscape (5:4)
+   *   <li>{@code "9:16"} - Vertical video (9:16)
+   *   <li>{@code "16:9"} - Horizontal video (16:9)
+   *   <li>{@code "21:9"} - Ultra-wide (21:9)
+   * </ul>
+   *
+   * <p>This field accepts any string value to support future aspect ratios.
    */
   @JsonProperty("aspect_ratio")
   public abstract Optional<String> aspectRatio();
 
   /**
-   * Size of the generated images.
+   * Specifies the size of generated images.
    *
-   * <p>Supported values are "1K", "2K", and "4K".
+   * <p>Supported values:
+   * <ul>
+   *   <li>{@code "1K"} - 1024x1024 pixels (default)
+   *   <li>{@code "2K"} - 2048x2048 pixels
+   *   <li>{@code "4K"} - 4096x4096 pixels
+   * </ul>
+   *
+   * <p>If not specified, the model will use default value {@code "1K"}.
+   *
+   * <p>This field accepts any string value to support future image sizes.
    */
   @JsonProperty("image_size")
   public abstract Optional<String> imageSize();
@@ -108,8 +133,9 @@ public abstract class ImageConfig extends JsonSerializable {
     /**
      * Setter for aspectRatio.
      *
-     * <p>aspectRatio: Aspect ratio of the generated images. Supported values include "1:1", "2:3",
-     * "3:2", "3:4", "4:3", "9:16", "16:9", and "21:9".
+     * <p>aspectRatio: Aspect ratio of the generated images.
+     *
+     * <p>Supported values: "1:1", "2:3", "3:2", "3:4", "4:3", "4:5", "5:4", "9:16", "16:9", "21:9".
      */
     @JsonProperty("aspect_ratio")
     public abstract Builder aspectRatio(String aspectRatio);

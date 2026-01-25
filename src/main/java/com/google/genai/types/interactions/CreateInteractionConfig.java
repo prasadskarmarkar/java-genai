@@ -25,14 +25,20 @@ import com.google.genai.JsonSerializable;
 import com.google.genai.types.AgentConfig;
 import com.google.genai.types.ExcludeFromGeneratedCoverageReport;
 import com.google.genai.types.HttpOptions;
+import com.google.genai.types.Modality;
 import com.google.genai.types.interactions.content.Content;
 import com.google.genai.types.interactions.tools.Tool;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import static com.google.common.collect.ImmutableList.toImmutableList;
+import com.google.common.collect.ImmutableList;
+
 /**
  * Configuration for creating an interaction.
+ *
+ * <p>The Interactions API is available in both Vertex AI and Gemini API.
  *
  * <p>Note: The Interactions API is in beta and subject to change.
  */
@@ -83,9 +89,20 @@ public abstract class CreateInteractionConfig extends JsonSerializable {
   @JsonProperty("responseMimeType")
   public abstract Optional<String> responseMimeType();
 
-  /** The modalities for the response (e.g., ["text", "image", "audio"]). */
+  /**
+   * The requested modalities of the response.
+   *
+   * <p>Represents the set of modalities that the model can return.
+   *
+   * <p>Supported values:
+   * <ul>
+   *   <li>{@link Modality.Known#TEXT} - Text content
+   *   <li>{@link Modality.Known#IMAGE} - Image content
+   *   <li>{@link Modality.Known#AUDIO} - Audio content
+   * </ul>
+   */
   @JsonProperty("responseModalities")
-  public abstract Optional<List<String>> responseModalities();
+  public abstract Optional<List<Modality>> responseModalities();
 
   /** Whether to store the interaction history. */
   @JsonProperty("store")
@@ -98,8 +115,8 @@ public abstract class CreateInteractionConfig extends JsonSerializable {
   /**
    * A list of tools the model may use to generate the next response.
    *
-   * <p>Use the dedicated Interactions tool types such as {@code FunctionTool}, {@code
-   * GoogleSearchTool}, {@code CodeExecutionTool}, etc.
+   * <p>Use the dedicated Interactions tool types such as {@code Function}, {@code
+   * GoogleSearch}, {@code CodeExecution}, etc.
    */
   @JsonProperty("tools")
   public abstract Optional<List<Tool>> tools();
@@ -399,26 +416,73 @@ public abstract class CreateInteractionConfig extends JsonSerializable {
      * <p>responseModalities: The modalities for the response.
      */
     @JsonProperty("responseModalities")
-    public abstract Builder responseModalities(List<String> responseModalities);
+    public abstract Builder responseModalities(List<Modality> responseModalities);
 
     /**
-     * Setter for responseModalities (varargs convenience method).
+     * Setter for responseModalities.
      *
      * <p>responseModalities: The modalities for the response.
      */
-    @CanIgnoreReturnValue
-    public Builder responseModalities(String... responseModalities) {
+    public Builder responseModalities(Modality... responseModalities) {
       return responseModalities(Arrays.asList(responseModalities));
     }
 
     @ExcludeFromGeneratedCoverageReport
-    abstract Builder responseModalities(Optional<List<String>> responseModalities);
+    abstract Builder responseModalities(Optional<List<Modality>> responseModalities);
 
     /** Clears the value of responseModalities field. */
     @ExcludeFromGeneratedCoverageReport
     @CanIgnoreReturnValue
     public Builder clearResponseModalities() {
       return responseModalities(Optional.empty());
+    }
+
+    /**
+     * Setter for responseModalities given a varargs of strings.
+     *
+     * <p>responseModalities: The modalities for the response.
+     */
+    @ExcludeFromGeneratedCoverageReport
+    @CanIgnoreReturnValue
+    public Builder responseModalities(String... responseModalities) {
+      return responseModalitiesFromString(Arrays.asList(responseModalities));
+    }
+
+    /**
+     * Setter for responseModalities given a varargs of known enums.
+     *
+     * <p>responseModalities: The modalities for the response.
+     */
+    @ExcludeFromGeneratedCoverageReport
+    @CanIgnoreReturnValue
+    public Builder responseModalities(Modality.Known... knownTypes) {
+      return responseModalitiesFromKnown(Arrays.asList(knownTypes));
+    }
+
+    /**
+     * Setter for responseModalities given a list of known enums.
+     *
+     * <p>responseModalities: The modalities for the response.
+     */
+    @ExcludeFromGeneratedCoverageReport
+    @CanIgnoreReturnValue
+    public Builder responseModalitiesFromKnown(List<Modality.Known> knownTypes) {
+      ImmutableList<Modality> listItems =
+          knownTypes.stream().map(Modality::new).collect(toImmutableList());
+      return responseModalities(listItems);
+    }
+
+    /**
+     * Setter for responseModalities given a list of strings.
+     *
+     * <p>responseModalities: The modalities for the response.
+     */
+    @ExcludeFromGeneratedCoverageReport
+    @CanIgnoreReturnValue
+    public Builder responseModalitiesFromString(List<String> responseModalities) {
+      ImmutableList<Modality> listItems =
+          responseModalities.stream().map(Modality::new).collect(toImmutableList());
+      return responseModalities(listItems);
     }
 
     /**

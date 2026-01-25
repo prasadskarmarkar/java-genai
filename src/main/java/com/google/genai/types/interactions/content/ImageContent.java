@@ -25,10 +25,12 @@ import com.google.auto.value.AutoValue;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import com.google.genai.JsonSerializable;
 import com.google.genai.types.ExcludeFromGeneratedCoverageReport;
+import com.google.genai.types.interactions.ImageMimeType;
+import com.google.genai.types.interactions.MediaResolution;
 import java.util.Optional;
 
 /**
- * Image content for interactions.
+ * Image content for the Interactions API.
  *
  * <p>Represents image data that can be included in interaction inputs or outputs.
  * Images can be provided either as base64-encoded data or as a URI.
@@ -44,6 +46,10 @@ import java.util.Optional;
  * <pre>{@code
  * ImageContent image = ImageContent.fromUri("https://example.com/image.png", "image/png");
  * }</pre>
+ *
+ * <p>The Interactions API is available in both Vertex AI and Gemini API.
+ *
+ * <p>Note: The Interactions API is in beta and subject to change.
  */
 @AutoValue
 @JsonDeserialize(builder = ImageContent.Builder.class)
@@ -58,11 +64,36 @@ public abstract class ImageContent extends JsonSerializable
   @JsonProperty("uri")
   public abstract Optional<String> uri();
 
+  /**
+   * The MIME type of the image.
+   *
+   * <p>Supported values:
+   * <ul>
+   *   <li>{@link ImageMimeType.Known#IMAGE_PNG} - PNG format
+   *   <li>{@link ImageMimeType.Known#IMAGE_JPEG} - JPEG format
+   *   <li>{@link ImageMimeType.Known#IMAGE_WEBP} - WebP format
+   *   <li>{@link ImageMimeType.Known#IMAGE_HEIC} - HEIC format
+   *   <li>{@link ImageMimeType.Known#IMAGE_HEIF} - HEIF format
+   * </ul>
+   *
+   * <p>This field accepts any MIME type string to support future image formats.
+   */
   @JsonProperty("mime_type")
-  public abstract Optional<String> mimeType();
+  public abstract Optional<ImageMimeType> mimeType();
 
+  /**
+   * The resolution of the image.
+   *
+   * <p>Possible values:
+   * <ul>
+   *   <li>{@link MediaResolution#LOW} - Low resolution
+   *   <li>{@link MediaResolution#MEDIUM} - Medium resolution
+   *   <li>{@link MediaResolution#HIGH} - High resolution
+   *   <li>{@link MediaResolution#ULTRA_HIGH} - Ultra high resolution
+   * </ul>
+   */
   @JsonProperty("resolution")
-  public abstract Optional<String> resolution();
+  public abstract Optional<MediaResolution> resolution();
 
   @ExcludeFromGeneratedCoverageReport
   public static Builder builder() {
@@ -103,10 +134,10 @@ public abstract class ImageContent extends JsonSerializable
     }
 
     @JsonProperty("mime_type")
-    public abstract Builder mimeType(String mimeType);
+    public abstract Builder mimeType(ImageMimeType mimeType);
 
     @ExcludeFromGeneratedCoverageReport
-    abstract Builder mimeType(Optional<String> mimeType);
+    abstract Builder mimeType(Optional<ImageMimeType> mimeType);
 
     @ExcludeFromGeneratedCoverageReport
     @CanIgnoreReturnValue
@@ -115,10 +146,10 @@ public abstract class ImageContent extends JsonSerializable
     }
 
     @JsonProperty("resolution")
-    public abstract Builder resolution(String resolution);
+    public abstract Builder resolution(MediaResolution resolution);
 
     @ExcludeFromGeneratedCoverageReport
-    abstract Builder resolution(Optional<String> resolution);
+    abstract Builder resolution(Optional<MediaResolution> resolution);
 
     @ExcludeFromGeneratedCoverageReport
     @CanIgnoreReturnValue
@@ -136,11 +167,11 @@ public abstract class ImageContent extends JsonSerializable
 
   @ExcludeFromGeneratedCoverageReport
   public static ImageContent fromData(String data, String mimeType) {
-    return builder().data(data).mimeType(mimeType).build();
+    return builder().data(data).mimeType(new ImageMimeType(mimeType)).build();
   }
 
   @ExcludeFromGeneratedCoverageReport
   public static ImageContent fromUri(String uri, String mimeType) {
-    return builder().uri(uri).mimeType(mimeType).build();
+    return builder().uri(uri).mimeType(new ImageMimeType(mimeType)).build();
   }
 }

@@ -42,12 +42,12 @@ import com.google.genai.types.interactions.content.CodeExecutionResultContent;
 import com.google.genai.types.interactions.content.Content;
 import com.google.genai.types.interactions.content.ImageContent;
 import com.google.genai.types.interactions.content.TextContent;
-import com.google.genai.types.interactions.tools.CodeExecutionTool;
+import com.google.genai.types.interactions.tools.CodeExecution;
 
 /**
- * Example: CodeExecutionTool with Multiple Content Types
+ * Example: CodeExecution with Multiple Content Types
  *
- * <p>Demonstrates CodeExecutionTool with multiple content types as input:
+ * <p>Demonstrates CodeExecution with multiple content types as input:
  *
  * <ul>
  *   <li>3 TextContent items
@@ -64,10 +64,10 @@ public final class InteractionsCodeExecutionMultiContent {
     //
     Client client = new Client();
 
-    System.out.println("=== Interactions API: CodeExecutionTool with Multiple Contents ===\n");
+    System.out.println("=== Interactions API: CodeExecution with Multiple Contents ===\n");
 
-    // ===== Configure CodeExecutionTool =====
-    CodeExecutionTool codeExecutionTool = CodeExecutionTool.builder().build();
+    // ===== Configure CodeExecution =====
+    CodeExecution codeExecutionTool = CodeExecution.builder().build();
 
     // ===== Create Multiple Content Items =====
     System.out.println("--- Creating Multiple Content Items ---\n");

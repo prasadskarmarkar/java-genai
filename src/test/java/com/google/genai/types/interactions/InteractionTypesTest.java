@@ -29,8 +29,8 @@ import com.google.genai.types.interactions.content.McpServerToolResultContent;
 import com.google.genai.types.interactions.content.TextContent;
 import com.google.genai.types.interactions.content.ThoughtContent;
 import com.google.genai.types.interactions.content.ThoughtSummaryContent;
-import com.google.genai.types.interactions.tools.FileSearchTool;
-import com.google.genai.types.interactions.tools.McpServerTool;
+import com.google.genai.types.interactions.tools.FileSearch;
+import com.google.genai.types.interactions.tools.McpServer;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -335,12 +335,12 @@ public class InteractionTypesTest {
     assertEquals("server-name", content.serverName().get());
   }
 
-  // ========== FileSearchTool Tests ==========
+  // ========== FileSearch Tests ==========
 
   @Test
-  public void testFileSearchToolMetadataFilterIsString() {
+  public void testFileSearchMetadataFilterIsString() {
     // Act
-    FileSearchTool tool = FileSearchTool.builder()
+    FileSearch tool = FileSearch.builder()
         .fileSearchStoreNames("store-1", "store-2")
         .topK(10)
         .metadataFilter("category = 'documents' AND year > 2020")
@@ -356,9 +356,9 @@ public class InteractionTypesTest {
   }
 
   @Test
-  public void testFileSearchToolJsonSerializationSnakeCase() {
+  public void testFileSearchJsonSerializationSnakeCase() {
     // Arrange
-    FileSearchTool tool = FileSearchTool.builder()
+    FileSearch tool = FileSearch.builder()
         .fileSearchStoreNames("my-store")
         .topK(5)
         .metadataFilter("status = 'active'")
@@ -379,12 +379,12 @@ public class InteractionTypesTest {
   }
 
   @Test
-  public void testFileSearchToolJsonDeserialization() {
+  public void testFileSearchJsonDeserialization() {
     // Arrange - JSON with snake_case property names
     String json = "{\"type\":\"file_search\",\"file_search_store_names\":[\"store-a\",\"store-b\"],\"top_k\":15,\"metadata_filter\":\"type = 'pdf'\"}";
 
     // Act
-    FileSearchTool tool = FileSearchTool.fromJson(json);
+    FileSearch tool = FileSearch.fromJson(json);
 
     // Assert
     assertTrue(tool.fileSearchStoreNames().isPresent());
@@ -398,9 +398,9 @@ public class InteractionTypesTest {
   }
 
   @Test
-  public void testFileSearchToolWithoutOptionalFields() {
+  public void testFileSearchWithoutOptionalFields() {
     // Act
-    FileSearchTool tool = FileSearchTool.builder().build();
+    FileSearch tool = FileSearch.builder().build();
 
     // Assert - all fields are optional
     assertTrue(!tool.fileSearchStoreNames().isPresent());
@@ -409,15 +409,15 @@ public class InteractionTypesTest {
   }
 
   @Test
-  public void testFileSearchToolClearMethods() {
+  public void testFileSearchClearMethods() {
     // Arrange
-    FileSearchTool.Builder builder = FileSearchTool.builder()
+    FileSearch.Builder builder = FileSearch.builder()
         .fileSearchStoreNames("store-1")
         .topK(10)
         .metadataFilter("filter");
 
     // Act
-    FileSearchTool tool = builder
+    FileSearch tool = builder
         .clearFileSearchStoreNames()
         .clearTopK()
         .clearMetadataFilter()
@@ -750,16 +750,16 @@ public class InteractionTypesTest {
     assertEquals(3, allowedTools.tools().get().size());
   }
 
-  // ========== McpServerTool Tests ==========
+  // ========== McpServer Tests ==========
 
   @Test
-  public void testMcpServerToolWithAllowedToolsList() {
+  public void testMcpServerWithAllowedToolsList() {
     // Arrange
     AllowedTools allowed1 = AllowedTools.of("auto", "get_weather", "get_forecast");
     AllowedTools allowed2 = AllowedTools.of("any", "search", "query");
 
     // Act
-    McpServerTool tool = McpServerTool.builder()
+    McpServer tool = McpServer.builder()
         .name("my-mcp-server")
         .url("https://mcp.example.com")
         .allowedTools(allowed1, allowed2)
@@ -775,10 +775,10 @@ public class InteractionTypesTest {
   }
 
   @Test
-  public void testMcpServerToolJsonSerializationSnakeCase() {
+  public void testMcpServerJsonSerializationSnakeCase() {
     // Arrange
     AllowedTools allowed = AllowedTools.of("auto", "my_tool");
-    McpServerTool tool = McpServerTool.builder()
+    McpServer tool = McpServer.builder()
         .name("test-server")
         .url("https://example.com")
         .allowedTools(allowed)
@@ -797,12 +797,12 @@ public class InteractionTypesTest {
   }
 
   @Test
-  public void testMcpServerToolJsonDeserialization() {
+  public void testMcpServerJsonDeserialization() {
     // Arrange - JSON with snake_case property names
     String json = "{\"type\":\"mcp_server\",\"name\":\"deserialized-server\",\"url\":\"https://test.com\",\"allowed_tools\":[{\"mode\":\"any\",\"tools\":[\"a\",\"b\"]}]}";
 
     // Act
-    McpServerTool tool = McpServerTool.fromJson(json);
+    McpServer tool = McpServer.fromJson(json);
 
     // Assert
     assertTrue(tool.name().isPresent());

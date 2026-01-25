@@ -66,12 +66,12 @@ import com.google.genai.types.interactions.FileSearchResult;
 import com.google.genai.types.interactions.content.FileSearchResultContent;
 import com.google.genai.types.interactions.content.Content;
 import com.google.genai.types.interactions.content.TextContent;
-import com.google.genai.types.interactions.tools.FileSearchTool;
+import com.google.genai.types.interactions.tools.FileSearch;
 
 /**
  * Example: File Search Tool with the Interactions API
  *
- * <p>Demonstrates how to use the FileSearchTool to enable the model to search through file stores.
+ * <p>Demonstrates how to use the FileSearch to enable the model to search through file stores.
  * This is useful for RAG (Retrieval-Augmented Generation) use cases where you want the model to
  * answer questions based on your documents.
  *
@@ -93,13 +93,13 @@ public final class InteractionsFileSearch {
     System.out.println("IMPORTANT: This example requires file search stores to be created.\n");
     System.out.println("See the file header comments for setup instructions.\n");
 
-    // ===== STEP 1: Create FileSearchTool =====
-    System.out.println("STEP 1: Create FileSearchTool\n");
+    // ===== STEP 1: Create FileSearch =====
+    System.out.println("STEP 1: Create FileSearch\n");
 
     // Configure the file search tool
     // Update the store names to match your created file search stores
-    FileSearchTool fileSearchTool =
-        FileSearchTool.builder()
+    FileSearch fileSearchTool =
+        FileSearch.builder()
             .fileSearchStoreNames(
                 "my-document-store-1",
                 "my-document-store-2" // You can search across multiple stores
@@ -109,7 +109,7 @@ public final class InteractionsFileSearch {
             // .metadataFilter(ImmutableMap.of("category", "technical", "year", 2025))
             .build();
 
-    System.out.println("FileSearchTool created successfully");
+    System.out.println("FileSearch created successfully");
     System.out.println(
         "Store Names: " + fileSearchTool.fileSearchStoreNames().orElse(java.util.List.of()));
     System.out.println("Top K: " + fileSearchTool.topK().orElse(10));

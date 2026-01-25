@@ -43,13 +43,13 @@ import com.google.genai.types.interactions.content.ImageContent;
 import com.google.genai.types.interactions.content.TextContent;
 import com.google.genai.types.interactions.content.UrlContextCallContent;
 import com.google.genai.types.interactions.content.UrlContextResultContent;
-import com.google.genai.types.interactions.tools.UrlContextTool;
+import com.google.genai.types.interactions.tools.UrlContext;
 import java.util.List;
 
 /**
- * Example: UrlContextTool with Multiple Content Types
+ * Example: UrlContext with Multiple Content Types
  *
- * <p>Demonstrates UrlContextTool with multiple content types as input:
+ * <p>Demonstrates UrlContext with multiple content types as input:
  *
  * <ul>
  *   <li>3 TextContent items
@@ -66,10 +66,10 @@ public final class InteractionsUrlContextMultiContent {
     //
     Client client = new Client();
 
-    System.out.println("=== Interactions API: UrlContextTool with Multiple Contents ===\n");
+    System.out.println("=== Interactions API: UrlContext with Multiple Contents ===\n");
 
-    // ===== Configure UrlContextTool =====
-    UrlContextTool urlContextTool = UrlContextTool.builder().build();
+    // ===== Configure UrlContext =====
+    UrlContext urlContextTool = UrlContext.builder().build();
 
     // ===== Create Multiple Content Items =====
     System.out.println("--- Creating Multiple Content Items ---\n");

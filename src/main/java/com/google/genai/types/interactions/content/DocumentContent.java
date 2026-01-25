@@ -25,10 +25,11 @@ import com.google.auto.value.AutoValue;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import com.google.genai.JsonSerializable;
 import com.google.genai.types.ExcludeFromGeneratedCoverageReport;
+import com.google.genai.types.interactions.DocumentMimeType;
 import java.util.Optional;
 
 /**
- * Document content for interactions.
+ * Document content for the Interactions API.
  *
  * <p>Represents document data (e.g., PDF, text files) that can be included in interaction inputs or outputs.
  * Documents can be provided either as base64-encoded data or as a URI.
@@ -44,6 +45,10 @@ import java.util.Optional;
  * <pre>{@code
  * DocumentContent doc = DocumentContent.fromUri("https://example.com/doc.pdf", "application/pdf");
  * }</pre>
+ *
+ * <p>The Interactions API is available in both Vertex AI and Gemini API.
+ *
+ * <p>Note: The Interactions API is in beta and subject to change.
  */
 @AutoValue
 @JsonDeserialize(builder = DocumentContent.Builder.class)
@@ -57,8 +62,18 @@ public abstract class DocumentContent extends JsonSerializable implements Conten
   @JsonProperty("uri")
   public abstract Optional<String> uri();
 
+  /**
+   * The MIME type of the document.
+   *
+   * <p>Supported values:
+   * <ul>
+   *   <li>{@link DocumentMimeType.Known#APPLICATION_PDF} - PDF format
+   * </ul>
+   *
+   * <p>This field accepts any MIME type string to support future document formats.
+   */
   @JsonProperty("mime_type")
-  public abstract Optional<String> mimeType();
+  public abstract Optional<DocumentMimeType> mimeType();
 
   @ExcludeFromGeneratedCoverageReport
   public static Builder builder() {
@@ -99,10 +114,10 @@ public abstract class DocumentContent extends JsonSerializable implements Conten
     }
 
     @JsonProperty("mime_type")
-    public abstract Builder mimeType(String mimeType);
+    public abstract Builder mimeType(DocumentMimeType mimeType);
 
     @ExcludeFromGeneratedCoverageReport
-    abstract Builder mimeType(Optional<String> mimeType);
+    abstract Builder mimeType(Optional<DocumentMimeType> mimeType);
 
     @ExcludeFromGeneratedCoverageReport
     @CanIgnoreReturnValue
@@ -120,11 +135,11 @@ public abstract class DocumentContent extends JsonSerializable implements Conten
 
   @ExcludeFromGeneratedCoverageReport
   public static DocumentContent fromData(String data, String mimeType) {
-    return builder().data(data).mimeType(mimeType).build();
+    return builder().data(data).mimeType(new DocumentMimeType(mimeType)).build();
   }
 
   @ExcludeFromGeneratedCoverageReport
   public static DocumentContent fromUri(String uri, String mimeType) {
-    return builder().uri(uri).mimeType(mimeType).build();
+    return builder().uri(uri).mimeType(new DocumentMimeType(mimeType)).build();
   }
 }

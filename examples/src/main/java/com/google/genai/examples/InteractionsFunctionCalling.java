@@ -42,22 +42,25 @@ import com.google.genai.types.interactions.content.FunctionCallContent;
 import com.google.genai.types.interactions.content.FunctionResultContent;
 import com.google.genai.types.interactions.content.Content;
 import com.google.genai.types.interactions.content.TextContent;
-import com.google.genai.types.interactions.tools.FunctionTool;
-import java.lang.reflect.Method;
-import java.util.List;
+import com.google.genai.types.interactions.tools.Function;
 import java.util.Map;
 
 /**
- * Example: Function Calling with the Interactions API
+ * Example: Manual Function Calling with the Interactions API
  *
- * <p>Demonstrates two approaches to function calling:
+ * <p>Demonstrates how to handle function calling manually with the Interactions API:
  *
  * <ol>
- *   <li><b>Manual Function Calling</b>: Define function tools with Schema, handle function calls
- *       manually
- *   <li><b>Automatic Function Calling (AFC)</b>: Define function tools from Java methods, SDK
- *       auto-executes functions
+ *   <li>Define function tools with Schema
+ *   <li>Send initial request with function declarations
+ *   <li>Extract function calls from the response
+ *   <li>Execute functions in your application code
+ *   <li>Send function results back using previousInteractionId
+ *   <li>Receive the final response
  * </ol>
+ *
+ * <p>Note: The Interactions API does not implement Automatic Function Calling (AFC).
+ * All function execution must be handled manually by the application.
  *
  * <p>Note: The Interactions API is in beta and subject to change.
  */
@@ -71,23 +74,7 @@ public final class InteractionsFunctionCalling {
 
     System.out.println("=== Interactions API: Function Calling Example ===\n");
 
-    // ========================================
-    // PART 1: Manual Function Calling
-    // ========================================
-    System.out.println("========================================");
-    System.out.println("PART 1: Manual Function Calling");
-    System.out.println("========================================\n");
-
     manualFunctionCallingExample(client);
-
-    // ========================================
-    // PART 2: Automatic Function Calling (AFC)
-    // ========================================
-    System.out.println("\n========================================");
-    System.out.println("PART 2: Automatic Function Calling (AFC)");
-    System.out.println("========================================\n");
-
-    automaticFunctionCallingExample(client);
 
     System.out.println("\n=== Example completed ===");
   }
@@ -98,13 +85,13 @@ public final class InteractionsFunctionCalling {
    * <p>In manual mode, you define the function schema and handle function calls yourself.
    */
   private static void manualFunctionCallingExample(Client client) {
-    // ===== STEP 1: Define a FunctionTool with Schema =====
+    // ===== STEP 1: Define a Function with Schema =====
     System.out.println("STEP 1: Define the get_weather function using Schema\n");
 
     // Define the function tool with parameters schema
     // Note: Using lowercase type strings ("object", "string") for API compatibility
-    FunctionTool weatherTool =
-        FunctionTool.builder()
+    Function weatherTool =
+        Function.builder()
             .name("get_weather")
             .description("Get the current weather for a location")
             .parameters(
@@ -121,7 +108,7 @@ public final class InteractionsFunctionCalling {
                     .build())
             .build();
 
-    System.out.println("FunctionTool defined: " + weatherTool.name().orElse("N/A") + "\n");
+    System.out.println("Function defined: " + weatherTool.name().orElse("N/A") + "\n");
 
     // ===== STEP 2: First interaction - Ask about weather =====
     System.out.println("---\n");
@@ -194,86 +181,6 @@ public final class InteractionsFunctionCalling {
     printOutputs(response2);
   }
 
-  /**
-   * Demonstrates Automatic Function Calling (AFC) with the Interactions API.
-   *
-   * <p>In AFC mode, you define function tools from Java methods and the SDK automatically executes
-   * the functions when the model requests them.
-   */
-  private static void automaticFunctionCallingExample(Client client) throws Exception {
-    // ===== STEP 1: Get Java Method reference =====
-    System.out.println("STEP 1: Create FunctionTool from Java Method\n");
-
-    // Get the Java Method reference
-    Method weatherMethod =
-        InteractionsFunctionCalling.class.getMethod("getWeatherForCity", String.class);
-
-    // Create FunctionTool from the method - this enables AFC
-    FunctionTool weatherTool =
-        FunctionTool.fromMethod("Get the current weather for a city", weatherMethod);
-
-    System.out.println(
-        "FunctionTool created from method: " + weatherTool.name().orElse("N/A") + "\n");
-    System.out.println("AFC enabled: method() is set = " + weatherTool.method().isPresent() + "\n");
-
-    // ===== STEP 2: Create interaction with AFC =====
-    System.out.println("---\n");
-    System.out.println("STEP 2: Create interaction - SDK will automatically handle function calls\n");
-
-    String userQuestion = "What's the weather like in Tokyo?";
-    System.out.println("User: " + userQuestion + "\n");
-
-    CreateInteractionConfig config =
-        CreateInteractionConfig.builder()
-            .model("gemini-2.5-flash")
-            .input(userQuestion)
-            .tools(weatherTool)
-            .build();
-
-    // The SDK automatically:
-    // 1. Sends the request to the model
-    // 2. Detects function calls in the response
-    // 3. Executes the Java method with the arguments from the model
-    // 4. Sends the result back to the model
-    // 5. Returns the final text response
-    Interaction response = client.interactions.create(config);
-
-    // ===== STEP 3: Display the final response =====
-    System.out.println("---\n");
-    System.out.println("STEP 3: Final response (AFC handled automatically)\n");
-
-    System.out.println("Model: ");
-    printOutputs(response);
-
-    // Check AFC history
-    if (response.automaticFunctionCallingHistory().isPresent()) {
-      List<Interaction> history = response.automaticFunctionCallingHistory().get();
-      System.out.println("\nAFC History (" + history.size() + " interactions):");
-      for (int i = 0; i < history.size(); i++) {
-        Interaction hist = history.get(i);
-        System.out.println("  [" + (i + 1) + "] ID: " + hist.id());
-      }
-    }
-  }
-
-  /**
-   * Public static method for AFC - gets weather for a city.
-   *
-   * <p>This method must be public and static for AFC to work. The SDK uses reflection to invoke
-   * it.
-   *
-   * @param location The city name
-   * @return A map with weather information
-   */
-  public static Map<String, Object> getWeatherForCity(String location) {
-    System.out.println("  [AFC] Executing getWeatherForCity(\"" + location + "\")");
-    return ImmutableMap.of(
-        "location", location,
-        "temperature", "18",
-        "unit", "celsius",
-        "condition", "partly cloudy",
-        "humidity", "62%");
-  }
 
   /**
    * Simulates executing the get_weather function (for manual mode).

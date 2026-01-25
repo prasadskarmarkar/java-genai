@@ -29,7 +29,7 @@
  *
  * <p>mvn clean compile
  *
- * <p>mvn exec:java -Dexec.mainClass="com.google.genai.examples.InteractionsCreateAllContentTypes"
+ * <p>mvn exec:java -Dexec.mainClass="com.google.genai.examples.InteractionsCreateExample"
  */
 package com.google.genai.examples;
 
@@ -62,7 +62,7 @@ import com.google.genai.types.interactions.content.VideoContent;
  *
  * <p>Note: The Interactions API is in beta and subject to change.
  */
-public final class InteractionsCreate{
+public final class InteractionsCreateExample {
 
   public static void main(String[] args) {
     // Instantiate the client. The client gets the API key from the environment variable
@@ -260,5 +260,5 @@ public final class InteractionsCreate{
     }
   }
 
-  private InteractionsCreate() {}
+  private InteractionsCreateExample() {}
 }

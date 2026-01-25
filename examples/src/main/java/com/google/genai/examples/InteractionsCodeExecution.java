@@ -40,12 +40,12 @@ import com.google.genai.types.interactions.content.CodeExecutionCallContent;
 import com.google.genai.types.interactions.content.CodeExecutionResultContent;
 import com.google.genai.types.interactions.content.Content;
 import com.google.genai.types.interactions.content.TextContent;
-import com.google.genai.types.interactions.tools.CodeExecutionTool;
+import com.google.genai.types.interactions.tools.CodeExecution;
 
 /**
  * Example: Code Execution Tool with the Interactions API
  *
- * <p>Demonstrates how to use the CodeExecutionTool to enable the model to execute code as part of
+ * <p>Demonstrates how to use the CodeExecution to enable the model to execute code as part of
  * generation. The model can write and run code to solve problems.
  *
  * <p>Note: The Interactions API is in beta and subject to change.
@@ -60,12 +60,12 @@ public final class InteractionsCodeExecution {
 
     System.out.println("=== Interactions API: Code Execution Tool Example ===\n");
 
-    // ===== STEP 1: Create CodeExecutionTool =====
-    System.out.println("STEP 1: Create CodeExecutionTool\n");
+    // ===== STEP 1: Create CodeExecution =====
+    System.out.println("STEP 1: Create CodeExecution\n");
 
-    CodeExecutionTool codeTool = CodeExecutionTool.builder().build();
+    CodeExecution codeTool = CodeExecution.builder().build();
 
-    System.out.println("CodeExecutionTool created successfully\n");
+    System.out.println("CodeExecution created successfully\n");
 
     // ===== STEP 2: Create interaction with Code Execution enabled =====
     System.out.println("---\n");

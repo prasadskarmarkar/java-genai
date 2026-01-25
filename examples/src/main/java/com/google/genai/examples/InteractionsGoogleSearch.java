@@ -41,13 +41,13 @@ import com.google.genai.types.interactions.content.GoogleSearchCallContent;
 import com.google.genai.types.interactions.content.GoogleSearchResultContent;
 import com.google.genai.types.interactions.content.Content;
 import com.google.genai.types.interactions.content.TextContent;
-import com.google.genai.types.interactions.tools.GoogleSearchTool;
+import com.google.genai.types.interactions.tools.GoogleSearch;
 import java.util.List;
 
 /**
  * Example: Google Search Tool with the Interactions API
  *
- * <p>Demonstrates how to use the GoogleSearchTool to enable the model to search the web using
+ * <p>Demonstrates how to use the GoogleSearch to enable the model to search the web using
  * Google Search.
  *
  * <p>Note: The Interactions API is in beta and subject to change.
@@ -62,12 +62,12 @@ public final class InteractionsGoogleSearch {
 
     System.out.println("=== Interactions API: Google Search Tool Example ===\n");
 
-    // ===== STEP 1: Create GoogleSearchTool =====
-    System.out.println("STEP 1: Create GoogleSearchTool\n");
+    // ===== STEP 1: Create GoogleSearch =====
+    System.out.println("STEP 1: Create GoogleSearch\n");
 
-    GoogleSearchTool searchTool = GoogleSearchTool.builder().build();
+    GoogleSearch searchTool = GoogleSearch.builder().build();
 
-    System.out.println("GoogleSearchTool created successfully\n");
+    System.out.println("GoogleSearch created successfully\n");
 
     // ===== STEP 2: Create interaction with Google Search enabled =====
     System.out.println("---\n");

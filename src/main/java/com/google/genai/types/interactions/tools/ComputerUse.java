@@ -43,6 +43,8 @@ import java.util.Optional;
  *     .build();
  * }</pre>
  *
+ * <p>The Interactions API is available in both Vertex AI and Gemini API.
+ *
  * <p>Note: The Interactions API is in beta and subject to change.
  */
 @AutoValue

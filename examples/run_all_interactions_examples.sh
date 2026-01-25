@@ -56,6 +56,7 @@ EXAMPLES=(
     "InteractionsPreviousInteractionId"
     "InteractionsThoughtContent"
     "InteractionsTextAnnotations"
+    "InteractionsGenerationConfigComprehensive"
 )
 
 # Expected failures (examples that require additional setup)

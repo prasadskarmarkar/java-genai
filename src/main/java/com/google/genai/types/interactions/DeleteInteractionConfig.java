@@ -26,7 +26,25 @@ import com.google.genai.types.ExcludeFromGeneratedCoverageReport;
 import com.google.genai.types.HttpOptions;
 import java.util.Optional;
 
-/** Optional parameters for interactions.delete method. */
+/**
+ * Configuration for deleting an interaction in the Interactions API.
+ *
+ * <p>Optional parameters for the interactions.delete method. Currently supports HTTP request
+ * options for customizing the delete operation.
+ *
+ * <p>Example usage:
+ *
+ * <pre>{@code
+ * DeleteInteractionConfig config = DeleteInteractionConfig.builder()
+ *     .httpOptions(HttpOptions.builder().timeout(5000).build())
+ *     .build();
+ * client.interactions.delete("interaction-id", config);
+ * }</pre>
+ *
+ * <p>The Interactions API is available in both Vertex AI and Gemini API.
+ *
+ * <p>Note: The Interactions API is in beta and subject to change.
+ */
 @AutoValue
 @JsonDeserialize(builder = DeleteInteractionConfig.Builder.class)
 public abstract class DeleteInteractionConfig extends JsonSerializable {

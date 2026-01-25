@@ -27,9 +27,7 @@ import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import com.google.genai.JsonSerializable;
 import com.google.genai.types.ExcludeFromGeneratedCoverageReport;
 
-import com.google.genai.types.FunctionDeclaration;
 import com.google.genai.types.Schema;
-import java.lang.reflect.Method;
 import java.util.Optional;
 
 /**
@@ -54,12 +52,10 @@ import java.util.Optional;
  *     .build();
  * }</pre>
  *
- * <p>Example usage with reflection (enables Automatic Function Calling):
+ * <p>The Interactions API does not support Automatic Function Calling (AFC). All function
+ * execution must be handled manually by the application.
  *
- * <pre>{@code
- * Method getCurrentWeather = MyClass.class.getMethod("getCurrentWeather", String.class);
- * Function weatherTool = Function.fromMethod(getCurrentWeather);
- * }</pre>
+ * <p>The Interactions API is available in both Vertex AI and Gemini API.
  *
  * <p>Note: The Interactions API is in beta and subject to change.
  */
@@ -80,15 +76,6 @@ public abstract class Function extends JsonSerializable implements Tool {
   /** The parameters schema for the function in JSON Schema format. */
   @JsonProperty("parameters")
   public abstract Optional<Schema> parameters();
-
-  /**
-   * The Java Method instance for Automatic Function Calling (AFC).
-   *
-   * <p>When set, the SDK can automatically invoke this method when the model requests it. Not
-   * serialized to JSON.
-   */
-  @JsonIgnore
-  public abstract Optional<Method> method();
 
   /** Instantiates a builder for Function. */
   @ExcludeFromGeneratedCoverageReport
@@ -166,28 +153,10 @@ public abstract class Function extends JsonSerializable implements Tool {
     abstract Builder parameters(Optional<Schema> parameters);
 
     /** Clears the value of parameters field. */
-    
+
     @CanIgnoreReturnValue
     public Builder clearParameters() {
       return parameters(Optional.empty());
-    }
-
-    /**
-     * Setter for method.
-     *
-     * <p>method: The Java Method for AFC. Not serialized to JSON.
-     */
-    @JsonIgnore
-    public abstract Builder method(Method method);
-
-    
-    abstract Builder method(Optional<Method> method);
-
-    /** Clears the value of method field. */
-    
-    @CanIgnoreReturnValue
-    public Builder clearMethod() {
-      return method(Optional.empty());
     }
 
     public abstract Function build();
@@ -197,52 +166,5 @@ public abstract class Function extends JsonSerializable implements Tool {
   @ExcludeFromGeneratedCoverageReport
   public static Function fromJson(String jsonString) {
     return JsonSerializable.fromJsonString(jsonString, Function.class);
-  }
-
-  /**
-   * Creates a Function from a Java Method.
-   *
-   * <p>This enables Automatic Function Calling (AFC) - the SDK will automatically invoke this
-   * method when the model requests it.
-   *
-   * @param method The static method to wrap. Must be a static method.
-   * @param orderedParameterNames Optional ordered parameter names. If not provided, parameter names
-   *     will be retrieved via reflection.
-   * @return A Function that wraps the method.
-   */
-  public static Function fromMethod(Method method, String... orderedParameterNames) {
-    return fromMethod("", method, orderedParameterNames);
-  }
-
-  /**
-   * Creates a Function from a Java Method with a description.
-   *
-   * <p>This enables Automatic Function Calling (AFC) - the SDK will automatically invoke this
-   * method when the model requests it.
-   *
-   * @param functionDescription Description of the function for the model.
-   * @param method The static method to wrap. Must be a static method.
-   * @param orderedParameterNames Optional ordered parameter names. If not provided, parameter names
-   *     will be retrieved via reflection.
-   * @return A Function that wraps the method.
-   */
-  public static Function fromMethod(
-      String functionDescription, Method method, String... orderedParameterNames) {
-    FunctionDeclaration fd =
-        FunctionDeclaration.fromMethod(functionDescription, method, orderedParameterNames);
-
-    Builder builder = Function.builder().method(method);
-
-    if (fd.name().isPresent()) {
-      builder.name(fd.name().get());
-    }
-    if (fd.description().isPresent() && !fd.description().get().isEmpty()) {
-      builder.description(fd.description().get());
-    }
-    if (fd.parameters().isPresent()) {
-      builder.parameters(fd.parameters().get());
-    }
-
-    return builder.build();
   }
 }

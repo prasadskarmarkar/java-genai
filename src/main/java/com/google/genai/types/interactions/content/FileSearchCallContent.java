@@ -28,7 +28,7 @@ import com.google.genai.types.ExcludeFromGeneratedCoverageReport;
 import java.util.Optional;
 
 /**
- * File search call content for interactions.
+ * File search call content for the Interactions API.
  *
  * <p>Represents a request from the model to search through file stores. This content type appears in
  * interaction outputs when the model wants to retrieve information from uploaded files.
@@ -40,6 +40,10 @@ import java.util.Optional;
  *     .id("call_123")
  *     .build();
  * }</pre>
+ *
+ * <p>The Interactions API is available in both Vertex AI and Gemini API.
+ *
+ * <p>Note: The Interactions API is in beta and subject to change.
  */
 @AutoValue
 @JsonDeserialize(builder = FileSearchCallContent.Builder.class)

@@ -28,7 +28,27 @@ import com.google.genai.types.ExcludeFromGeneratedCoverageReport;
 import java.util.Map;
 import java.util.Optional;
 
-/** Function call content representing a request from the model to call a function. */
+/**
+ * Function call content for the Interactions API.
+ *
+ * <p>Represents a request from the model to execute a function. When the model determines it needs
+ * to call a function, it returns this content type with the function name, arguments, and a unique
+ * identifier for tracking the call-result pair.
+ *
+ * <p>Example usage:
+ *
+ * <pre>{@code
+ * FunctionCallContent call = FunctionCallContent.builder()
+ *     .id("call-123")
+ *     .name("get_weather")
+ *     .arguments(Map.of("location", "San Francisco"))
+ *     .build();
+ * }</pre>
+ *
+ * <p>The Interactions API is available in both Vertex AI and Gemini API.
+ *
+ * <p>Note: The Interactions API is in beta and subject to change.
+ */
 @AutoValue
 @JsonDeserialize(builder = FunctionCallContent.Builder.class)
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")

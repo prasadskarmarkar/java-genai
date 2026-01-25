@@ -33,6 +33,8 @@ import java.util.Optional;
  * the Interactions API and has a simpler structure than speech configuration classes used in other
  * APIs.
  *
+ * <p>The Interactions API is available in both Vertex AI and Gemini API.
+ *
  * <p>Example usage:
  *
  * <pre>{@code

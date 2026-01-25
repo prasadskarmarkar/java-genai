@@ -23,7 +23,7 @@ import com.google.genai.types.interactions.content.FileSearchCallContent;
  *
  * <p>FileSearchCallContent represents a file search operation call in the Interactions API.
  * Unlike other tool calls, FileSearchCallContent contains only the type and call ID.
- * All search configuration (stores, top_k, filters) is defined in the FileSearchTool.
+ * All search configuration (stores, top_k, filters) is defined in the FileSearch.
  */
 public class FileSearchCallContentExample {
 

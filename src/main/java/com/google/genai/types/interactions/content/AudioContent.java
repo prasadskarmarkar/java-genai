@@ -25,10 +25,11 @@ import com.google.auto.value.AutoValue;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import com.google.genai.JsonSerializable;
 import com.google.genai.types.ExcludeFromGeneratedCoverageReport;
+import com.google.genai.types.interactions.AudioMimeType;
 import java.util.Optional;
 
 /**
- * Audio content for interactions.
+ * Audio content for the Interactions API.
  *
  * <p>Represents audio data that can be included in interaction inputs or outputs.
  * Audio can be provided either as base64-encoded data or as a URI.
@@ -44,6 +45,10 @@ import java.util.Optional;
  * <pre>{@code
  * AudioContent audio = AudioContent.fromUri("https://example.com/audio.mp3", "audio/mp3");
  * }</pre>
+ *
+ * <p>The Interactions API is available in both Vertex AI and Gemini API.
+ *
+ * <p>Note: The Interactions API is in beta and subject to change.
  */
 @AutoValue
 @JsonDeserialize(builder = AudioContent.Builder.class)
@@ -57,8 +62,23 @@ public abstract class AudioContent extends JsonSerializable implements Content {
   @JsonProperty("uri")
   public abstract Optional<String> uri();
 
+  /**
+   * The MIME type of the audio.
+   *
+   * <p>Supported values:
+   * <ul>
+   *   <li>{@link AudioMimeType.Known#AUDIO_WAV} - WAV format
+   *   <li>{@link AudioMimeType.Known#AUDIO_MP3} - MP3 format
+   *   <li>{@link AudioMimeType.Known#AUDIO_AIFF} - AIFF format
+   *   <li>{@link AudioMimeType.Known#AUDIO_AAC} - AAC format
+   *   <li>{@link AudioMimeType.Known#AUDIO_OGG} - OGG format
+   *   <li>{@link AudioMimeType.Known#AUDIO_FLAC} - FLAC format
+   * </ul>
+   *
+   * <p>This field accepts any MIME type string to support future audio formats.
+   */
   @JsonProperty("mime_type")
-  public abstract Optional<String> mimeType();
+  public abstract Optional<AudioMimeType> mimeType();
 
   @ExcludeFromGeneratedCoverageReport
   public static Builder builder() {
@@ -99,10 +119,10 @@ public abstract class AudioContent extends JsonSerializable implements Content {
     }
 
     @JsonProperty("mime_type")
-    public abstract Builder mimeType(String mimeType);
+    public abstract Builder mimeType(AudioMimeType mimeType);
 
     @ExcludeFromGeneratedCoverageReport
-    abstract Builder mimeType(Optional<String> mimeType);
+    abstract Builder mimeType(Optional<AudioMimeType> mimeType);
 
     @ExcludeFromGeneratedCoverageReport
     @CanIgnoreReturnValue
@@ -120,11 +140,11 @@ public abstract class AudioContent extends JsonSerializable implements Content {
 
   @ExcludeFromGeneratedCoverageReport
   public static AudioContent fromData(String data, String mimeType) {
-    return builder().data(data).mimeType(mimeType).build();
+    return builder().data(data).mimeType(new AudioMimeType(mimeType)).build();
   }
 
   @ExcludeFromGeneratedCoverageReport
   public static AudioContent fromUri(String uri, String mimeType) {
-    return builder().uri(uri).mimeType(mimeType).build();
+    return builder().uri(uri).mimeType(new AudioMimeType(mimeType)).build();
   }
 }

@@ -34,6 +34,8 @@ import java.util.Optional;
 /**
  * Represents an interaction with a model or agent.
  *
+ * <p>The Interactions API is available in both Vertex AI and Gemini API.
+ *
  * <p>Note: The Interactions API is in beta and subject to change.
  */
 @AutoValue
@@ -91,17 +93,6 @@ public abstract class Interaction extends JsonSerializable {
   /** Token usage statistics for the interaction. */
   @JsonProperty("usage")
   public abstract Optional<UsageMetadata> usage();
-
-  /**
-   * History of interactions during Automatic Function Calling (AFC).
-   *
-   * <p>This field is populated when AFC is enabled and the SDK automatically executes function
-   * calls. It contains the sequence of interactions that occurred during the AFC loop.
-   *
-   * <p>This field is not serialized to JSON.
-   */
-  @JsonIgnore
-  public abstract Optional<List<Interaction>> automaticFunctionCallingHistory();
 
   /** Instantiates a builder for Interaction. */
   @ExcludeFromGeneratedCoverageReport
@@ -339,41 +330,6 @@ public abstract class Interaction extends JsonSerializable {
     @CanIgnoreReturnValue
     public Builder clearUsage() {
       return usage(Optional.empty());
-    }
-
-    /**
-     * Setter for automaticFunctionCallingHistory.
-     *
-     * <p>automaticFunctionCallingHistory: History of interactions during AFC.
-     */
-    @JsonIgnore
-    public abstract Builder automaticFunctionCallingHistory(
-        List<Interaction> automaticFunctionCallingHistory);
-
-    /**
-     * Setter for automaticFunctionCallingHistory (varargs convenience method).
-     *
-     * <p>automaticFunctionCallingHistory: History of interactions during AFC.
-     */
-    @CanIgnoreReturnValue
-    public Builder automaticFunctionCallingHistory(Interaction... automaticFunctionCallingHistory) {
-      return automaticFunctionCallingHistory(Arrays.asList(automaticFunctionCallingHistory));
-    }
-
-    /** Internal setter for automaticFunctionCallingHistory with Optional. */
-    @ExcludeFromGeneratedCoverageReport
-    abstract Builder automaticFunctionCallingHistory(
-        Optional<List<Interaction>> automaticFunctionCallingHistory);
-
-    /**
-     * Clear method for automaticFunctionCallingHistory.
-     *
-     * <p>Removes the automaticFunctionCallingHistory field.
-     */
-    @ExcludeFromGeneratedCoverageReport
-    @CanIgnoreReturnValue
-    public Builder clearAutomaticFunctionCallingHistory() {
-      return automaticFunctionCallingHistory(Optional.empty());
     }
 
     /** Builds the Interaction instance. */

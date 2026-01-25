@@ -51,7 +51,7 @@ import com.google.genai.types.interactions.content.FileSearchCallContent;
 import com.google.genai.types.interactions.content.FileSearchResultContent;
 import com.google.genai.types.interactions.content.Content;
 import com.google.genai.types.interactions.content.TextContent;
-import com.google.genai.types.interactions.tools.FileSearchTool;
+import com.google.genai.types.interactions.tools.FileSearch;
 
 /**
  * FileSearchCallContent Testing Example
@@ -65,7 +65,7 @@ import com.google.genai.types.interactions.tools.FileSearchTool;
  * - id: Optional unique identifier for the file search call
  *
  * <p>Note: Unlike other tool calls, FileSearchCallContent has no arguments field.
- * All search configuration (stores, top_k, filters) is defined in the FileSearchTool.
+ * All search configuration (stores, top_k, filters) is defined in the FileSearch.
  * The content type appears in the interaction outputs when the model decides to
  * search through file stores.
  *
@@ -107,8 +107,8 @@ public final class InteractionsFileSearchCallContent {
     String prompt = "Search the documentation and tell me about the API authentication methods.";
 
     // NOTE: Update "my-document-store" to match your actual file search store name
-    FileSearchTool fileSearchTool =
-        FileSearchTool.builder()
+    FileSearch fileSearchTool =
+        FileSearch.builder()
             .fileSearchStoreNames("my-document-store")
             .topK(5)
             .build();
@@ -169,8 +169,8 @@ public final class InteractionsFileSearchCallContent {
             + "Please cite specific sections from the documents.";
 
     // NOTE: Update store names to match your actual file search stores
-    FileSearchTool fileSearchTool =
-        FileSearchTool.builder()
+    FileSearch fileSearchTool =
+        FileSearch.builder()
             .fileSearchStoreNames("my-document-store-1", "my-document-store-2")
             .topK(10)
             .build();

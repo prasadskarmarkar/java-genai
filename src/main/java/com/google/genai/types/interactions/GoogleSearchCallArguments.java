@@ -26,6 +26,23 @@ import com.google.genai.types.ExcludeFromGeneratedCoverageReport;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Arguments for Google Search tool calls in the Interactions API.
+ *
+ * <p>Specifies the search queries to be executed when the model invokes the Google Search tool.
+ *
+ * <p>Example usage:
+ *
+ * <pre>{@code
+ * GoogleSearchCallArguments args = GoogleSearchCallArguments.builder()
+ *     .queries(List.of("latest AI research", "machine learning trends"))
+ *     .build();
+ * }</pre>
+ *
+ * <p>The Interactions API is available in both Vertex AI and Gemini API.
+ *
+ * <p>Note: The Interactions API is in beta and subject to change.
+ */
 @AutoValue
 @JsonDeserialize(builder = GoogleSearchCallArguments.Builder.class)
 public abstract class GoogleSearchCallArguments extends JsonSerializable {

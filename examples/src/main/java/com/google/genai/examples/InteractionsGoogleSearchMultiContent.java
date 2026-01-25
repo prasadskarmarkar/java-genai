@@ -44,13 +44,13 @@ import com.google.genai.types.interactions.content.GoogleSearchResultContent;
 import com.google.genai.types.interactions.content.ImageContent;
 import com.google.genai.types.interactions.content.TextContent;
 import com.google.genai.types.interactions.content.VideoContent;
-import com.google.genai.types.interactions.tools.GoogleSearchTool;
+import com.google.genai.types.interactions.tools.GoogleSearch;
 import java.util.List;
 
 /**
- * Example: GoogleSearchTool with Multiple Content Types
+ * Example: GoogleSearch with Multiple Content Types
  *
- * <p>Demonstrates GoogleSearchTool with multiple content types as input:
+ * <p>Demonstrates GoogleSearch with multiple content types as input:
  *
  * <ul>
  *   <li>3 TextContent items
@@ -68,10 +68,10 @@ public final class InteractionsGoogleSearchMultiContent {
     //
     Client client = new Client();
 
-    System.out.println("=== Interactions API: GoogleSearchTool with Multiple Contents ===\n");
+    System.out.println("=== Interactions API: GoogleSearch with Multiple Contents ===\n");
 
-    // ===== Configure GoogleSearchTool =====
-    GoogleSearchTool googleSearchTool = GoogleSearchTool.builder().build();
+    // ===== Configure GoogleSearch =====
+    GoogleSearch googleSearchTool = GoogleSearch.builder().build();
 
     // ===== Create Multiple Content Items =====
     System.out.println("--- Creating Multiple Content Items ---\n");

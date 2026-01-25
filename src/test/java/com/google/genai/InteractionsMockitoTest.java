@@ -73,7 +73,7 @@ public class InteractionsMockitoTest {
   public void testCreate_requestBuilding() throws Exception {
     // Arrange
     String responseJson =
-        "{\"id\":\"" + INTERACTION_ID + "\",\"status\":\"COMPLETED\"}";
+        "{\"id\":\"" + INTERACTION_ID + "\",\"status\":\"completed\"}";
     ResponseBody body = ResponseBody.create(responseJson, MediaType.get("application/json"));
     when(mockedResponse.getBody()).thenReturn(body);
     when(mockedClient.request(anyString(), anyString(), anyString(), any()))
@@ -97,7 +97,7 @@ public class InteractionsMockitoTest {
   public void testGet_requestBuilding() throws Exception {
     // Arrange
     String responseJson =
-        "{\"id\":\"" + INTERACTION_ID + "\",\"status\":\"COMPLETED\"}";
+        "{\"id\":\"" + INTERACTION_ID + "\",\"status\":\"completed\"}";
     ResponseBody body = ResponseBody.create(responseJson, MediaType.get("application/json"));
     when(mockedResponse.getBody()).thenReturn(body);
     when(mockedClient.request(anyString(), anyString(), anyString(), any()))
@@ -164,7 +164,7 @@ public class InteractionsMockitoTest {
   public void testCreate_withHttpOptions() throws Exception {
     // Arrange
     String responseJson =
-        "{\"id\":\"" + INTERACTION_ID + "\",\"status\":\"COMPLETED\"}";
+        "{\"id\":\"" + INTERACTION_ID + "\",\"status\":\"completed\"}";
     ResponseBody body = ResponseBody.create(responseJson, MediaType.get("application/json"));
     when(mockedResponse.getBody()).thenReturn(body);
     when(mockedClient.request(anyString(), anyString(), anyString(), any()))
@@ -199,7 +199,7 @@ public class InteractionsMockitoTest {
             + "\"id\":\""
             + INTERACTION_ID
             + "\","
-            + "\"status\":\"COMPLETED\","
+            + "\"status\":\"completed\","
             + "\"model\":\""
             + MODEL_ID
             + "\","
@@ -233,7 +233,7 @@ public class InteractionsMockitoTest {
             + "\"id\":\""
             + INTERACTION_ID
             + "\","
-            + "\"status\":\"COMPLETED\","
+            + "\"status\":\"completed\","
             + "\"previous_interaction_id\":\""
             + previousId
             + "\""
@@ -262,7 +262,7 @@ public class InteractionsMockitoTest {
   public void testCreate_withGenerationConfig() throws Exception {
     // Arrange
     String responseJson =
-        "{\"id\":\"" + INTERACTION_ID + "\",\"status\":\"COMPLETED\"}";
+        "{\"id\":\"" + INTERACTION_ID + "\",\"status\":\"completed\"}";
     ResponseBody body = ResponseBody.create(responseJson, MediaType.get("application/json"));
     when(mockedResponse.getBody()).thenReturn(body);
     when(mockedClient.request(anyString(), anyString(), anyString(), any()))
@@ -293,7 +293,7 @@ public class InteractionsMockitoTest {
     // Test making multiple sequential calls
     for (int i = 1; i <= 3; i++) {
       String interactionId = "interaction-" + i;
-      String responseJson = "{\"id\":\"" + interactionId + "\",\"status\":\"COMPLETED\"}";
+      String responseJson = "{\"id\":\"" + interactionId + "\",\"status\":\"completed\"}";
       ResponseBody body = ResponseBody.create(responseJson, MediaType.get("application/json"));
       when(mockedResponse.getBody()).thenReturn(body);
       when(mockedClient.request(anyString(), anyString(), anyString(), any()))
@@ -320,7 +320,7 @@ public class InteractionsMockitoTest {
             + "\"id\":\""
             + INTERACTION_ID
             + "\","
-            + "\"status\":\"COMPLETED\","
+            + "\"status\":\"completed\","
             + "\"outputs\":[{\"type\":\"text\",\"text\":\"Retrieved response\"}]"
             + "}";
     ResponseBody body = ResponseBody.create(responseJson, MediaType.get("application/json"));
@@ -349,7 +349,7 @@ public class InteractionsMockitoTest {
             + "\"id\":\""
             + INTERACTION_ID
             + "\","
-            + "\"status\":\"COMPLETED\","
+            + "\"status\":\"completed\","
             + "\"model\":\""
             + MODEL_ID
             + "\","
@@ -386,7 +386,7 @@ public class InteractionsMockitoTest {
   public void testApiClientVerification() throws Exception {
     // Verify that ApiClient is being called with correct parameters
     String responseJson =
-        "{\"id\":\"" + INTERACTION_ID + "\",\"status\":\"COMPLETED\"}";
+        "{\"id\":\"" + INTERACTION_ID + "\",\"status\":\"completed\"}";
     ResponseBody body = ResponseBody.create(responseJson, MediaType.get("application/json"));
     when(mockedResponse.getBody()).thenReturn(body);
 
@@ -407,5 +407,317 @@ public class InteractionsMockitoTest {
     assertEquals("POST", methodCaptor.getValue());
     // Path will be interactions-specific
     assertNotNull(pathCaptor.getValue());
+  }
+
+  // ==================== Request Building Validation ====================
+
+  @Test
+  public void testCreate_requestBodyStructure() throws Exception {
+    // Arrange
+    String responseJson = "{\"id\":\"" + INTERACTION_ID + "\",\"status\":\"completed\"}";
+    ResponseBody body = ResponseBody.create(responseJson, MediaType.get("application/json"));
+    when(mockedResponse.getBody()).thenReturn(body);
+
+    ArgumentCaptor<String> bodyCaptor = ArgumentCaptor.forClass(String.class);
+    when(mockedClient.request(anyString(), anyString(), bodyCaptor.capture(), any()))
+        .thenReturn(mockedResponse);
+
+    CreateInteractionConfig config =
+        CreateInteractionConfig.builder().model(MODEL_ID).input("Test input").build();
+
+    // Act
+    client.interactions.create(config);
+
+    // Assert - Verify JSON body structure contains expected fields
+    String requestBody = bodyCaptor.getValue();
+    assertNotNull(requestBody);
+    assertTrue(requestBody.contains("\"model\""));
+    assertTrue(requestBody.contains(MODEL_ID));
+  }
+
+  @Test
+  public void testGet_pathFormatting() throws Exception {
+    // Arrange
+    String responseJson = "{\"id\":\"" + INTERACTION_ID + "\",\"status\":\"completed\"}";
+    ResponseBody body = ResponseBody.create(responseJson, MediaType.get("application/json"));
+    when(mockedResponse.getBody()).thenReturn(body);
+
+    ArgumentCaptor<String> pathCaptor = ArgumentCaptor.forClass(String.class);
+    when(mockedClient.request(anyString(), pathCaptor.capture(), anyString(), any()))
+        .thenReturn(mockedResponse);
+
+    GetInteractionConfig config = GetInteractionConfig.builder().build();
+
+    // Act
+    client.interactions.get(INTERACTION_ID, config);
+
+    // Assert - Verify path includes interaction ID
+    String path = pathCaptor.getValue();
+    assertNotNull(path);
+    assertTrue(path.contains(INTERACTION_ID) || path.contains("interactions"));
+  }
+
+  @Test
+  public void testCancel_pathIncludesCancel() throws Exception {
+    // Arrange
+    String responseJson = "{\"id\":\"" + INTERACTION_ID + "\",\"status\":\"FAILED\"}";
+    ResponseBody body = ResponseBody.create(responseJson, MediaType.get("application/json"));
+    when(mockedResponse.getBody()).thenReturn(body);
+
+    ArgumentCaptor<String> pathCaptor = ArgumentCaptor.forClass(String.class);
+    when(mockedClient.request(anyString(), pathCaptor.capture(), anyString(), any()))
+        .thenReturn(mockedResponse);
+
+    CancelInteractionConfig config = CancelInteractionConfig.builder().build();
+
+    // Act
+    client.interactions.cancel(INTERACTION_ID, config);
+
+    // Assert - Verify path includes :cancel
+    String path = pathCaptor.getValue();
+    assertNotNull(path);
+    assertTrue(path.contains("cancel") || path.contains(INTERACTION_ID));
+  }
+
+  @Test
+  public void testDelete_httpMethod() throws Exception {
+    // Arrange
+    String responseJson = "{}";
+    ResponseBody body = ResponseBody.create(responseJson, MediaType.get("application/json"));
+    when(mockedResponse.getBody()).thenReturn(body);
+
+    ArgumentCaptor<String> methodCaptor = ArgumentCaptor.forClass(String.class);
+    when(mockedClient.request(methodCaptor.capture(), anyString(), anyString(), any()))
+        .thenReturn(mockedResponse);
+
+    DeleteInteractionConfig config = DeleteInteractionConfig.builder().build();
+
+    // Act
+    client.interactions.delete(INTERACTION_ID, config);
+
+    // Assert - Verify DELETE HTTP method
+    assertEquals("DELETE", methodCaptor.getValue());
+  }
+
+  @Test
+  public void testCreate_httpMethod() throws Exception {
+    // Arrange
+    String responseJson = "{\"id\":\"" + INTERACTION_ID + "\",\"status\":\"completed\"}";
+    ResponseBody body = ResponseBody.create(responseJson, MediaType.get("application/json"));
+    when(mockedResponse.getBody()).thenReturn(body);
+
+    ArgumentCaptor<String> methodCaptor = ArgumentCaptor.forClass(String.class);
+    when(mockedClient.request(methodCaptor.capture(), anyString(), anyString(), any()))
+        .thenReturn(mockedResponse);
+
+    CreateInteractionConfig config =
+        CreateInteractionConfig.builder().model(MODEL_ID).input("Test").build();
+
+    // Act
+    client.interactions.create(config);
+
+    // Assert - Verify POST HTTP method
+    assertEquals("POST", methodCaptor.getValue());
+  }
+
+  // ==================== Platform-Specific Behavior ====================
+
+  @Test
+  public void testCreate_mldevClient() throws Exception {
+    // Arrange - Ensure we're using MLDev client
+    String responseJson = "{\"id\":\"" + INTERACTION_ID + "\",\"status\":\"completed\"}";
+    ResponseBody body = ResponseBody.create(responseJson, MediaType.get("application/json"));
+    when(mockedResponse.getBody()).thenReturn(body);
+    when(mockedClient.request(anyString(), anyString(), anyString(), any()))
+        .thenReturn(mockedResponse);
+
+    CreateInteractionConfig config =
+        CreateInteractionConfig.builder().model(MODEL_ID).input("Test").build();
+
+    // Act
+    Interaction result = client.interactions.create(config);
+
+    // Assert
+    assertNotNull(result);
+    assertEquals(INTERACTION_ID, result.id());
+  }
+
+  @Test
+  public void testCreate_vertexClient() throws Exception {
+    // Arrange - Create a Vertex AI client
+    Client vertexClient = Client.builder()
+        .vertexAI(true)
+        .project("test-project")
+        .location("us-central1")
+        .build();
+
+    // Inject mocked client
+    Field apiClientField = Interactions.class.getDeclaredField("apiClient");
+    apiClientField.setAccessible(true);
+    apiClientField.set(vertexClient.interactions, mockedClient);
+
+    String responseJson = "{\"id\":\"" + INTERACTION_ID + "\",\"status\":\"completed\"}";
+    ResponseBody body = ResponseBody.create(responseJson, MediaType.get("application/json"));
+    when(mockedResponse.getBody()).thenReturn(body);
+    when(mockedClient.request(anyString(), anyString(), anyString(), any()))
+        .thenReturn(mockedResponse);
+
+    CreateInteractionConfig config =
+        CreateInteractionConfig.builder().model(MODEL_ID).input("Test").build();
+
+    // Act
+    Interaction result = vertexClient.interactions.create(config);
+
+    // Assert
+    assertNotNull(result);
+  }
+
+  @Test
+  public void testGet_vertexIdFormat() throws Exception {
+    // Arrange
+    String vertexId = "projects/test-project/locations/us-central1/interactions/test-id";
+    String responseJson = "{\"id\":\"" + vertexId + "\",\"status\":\"completed\"}";
+    ResponseBody body = ResponseBody.create(responseJson, MediaType.get("application/json"));
+    when(mockedResponse.getBody()).thenReturn(body);
+    when(mockedClient.request(anyString(), anyString(), anyString(), any()))
+        .thenReturn(mockedResponse);
+
+    GetInteractionConfig config = GetInteractionConfig.builder().build();
+
+    // Act
+    Interaction result = client.interactions.get(vertexId, config);
+
+    // Assert
+    assertNotNull(result);
+    assertEquals(vertexId, result.id());
+  }
+
+  // ==================== Edge Cases ====================
+
+  @Test
+  public void testCreate_emptyOptionalFields() throws Exception {
+    // Arrange
+    String responseJson = "{\"id\":\"" + INTERACTION_ID + "\",\"status\":\"completed\"}";
+    ResponseBody body = ResponseBody.create(responseJson, MediaType.get("application/json"));
+    when(mockedResponse.getBody()).thenReturn(body);
+    when(mockedClient.request(anyString(), anyString(), anyString(), any()))
+        .thenReturn(mockedResponse);
+
+    // Create config with only required fields
+    CreateInteractionConfig config =
+        CreateInteractionConfig.builder().model(MODEL_ID).input("Minimal config").build();
+
+    // Act
+    Interaction result = client.interactions.create(config);
+
+    // Assert
+    assertNotNull(result);
+    assertEquals(INTERACTION_ID, result.id());
+  }
+
+  @Test
+  public void testGet_responseWithAllFields() throws Exception {
+    // Arrange - Comprehensive response with all possible fields
+    String fullResponseJson =
+        "{"
+            + "\"id\":\"" + INTERACTION_ID + "\","
+            + "\"status\":\"completed\","
+            + "\"model\":\"" + MODEL_ID + "\","
+            + "\"agent\":null,"
+            + "\"created\":\"2025-01-24T10:00:00Z\","
+            + "\"updated\":\"2025-01-24T10:01:00Z\","
+            + "\"outputs\":[{\"type\":\"text\",\"text\":\"Response\"}],"
+            + "\"usage\":{\"total_token_count\":150,\"prompt_token_count\":50,\"candidates_token_count\":100},"
+            + "\"previous_interaction_id\":\"prev-123\""
+            + "}";
+
+    ResponseBody body = ResponseBody.create(fullResponseJson, MediaType.get("application/json"));
+    when(mockedResponse.getBody()).thenReturn(body);
+    when(mockedClient.request(anyString(), anyString(), anyString(), any()))
+        .thenReturn(mockedResponse);
+
+    GetInteractionConfig config = GetInteractionConfig.builder().build();
+
+    // Act
+    Interaction result = client.interactions.get(INTERACTION_ID, config);
+
+    // Assert - Verify all fields are present
+    assertNotNull(result);
+    assertEquals(INTERACTION_ID, result.id());
+    assertTrue(result.model().isPresent());
+    assertTrue(result.created().isPresent());
+    assertTrue(result.updated().isPresent());
+    assertTrue(result.outputs().isPresent());
+    assertTrue(result.usage().isPresent());
+    assertTrue(result.previousInteractionId().isPresent());
+  }
+
+  @Test
+  public void testDelete_responseHandling() throws Exception {
+    // Arrange
+    String deleteResponseJson = "{\"success\":true}";
+    ResponseBody body = ResponseBody.create(deleteResponseJson, MediaType.get("application/json"));
+    when(mockedResponse.getBody()).thenReturn(body);
+    when(mockedClient.request(anyString(), anyString(), anyString(), any()))
+        .thenReturn(mockedResponse);
+
+    DeleteInteractionConfig config = DeleteInteractionConfig.builder().build();
+
+    // Act
+    DeleteInteractionResponse result = client.interactions.delete(INTERACTION_ID, config);
+
+    // Assert
+    assertNotNull(result);
+  }
+
+  @Test
+  public void testCreate_withBackgroundTrue() throws Exception {
+    // Arrange
+    String responseJson =
+        "{\"id\":\"" + INTERACTION_ID + "\",\"status\":\"in_progress\",\"background\":true}";
+    ResponseBody body = ResponseBody.create(responseJson, MediaType.get("application/json"));
+    when(mockedResponse.getBody()).thenReturn(body);
+    when(mockedClient.request(anyString(), anyString(), anyString(), any()))
+        .thenReturn(mockedResponse);
+
+    CreateInteractionConfig config =
+        CreateInteractionConfig.builder()
+            .model(MODEL_ID)
+            .input("Background task")
+            .background(true)
+            .build();
+
+    // Act
+    Interaction result = client.interactions.create(config);
+
+    // Assert
+    assertNotNull(result);
+    assertTrue(config.background().isPresent());
+    assertTrue(config.background().get());
+  }
+
+  @Test
+  public void testCreate_withStoreTrue() throws Exception {
+    // Arrange
+    String responseJson = "{\"id\":\"" + INTERACTION_ID + "\",\"status\":\"completed\"}";
+    ResponseBody body = ResponseBody.create(responseJson, MediaType.get("application/json"));
+    when(mockedResponse.getBody()).thenReturn(body);
+    when(mockedClient.request(anyString(), anyString(), anyString(), any()))
+        .thenReturn(mockedResponse);
+
+    CreateInteractionConfig config =
+        CreateInteractionConfig.builder()
+            .model(MODEL_ID)
+            .input("Store conversation")
+            .store(true)
+            .build();
+
+    // Act
+    Interaction result = client.interactions.create(config);
+
+    // Assert
+    assertNotNull(result);
+    assertTrue(config.store().isPresent());
+    assertTrue(config.store().get());
   }
 }

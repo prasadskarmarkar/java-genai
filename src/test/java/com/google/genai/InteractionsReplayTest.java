@@ -245,4 +245,301 @@ public class InteractionsReplayTest {
     assertNotNull(interaction.status());
     assertEquals(InteractionStatus.COMPLETED, interaction.status());
   }
+
+  // ==================== End-to-End Flows ====================
+
+  @ParameterizedTest
+  @ValueSource(booleans = {false, true})
+  public void testFullConversationFlow(boolean vertexAI) {
+    // Arrange
+    String suffix = vertexAI ? "vertex" : "mldev";
+    Client client =
+        TestUtils.createClient(
+            vertexAI, "tests/interactions/e2e/full_conversation_flow." + suffix + ".json");
+
+    // Act - Create initial interaction
+    CreateInteractionConfig createConfig =
+        CreateInteractionConfig.builder()
+            .model(MODEL_ID)
+            .input("What is the capital of France?")
+            .build();
+    Interaction initial = client.interactions.create(createConfig);
+
+    // Act - Get the interaction
+    GetInteractionConfig getConfig = GetInteractionConfig.builder().build();
+    Interaction retrieved = client.interactions.get(initial.id(), getConfig);
+
+    // Act - Create follow-up interaction
+    CreateInteractionConfig followUpConfig =
+        CreateInteractionConfig.builder()
+            .model(MODEL_ID)
+            .input("What's its population?")
+            .previousInteractionId(initial.id())
+            .build();
+    Interaction followUp = client.interactions.create(followUpConfig);
+
+    // Act - Get follow-up
+    Interaction retrievedFollowUp = client.interactions.get(followUp.id(), getConfig);
+
+    // Act - Delete the interactions
+    DeleteInteractionConfig deleteConfig = DeleteInteractionConfig.builder().build();
+    client.interactions.delete(initial.id(), deleteConfig);
+
+    // Assert
+    assertNotNull(initial);
+    assertNotNull(retrieved);
+    assertEquals(initial.id(), retrieved.id());
+    assertNotNull(followUp);
+    assertTrue(followUp.previousInteractionId().isPresent());
+    assertEquals(initial.id(), followUp.previousInteractionId().get());
+    assertNotNull(retrievedFollowUp);
+  }
+
+  @ParameterizedTest
+  @ValueSource(booleans = {false, true})
+  public void testBackgroundInteractionFlow(boolean vertexAI) {
+    // Arrange
+    String suffix = vertexAI ? "vertex" : "mldev";
+    Client client =
+        TestUtils.createClient(
+            vertexAI, "tests/interactions/e2e/background_flow." + suffix + ".json");
+
+    // Act - Create background interaction
+    CreateInteractionConfig config =
+        CreateInteractionConfig.builder()
+            .model(MODEL_ID)
+            .input("Long running task")
+            .background(true)
+            .build();
+    Interaction background = client.interactions.create(config);
+
+    // Act - Poll status
+    GetInteractionConfig getConfig = GetInteractionConfig.builder().build();
+    Interaction polled = client.interactions.get(background.id(), getConfig);
+
+    // Act - Cancel the background task
+    CancelInteractionConfig cancelConfig = CancelInteractionConfig.builder().build();
+    Interaction cancelled = client.interactions.cancel(background.id(), cancelConfig);
+
+    // Assert
+    assertNotNull(background);
+    assertNotNull(background.id());
+    assertNotNull(polled);
+    assertNotNull(cancelled);
+    assertNotNull(cancelled.status());
+  }
+
+  @ParameterizedTest
+  @ValueSource(booleans = {false, true})
+  public void testMultiTurnWithTools(boolean vertexAI) {
+    // Arrange
+    String suffix = vertexAI ? "vertex" : "mldev";
+    Client client =
+        TestUtils.createClient(
+            vertexAI, "tests/interactions/e2e/multi_turn_with_tools." + suffix + ".json");
+
+    com.google.genai.types.interactions.tools.GoogleSearch googleSearch =
+        com.google.genai.types.interactions.tools.GoogleSearch.builder().build();
+
+    // Act - First turn with tools
+    CreateInteractionConfig firstConfig =
+        CreateInteractionConfig.builder()
+            .model(MODEL_ID)
+            .input("Search for recent AI news")
+            .tools(com.google.common.collect.ImmutableList.of(googleSearch))
+            .build();
+    Interaction first = client.interactions.create(firstConfig);
+
+    // Act - Second turn following up
+    CreateInteractionConfig secondConfig =
+        CreateInteractionConfig.builder()
+            .model(MODEL_ID)
+            .input("Summarize the top 3 articles")
+            .previousInteractionId(first.id())
+            .tools(com.google.common.collect.ImmutableList.of(googleSearch))
+            .build();
+    Interaction second = client.interactions.create(secondConfig);
+
+    // Assert
+    assertNotNull(first);
+    assertNotNull(second);
+    assertTrue(second.previousInteractionId().isPresent());
+    assertEquals(first.id(), second.previousInteractionId().get());
+  }
+
+  @ParameterizedTest
+  @ValueSource(booleans = {false}) // Agent is MLDev only
+  public void testAgentResearchFlow(boolean vertexAI) {
+    // Arrange
+    String suffix = "mldev";
+    Client client =
+        TestUtils.createClient(
+            vertexAI, "tests/interactions/e2e/agent_research_flow." + suffix + ".json");
+
+    // Act - Create agent-based research interaction
+    CreateInteractionConfig config =
+        CreateInteractionConfig.builder()
+            .agent("deep-research-pro-preview-12-2025")
+            .input("Research the latest developments in quantum computing")
+            .background(true)
+            .build();
+    Interaction research = client.interactions.create(config);
+
+    // Act - Poll for completion
+    GetInteractionConfig getConfig = GetInteractionConfig.builder().build();
+    Interaction polled = client.interactions.get(research.id(), getConfig);
+
+    // Assert
+    assertNotNull(research);
+    assertTrue(research.agent().isPresent());
+    assertNotNull(polled);
+  }
+
+  @ParameterizedTest
+  @ValueSource(booleans = {false, true})
+  public void testToolChaining(boolean vertexAI) {
+    // Arrange
+    String suffix = vertexAI ? "vertex" : "mldev";
+    Client client =
+        TestUtils.createClient(
+            vertexAI, "tests/interactions/e2e/tool_chaining." + suffix + ".json");
+
+    com.google.genai.types.interactions.tools.GoogleSearch googleSearch =
+        com.google.genai.types.interactions.tools.GoogleSearch.builder().build();
+    com.google.genai.types.interactions.tools.CodeExecution codeExecution =
+        com.google.genai.types.interactions.tools.CodeExecution.builder().build();
+
+    // Act - Create interaction with multiple tools
+    CreateInteractionConfig config =
+        CreateInteractionConfig.builder()
+            .model(MODEL_ID)
+            .input("Search for weather data and calculate the average temperature")
+            .tools(com.google.common.collect.ImmutableList.of(googleSearch, codeExecution))
+            .build();
+    Interaction result = client.interactions.create(config);
+
+    // Assert
+    assertNotNull(result);
+    assertNotNull(result.id());
+    assertTrue(result.outputs().isPresent());
+  }
+
+  // ==================== Platform Comparison Tests ====================
+
+  @ParameterizedTest
+  @ValueSource(booleans = {false, true})
+  public void testSameModelAcrossPlatforms(boolean vertexAI) {
+    // Arrange
+    String suffix = vertexAI ? "vertex" : "mldev";
+    Client client =
+        TestUtils.createClient(
+            vertexAI, "tests/interactions/e2e/same_model_platforms." + suffix + ".json");
+
+    CreateInteractionConfig config =
+        CreateInteractionConfig.builder()
+            .model(MODEL_ID)
+            .input("What is 2+2?")
+            .build();
+
+    // Act
+    Interaction result = client.interactions.create(config);
+
+    // Assert
+    assertNotNull(result);
+    assertNotNull(result.id());
+    assertTrue(result.model().isPresent());
+    assertEquals(MODEL_ID, result.model().get());
+  }
+
+  @ParameterizedTest
+  @ValueSource(booleans = {false, true})
+  public void testResponseFormat(boolean vertexAI) {
+    // Arrange
+    String suffix = vertexAI ? "vertex" : "mldev";
+    Client client =
+        TestUtils.createClient(
+            vertexAI, "tests/interactions/e2e/response_format." + suffix + ".json");
+
+    CreateInteractionConfig config =
+        CreateInteractionConfig.builder()
+            .model(MODEL_ID)
+            .input("Generate a person's data")
+            .responseMimeType("application/json")
+            .build();
+
+    // Act
+    Interaction result = client.interactions.create(config);
+
+    // Assert
+    assertNotNull(result);
+    assertNotNull(result.id());
+    assertTrue(result.outputs().isPresent());
+  }
+
+  // ==================== Performance & Scale ====================
+
+  @ParameterizedTest
+  @ValueSource(booleans = {false, true})
+  public void testLargeInput(boolean vertexAI) {
+    // Arrange
+    String suffix = vertexAI ? "vertex" : "mldev";
+    Client client =
+        TestUtils.createClient(
+            vertexAI, "tests/interactions/e2e/large_input." + suffix + ".json");
+
+    // Create a large input (simulating approaching token limits)
+    StringBuilder largeInput = new StringBuilder();
+    for (int i = 0; i < 100; i++) {
+      largeInput.append("This is sentence number ").append(i).append(". ");
+    }
+
+    CreateInteractionConfig config =
+        CreateInteractionConfig.builder()
+            .model(MODEL_ID)
+            .input(largeInput.toString())
+            .build();
+
+    // Act
+    Interaction result = client.interactions.create(config);
+
+    // Assert
+    assertNotNull(result);
+    assertNotNull(result.id());
+  }
+
+  @ParameterizedTest
+  @ValueSource(booleans = {false, true})
+  public void testMultipleSequential(boolean vertexAI) {
+    // Arrange
+    String suffix = vertexAI ? "vertex" : "mldev";
+    Client client =
+        TestUtils.createClient(
+            vertexAI, "tests/interactions/e2e/multiple_sequential." + suffix + ".json");
+
+    String previousId = null;
+
+    // Act - Create 3 sequential interactions
+    for (int i = 1; i <= 3; i++) {
+      CreateInteractionConfig.Builder configBuilder =
+          CreateInteractionConfig.builder()
+              .model(MODEL_ID)
+              .input("Question " + i);
+
+      if (previousId != null) {
+        configBuilder.previousInteractionId(previousId);
+      }
+
+      Interaction result = client.interactions.create(configBuilder.build());
+
+      // Assert each interaction
+      assertNotNull(result);
+      assertNotNull(result.id());
+      if (previousId != null) {
+        assertTrue(result.previousInteractionId().isPresent());
+        assertEquals(previousId, result.previousInteractionId().get());
+      }
+
+      previousId = result.id();
+    }
+  }
 }

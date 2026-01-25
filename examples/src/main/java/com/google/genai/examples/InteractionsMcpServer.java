@@ -56,12 +56,12 @@ import com.google.genai.types.interactions.content.Content;
 import com.google.genai.types.interactions.content.McpServerToolCallContent;
 import com.google.genai.types.interactions.content.McpServerToolResultContent;
 import com.google.genai.types.interactions.content.TextContent;
-import com.google.genai.types.interactions.tools.McpServerTool;
+import com.google.genai.types.interactions.tools.McpServer;
 
 /**
  * Example: MCP Server Tool with the Interactions API
  *
- * <p>Demonstrates how to use the McpServerTool to enable the model to interact with an MCP (Model
+ * <p>Demonstrates how to use the McpServer to enable the model to interact with an MCP (Model
  * Context Protocol) server. This allows integration with external tools and services that implement
  * the MCP protocol.
  *
@@ -82,13 +82,13 @@ public final class InteractionsMcpServer {
     System.out.println("IMPORTANT: This example requires a running MCP server.\n");
     System.out.println("See the file header comments for setup instructions.\n");
 
-    // ===== STEP 1: Create McpServerTool =====
-    System.out.println("STEP 1: Create McpServerTool\n");
+    // ===== STEP 1: Create McpServer =====
+    System.out.println("STEP 1: Create McpServer\n");
 
     // Configure the MCP server connection
     // Update these values to match your MCP server setup
-    McpServerTool mcpTool =
-        McpServerTool.builder()
+    McpServer mcpTool =
+        McpServer.builder()
             .name("my-mcp-server")
             .url("http://localhost:8080/mcp") // Update this URL to your MCP server
             // Optional: Add custom headers if your MCP server requires authentication
@@ -101,7 +101,7 @@ public final class InteractionsMcpServer {
             // .allowedTools("weather", "calculator")
             .build();
 
-    System.out.println("McpServerTool created successfully");
+    System.out.println("McpServer created successfully");
     System.out.println("Name: " + mcpTool.name().orElse("N/A"));
     System.out.println("URL: " + mcpTool.url().orElse("N/A"));
     System.out.println();

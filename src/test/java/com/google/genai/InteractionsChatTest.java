@@ -70,7 +70,7 @@ public class InteractionsChatTest {
     String responseJson =
         "{"
             + "\"id\":\"interaction-1\","
-            + "\"status\":\"COMPLETED\","
+            + "\"status\":\"completed\","
             + "\"outputs\":[{\"type\":\"text\",\"text\":\"Hello!\"}]"
             + "}";
     ResponseBody body = ResponseBody.create(responseJson, MediaType.get("application/json"));
@@ -96,7 +96,7 @@ public class InteractionsChatTest {
     String response1Json =
         "{"
             + "\"id\":\"interaction-1\","
-            + "\"status\":\"COMPLETED\","
+            + "\"status\":\"completed\","
             + "\"outputs\":[{\"type\":\"text\",\"text\":\"Hello! How can I help?\"}]"
             + "}";
     ResponseBody body1 = ResponseBody.create(response1Json, MediaType.get("application/json"));
@@ -105,7 +105,7 @@ public class InteractionsChatTest {
     String response2Json =
         "{"
             + "\"id\":\"interaction-2\","
-            + "\"status\":\"COMPLETED\","
+            + "\"status\":\"completed\","
             + "\"previous_interaction_id\":\"interaction-1\","
             + "\"outputs\":[{\"type\":\"text\",\"text\":\"The answer is 4.\"}]"
             + "}";
@@ -151,7 +151,7 @@ public class InteractionsChatTest {
               + "\"id\":\""
               + interactionId
               + "\","
-              + "\"status\":\"COMPLETED\""
+              + "\"status\":\"completed\""
               + prevIdField
               + ","
               + "\"outputs\":[{\"type\":\"text\",\"text\":\"Response "
@@ -193,11 +193,11 @@ public class InteractionsChatTest {
   public void testConversationWithSameModel() throws Exception {
     // Ensure all interactions in a conversation use the same model
     String response1Json =
-        "{\"id\":\"int-1\",\"status\":\"COMPLETED\",\"model\":\""
+        "{\"id\":\"int-1\",\"status\":\"completed\",\"model\":\""
             + MODEL_ID
             + "\",\"outputs\":[{\"type\":\"text\",\"text\":\"Response 1\"}]}";
     String response2Json =
-        "{\"id\":\"int-2\",\"status\":\"COMPLETED\",\"model\":\""
+        "{\"id\":\"int-2\",\"status\":\"completed\",\"model\":\""
             + MODEL_ID
             + "\",\"previous_interaction_id\":\"int-1\",\"outputs\":[{\"type\":\"text\",\"text\":\"Response 2\"}]}";
 
@@ -245,9 +245,9 @@ public class InteractionsChatTest {
   public void testConversationContextPreservation() throws Exception {
     // Simulate a conversation where context is preserved
     String response1Json =
-        "{\"id\":\"ctx-1\",\"status\":\"COMPLETED\",\"outputs\":[{\"type\":\"text\",\"text\":\"My name is Claude.\"}]}";
+        "{\"id\":\"ctx-1\",\"status\":\"completed\",\"outputs\":[{\"type\":\"text\",\"text\":\"My name is Claude.\"}]}";
     String response2Json =
-        "{\"id\":\"ctx-2\",\"status\":\"COMPLETED\",\"previous_interaction_id\":\"ctx-1\",\"outputs\":[{\"type\":\"text\",\"text\":\"I told you, I'm Claude.\"}]}";
+        "{\"id\":\"ctx-2\",\"status\":\"completed\",\"previous_interaction_id\":\"ctx-1\",\"outputs\":[{\"type\":\"text\",\"text\":\"I told you, I'm Claude.\"}]}";
 
     when(mockedClient.request(anyString(), anyString(), anyString(), any()))
         .thenReturn(
@@ -277,9 +277,9 @@ public class InteractionsChatTest {
   public void testInProgressInteractionInConversation() throws Exception {
     // Test conversation where one interaction is still in progress
     String response1Json =
-        "{\"id\":\"prog-1\",\"status\":\"COMPLETED\",\"outputs\":[{\"type\":\"text\",\"text\":\"First response\"}]}";
+        "{\"id\":\"prog-1\",\"status\":\"completed\",\"outputs\":[{\"type\":\"text\",\"text\":\"First response\"}]}";
     String response2Json =
-        "{\"id\":\"prog-2\",\"status\":\"IN_PROGRESS\",\"previous_interaction_id\":\"prog-1\"}";
+        "{\"id\":\"prog-2\",\"status\":\"in_progress\",\"previous_interaction_id\":\"prog-1\"}";
 
     when(mockedClient.request(anyString(), anyString(), anyString(), any()))
         .thenReturn(
@@ -309,11 +309,11 @@ public class InteractionsChatTest {
   public void testBranchingConversations() throws Exception {
     // Test creating multiple follow-ups from the same interaction (branching)
     String baseJson =
-        "{\"id\":\"base\",\"status\":\"COMPLETED\",\"outputs\":[{\"type\":\"text\",\"text\":\"Base response\"}]}";
+        "{\"id\":\"base\",\"status\":\"completed\",\"outputs\":[{\"type\":\"text\",\"text\":\"Base response\"}]}";
     String branch1Json =
-        "{\"id\":\"branch-1\",\"status\":\"COMPLETED\",\"previous_interaction_id\":\"base\",\"outputs\":[{\"type\":\"text\",\"text\":\"Branch 1\"}]}";
+        "{\"id\":\"branch-1\",\"status\":\"completed\",\"previous_interaction_id\":\"base\",\"outputs\":[{\"type\":\"text\",\"text\":\"Branch 1\"}]}";
     String branch2Json =
-        "{\"id\":\"branch-2\",\"status\":\"COMPLETED\",\"previous_interaction_id\":\"base\",\"outputs\":[{\"type\":\"text\",\"text\":\"Branch 2\"}]}";
+        "{\"id\":\"branch-2\",\"status\":\"completed\",\"previous_interaction_id\":\"base\",\"outputs\":[{\"type\":\"text\",\"text\":\"Branch 2\"}]}";
 
     when(mockedClient.request(anyString(), anyString(), anyString(), any()))
         .thenReturn(
@@ -361,7 +361,7 @@ public class InteractionsChatTest {
       String id = "long-" + i;
       String prevField = previousId != null ? ",\"previous_interaction_id\":\"" + previousId + "\"" : "";
       String json =
-          "{\"id\":\"" + id + "\",\"status\":\"COMPLETED\"" + prevField + ",\"outputs\":[{\"type\":\"text\",\"text\":\"Turn " + i + "\"}]}";
+          "{\"id\":\"" + id + "\",\"status\":\"completed\"" + prevField + ",\"outputs\":[{\"type\":\"text\",\"text\":\"Turn " + i + "\"}]}";
 
       when(mockedClient.request(anyString(), anyString(), anyString(), any()))
           .thenReturn(
@@ -393,11 +393,11 @@ public class InteractionsChatTest {
     List<Interaction> history = new ArrayList<>();
 
     String json1 =
-        "{\"id\":\"hist-1\",\"status\":\"COMPLETED\",\"outputs\":[{\"type\":\"text\",\"text\":\"Response 1\"}]}";
+        "{\"id\":\"hist-1\",\"status\":\"completed\",\"outputs\":[{\"type\":\"text\",\"text\":\"Response 1\"}]}";
     String json2 =
-        "{\"id\":\"hist-2\",\"status\":\"COMPLETED\",\"previous_interaction_id\":\"hist-1\",\"outputs\":[{\"type\":\"text\",\"text\":\"Response 2\"}]}";
+        "{\"id\":\"hist-2\",\"status\":\"completed\",\"previous_interaction_id\":\"hist-1\",\"outputs\":[{\"type\":\"text\",\"text\":\"Response 2\"}]}";
     String json3 =
-        "{\"id\":\"hist-3\",\"status\":\"COMPLETED\",\"previous_interaction_id\":\"hist-2\",\"outputs\":[{\"type\":\"text\",\"text\":\"Response 3\"}]}";
+        "{\"id\":\"hist-3\",\"status\":\"completed\",\"previous_interaction_id\":\"hist-2\",\"outputs\":[{\"type\":\"text\",\"text\":\"Response 3\"}]}";
 
     when(mockedClient.request(anyString(), anyString(), anyString(), any()))
         .thenReturn(

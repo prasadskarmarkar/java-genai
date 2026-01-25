@@ -30,7 +30,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Google Search call content for interactions.
+ * Google Search call content for the Interactions API.
  *
  * <p>Represents a request from the model to perform a Google Search. This content type appears in
  * interaction outputs when the model wants to search the web for information.
@@ -45,6 +45,10 @@ import java.util.Optional;
  *         .build())
  *     .build();
  * }</pre>
+ *
+ * <p>The Interactions API is available in both Vertex AI and Gemini API.
+ *
+ * <p>Note: The Interactions API is in beta and subject to change.
  */
 @AutoValue
 @JsonDeserialize(builder = GoogleSearchCallContent.Builder.class)

@@ -41,7 +41,7 @@ import com.google.genai.types.interactions.content.Content;
 import com.google.genai.types.interactions.content.GoogleSearchCallContent;
 import com.google.genai.types.interactions.content.GoogleSearchResultContent;
 import com.google.genai.types.interactions.content.TextContent;
-import com.google.genai.types.interactions.tools.GoogleSearchTool;
+import com.google.genai.types.interactions.tools.GoogleSearch;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -51,7 +51,7 @@ import java.util.concurrent.CompletableFuture;
  * <p>Demonstrates async Google Search tool usage with chained operations:
  *
  * <ol>
- *   <li>Async create with GoogleSearchTool
+ *   <li>Async create with GoogleSearch
  *   <li>Extract search results asynchronously
  *   <li>Chain multiple search operations
  *   <li>Handle GoogleSearchResultContent in async callbacks
@@ -70,7 +70,7 @@ public final class InteractionsAsyncGoogleSearch {
     System.out.println("=== Interactions API: Async Google Search Example ===\n");
 
     try {
-      GoogleSearchTool searchTool = GoogleSearchTool.builder().build();
+      GoogleSearch searchTool = GoogleSearch.builder().build();
 
       // ===== PART 1: Basic Async Search =====
       System.out.println("--- PART 1: Basic Async Search ---\n");

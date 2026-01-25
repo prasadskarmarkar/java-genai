@@ -35,6 +35,8 @@ import java.util.Optional;
  * specification for the generationConfig parameter. It differs from the general {@code
  * GenerationConfig} class which is shared across multiple APIs and has 25+ fields.
  *
+ * <p>The Interactions API is available in both Vertex AI and Gemini API.
+ *
  * <p>The 10 fields are:
  *
  * <ol>

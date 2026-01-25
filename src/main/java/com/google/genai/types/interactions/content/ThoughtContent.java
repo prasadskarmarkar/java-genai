@@ -29,6 +29,25 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Thought content for the Interactions API.
+ *
+ * <p>Represents the model's internal reasoning process when thinking is enabled. This content type
+ * captures the model's thought signatures and summaries that explain its reasoning steps.
+ *
+ * <p>Example usage:
+ *
+ * <pre>{@code
+ * ThoughtContent thought = ThoughtContent.builder()
+ *     .signature("reasoning-step-1")
+ *     .summary(TextContent.of("Analyzing the problem..."))
+ *     .build();
+ * }</pre>
+ *
+ * <p>The Interactions API is available in both Vertex AI and Gemini API.
+ *
+ * <p>Note: The Interactions API is in beta and subject to change.
+ */
 @AutoValue
 @JsonDeserialize(builder = ThoughtContent.Builder.class)
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")

@@ -26,7 +26,25 @@ import com.google.genai.types.ExcludeFromGeneratedCoverageReport;
 import com.google.genai.types.HttpOptions;
 import java.util.Optional;
 
-/** Optional parameters for interactions.cancel method. */
+/**
+ * Configuration for canceling an interaction in the Interactions API.
+ *
+ * <p>Optional parameters for the interactions.cancel method. Currently supports HTTP request
+ * options for customizing the cancel operation.
+ *
+ * <p>Example usage:
+ *
+ * <pre>{@code
+ * CancelInteractionConfig config = CancelInteractionConfig.builder()
+ *     .httpOptions(HttpOptions.builder().timeout(5000).build())
+ *     .build();
+ * client.interactions.cancel("interaction-id", config);
+ * }</pre>
+ *
+ * <p>The Interactions API is available in both Vertex AI and Gemini API.
+ *
+ * <p>Note: The Interactions API is in beta and subject to change.
+ */
 @AutoValue
 @JsonDeserialize(builder = CancelInteractionConfig.Builder.class)
 public abstract class CancelInteractionConfig extends JsonSerializable {

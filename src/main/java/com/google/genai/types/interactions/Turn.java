@@ -28,7 +28,31 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-/** Represents a conversation turn with role and Content. */
+/**
+ * Represents a conversation turn in the Interactions API.
+ *
+ * <p>A turn contains the content of a single message in a conversation along with the role
+ * (either 'user' or 'model') that produced it. Turns are used to build conversation history
+ * and maintain context across multiple interactions.
+ *
+ * <p>Example usage:
+ *
+ * <pre>{@code
+ * Turn userTurn = Turn.builder()
+ *     .role("user")
+ *     .content(TextContent.of("What is the weather today?"))
+ *     .build();
+ *
+ * Turn modelTurn = Turn.builder()
+ *     .role("model")
+ *     .content(TextContent.of("The weather is sunny and warm."))
+ *     .build();
+ * }</pre>
+ *
+ * <p>The Interactions API is available in both Vertex AI and Gemini API.
+ *
+ * <p>Note: The Interactions API is in beta and subject to change.
+ */
 @AutoValue
 @JsonDeserialize(builder = Turn.Builder.class)
 public abstract class Turn extends JsonSerializable {

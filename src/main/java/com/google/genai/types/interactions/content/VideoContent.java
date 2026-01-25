@@ -25,10 +25,12 @@ import com.google.auto.value.AutoValue;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import com.google.genai.JsonSerializable;
 import com.google.genai.types.ExcludeFromGeneratedCoverageReport;
+import com.google.genai.types.interactions.MediaResolution;
+import com.google.genai.types.interactions.VideoMimeType;
 import java.util.Optional;
 
 /**
- * Video content for interactions.
+ * Video content for the Interactions API.
  *
  * <p>Represents video data that can be included in interaction inputs or outputs.
  * Videos can be provided either as base64-encoded data or as a URI.
@@ -44,6 +46,10 @@ import java.util.Optional;
  * <pre>{@code
  * VideoContent video = VideoContent.fromUri("https://example.com/video.mp4", "video/mp4");
  * }</pre>
+ *
+ * <p>The Interactions API is available in both Vertex AI and Gemini API.
+ *
+ * <p>Note: The Interactions API is in beta and subject to change.
  */
 @AutoValue
 @JsonDeserialize(builder = VideoContent.Builder.class)
@@ -57,11 +63,40 @@ public abstract class VideoContent extends JsonSerializable implements Content {
   @JsonProperty("uri")
   public abstract Optional<String> uri();
 
+  /**
+   * The MIME type of the video.
+   *
+   * <p>Supported values:
+   * <ul>
+   *   <li>{@link VideoMimeType.Known#VIDEO_MP4} - MP4 format
+   *   <li>{@link VideoMimeType.Known#VIDEO_MPEG} - MPEG format
+   *   <li>{@link VideoMimeType.Known#VIDEO_MOV} - MOV format
+   *   <li>{@link VideoMimeType.Known#VIDEO_AVI} - AVI format
+   *   <li>{@link VideoMimeType.Known#VIDEO_X_FLV} - FLV format
+   *   <li>{@link VideoMimeType.Known#VIDEO_MPG} - MPG format
+   *   <li>{@link VideoMimeType.Known#VIDEO_WEBM} - WebM format
+   *   <li>{@link VideoMimeType.Known#VIDEO_WMV} - WMV format
+   *   <li>{@link VideoMimeType.Known#VIDEO_3GPP} - 3GPP format
+   * </ul>
+   *
+   * <p>This field accepts any MIME type string to support future video formats.
+   */
   @JsonProperty("mime_type")
-  public abstract Optional<String> mimeType();
+  public abstract Optional<VideoMimeType> mimeType();
 
+  /**
+   * The resolution of the video.
+   *
+   * <p>Possible values:
+   * <ul>
+   *   <li>{@link MediaResolution#LOW} - Low resolution
+   *   <li>{@link MediaResolution#MEDIUM} - Medium resolution
+   *   <li>{@link MediaResolution#HIGH} - High resolution
+   *   <li>{@link MediaResolution#ULTRA_HIGH} - Ultra high resolution
+   * </ul>
+   */
   @JsonProperty("resolution")
-  public abstract Optional<String> resolution();
+  public abstract Optional<MediaResolution> resolution();
 
   @ExcludeFromGeneratedCoverageReport
   public static Builder builder() {
@@ -102,10 +137,10 @@ public abstract class VideoContent extends JsonSerializable implements Content {
     }
 
     @JsonProperty("mime_type")
-    public abstract Builder mimeType(String mimeType);
+    public abstract Builder mimeType(VideoMimeType mimeType);
 
     @ExcludeFromGeneratedCoverageReport
-    abstract Builder mimeType(Optional<String> mimeType);
+    abstract Builder mimeType(Optional<VideoMimeType> mimeType);
 
     @ExcludeFromGeneratedCoverageReport
     @CanIgnoreReturnValue
@@ -114,10 +149,10 @@ public abstract class VideoContent extends JsonSerializable implements Content {
     }
 
     @JsonProperty("resolution")
-    public abstract Builder resolution(String resolution);
+    public abstract Builder resolution(MediaResolution resolution);
 
     @ExcludeFromGeneratedCoverageReport
-    abstract Builder resolution(Optional<String> resolution);
+    abstract Builder resolution(Optional<MediaResolution> resolution);
 
     @ExcludeFromGeneratedCoverageReport
     @CanIgnoreReturnValue
@@ -135,11 +170,11 @@ public abstract class VideoContent extends JsonSerializable implements Content {
 
   @ExcludeFromGeneratedCoverageReport
   public static VideoContent fromData(String data, String mimeType) {
-    return builder().data(data).mimeType(mimeType).build();
+    return builder().data(data).mimeType(new VideoMimeType(mimeType)).build();
   }
 
   @ExcludeFromGeneratedCoverageReport
   public static VideoContent fromUri(String uri, String mimeType) {
-    return builder().uri(uri).mimeType(mimeType).build();
+    return builder().uri(uri).mimeType(new VideoMimeType(mimeType)).build();
   }
 }

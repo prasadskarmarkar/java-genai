@@ -30,7 +30,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * URL context call content for interactions.
+ * URL context call content for the Interactions API.
  *
  * <p>Represents a request from the model to retrieve and analyze content from URLs. This content type
  * appears in interaction outputs when the model wants to access web pages for context.
@@ -45,6 +45,10 @@ import java.util.Optional;
  *         .build())
  *     .build();
  * }</pre>
+ *
+ * <p>The Interactions API is available in both Vertex AI and Gemini API.
+ *
+ * <p>Note: The Interactions API is in beta and subject to change.
  */
 @AutoValue
 @JsonDeserialize(builder = UrlContextCallContent.Builder.class)
