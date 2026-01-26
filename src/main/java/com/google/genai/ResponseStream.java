@@ -125,6 +125,7 @@ public class ResponseStream<T extends JsonSerializable> implements Iterable<T>, 
           rootNode.set("sdkHttpResponse", sdkHttpResponseNode);
           currentJsonNode = rootNode;
         }
+
         if (needsRootObject) {
           currentJsonNode = (JsonNode) converter.invoke(obj, currentJsonNode, null, currentJsonNode);
         } else {
