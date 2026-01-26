@@ -75,6 +75,7 @@ public abstract class ImageConfig extends JsonSerializable {
    * Aspect ratio of the generated images.
    *
    * <p>Supported values:
+   *
    * <ul>
    *   <li>{@code "1:1"} - Square (1:1)
    *   <li>{@code "2:3"} - Portrait (2:3)
@@ -97,6 +98,7 @@ public abstract class ImageConfig extends JsonSerializable {
    * Specifies the size of generated images.
    *
    * <p>Supported values:
+   *
    * <ul>
    *   <li>{@code "1K"} - 1024x1024 pixels (default)
    *   <li>{@code "2K"} - 2048x2048 pixels
@@ -122,9 +124,7 @@ public abstract class ImageConfig extends JsonSerializable {
   /** Builder for ImageConfig. */
   @AutoValue.Builder
   public abstract static class Builder {
-    /**
-     * For internal usage. Please use {@code ImageConfig.builder()} for instantiation.
-     */
+    /** For internal usage. Please use {@code ImageConfig.builder()} for instantiation. */
     @JsonCreator
     private static Builder create() {
       return new AutoValue_ImageConfig.Builder();

@@ -17,7 +17,6 @@
 package com.google.genai.types.interactions.tools;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
@@ -26,7 +25,6 @@ import com.google.auto.value.AutoValue;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import com.google.genai.JsonSerializable;
 import com.google.genai.types.ExcludeFromGeneratedCoverageReport;
-
 import com.google.genai.types.Schema;
 import java.util.Optional;
 
@@ -52,8 +50,8 @@ import java.util.Optional;
  *     .build();
  * }</pre>
  *
- * <p>The Interactions API does not support Automatic Function Calling (AFC). All function
- * execution must be handled manually by the application.
+ * <p>The Interactions API does not support Automatic Function Calling (AFC). All function execution
+ * must be handled manually by the application.
  *
  * <p>The Interactions API is available in both Vertex AI and Gemini API.
  *
@@ -103,11 +101,9 @@ public abstract class Function extends JsonSerializable implements Tool {
     @JsonProperty("name")
     public abstract Builder name(String name);
 
-    
     abstract Builder name(Optional<String> name);
 
     /** Clears the value of name field. */
-    
     @CanIgnoreReturnValue
     public Builder clearName() {
       return name(Optional.empty());
@@ -121,11 +117,9 @@ public abstract class Function extends JsonSerializable implements Tool {
     @JsonProperty("description")
     public abstract Builder description(String description);
 
-    
     abstract Builder description(Optional<String> description);
 
     /** Clears the value of description field. */
-    
     @CanIgnoreReturnValue
     public Builder clearDescription() {
       return description(Optional.empty());
@@ -149,11 +143,9 @@ public abstract class Function extends JsonSerializable implements Tool {
       return parameters(parametersBuilder.build());
     }
 
-    
     abstract Builder parameters(Optional<Schema> parameters);
 
     /** Clears the value of parameters field. */
-
     @CanIgnoreReturnValue
     public Builder clearParameters() {
       return parameters(Optional.empty());

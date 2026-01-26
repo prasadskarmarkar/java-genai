@@ -46,9 +46,7 @@ public abstract class DeleteInteractionResponse extends JsonSerializable {
   /** Builder for DeleteInteractionResponse. */
   @AutoValue.Builder
   public abstract static class Builder {
-    /**
-     * For internal usage. Please use `DeleteInteractionResponse.builder()` for instantiation.
-     */
+    /** For internal usage. Please use `DeleteInteractionResponse.builder()` for instantiation. */
     @JsonCreator
     private static Builder create() {
       return new AutoValue_DeleteInteractionResponse.Builder();

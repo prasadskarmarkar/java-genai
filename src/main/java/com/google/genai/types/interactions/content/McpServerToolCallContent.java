@@ -30,8 +30,7 @@ import java.util.Map;
 @JsonDeserialize(builder = McpServerToolCallContent.Builder.class)
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 @JsonTypeName("mcp_server_tool_call")
-public abstract class McpServerToolCallContent extends JsonSerializable
-    implements Content {
+public abstract class McpServerToolCallContent extends JsonSerializable implements Content {
 
   @JsonProperty("id")
   public abstract String id();
@@ -82,11 +81,6 @@ public abstract class McpServerToolCallContent extends JsonSerializable
   @ExcludeFromGeneratedCoverageReport
   public static McpServerToolCallContent of(
       String id, String name, String serverName, Map<String, Object> arguments) {
-    return builder()
-        .id(id)
-        .name(name)
-        .serverName(serverName)
-        .arguments(arguments)
-        .build();
+    return builder().id(id).name(name).serverName(serverName).arguments(arguments).build();
   }
 }

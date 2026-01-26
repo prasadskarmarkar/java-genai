@@ -148,7 +148,8 @@ public abstract class FunctionResultContent extends JsonSerializable implements 
     /**
      * Setter for id.
      *
-     * <p>id: The unique identifier matching the corresponding FunctionCallContent. This field is required.
+     * <p>id: The unique identifier matching the corresponding FunctionCallContent. This field is
+     * required.
      */
     @JsonProperty("call_id")
     public abstract Builder id(String id);

@@ -31,8 +31,8 @@ import java.util.Optional;
 /**
  * Audio content for the Interactions API.
  *
- * <p>Represents audio data that can be included in interaction inputs or outputs.
- * Audio can be provided either as base64-encoded data or as a URI.
+ * <p>Represents audio data that can be included in interaction inputs or outputs. Audio can be
+ * provided either as base64-encoded data or as a URI.
  *
  * <p>Example usage with data:
  *
@@ -66,6 +66,7 @@ public abstract class AudioContent extends JsonSerializable implements Content {
    * The MIME type of the audio.
    *
    * <p>Supported values:
+   *
    * <ul>
    *   <li>{@link AudioMimeType.Known#AUDIO_WAV} - WAV format
    *   <li>{@link AudioMimeType.Known#AUDIO_MP3} - MP3 format

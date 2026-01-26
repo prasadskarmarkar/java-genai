@@ -33,8 +33,7 @@ import java.util.Optional;
 @JsonDeserialize(builder = UrlContextResultContent.Builder.class)
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 @JsonTypeName("url_context_result")
-public abstract class UrlContextResultContent extends JsonSerializable
-    implements Content {
+public abstract class UrlContextResultContent extends JsonSerializable implements Content {
 
   @JsonProperty("signature")
   public abstract Optional<String> signature();

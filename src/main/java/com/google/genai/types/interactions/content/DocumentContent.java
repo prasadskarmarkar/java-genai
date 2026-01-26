@@ -31,8 +31,8 @@ import java.util.Optional;
 /**
  * Document content for the Interactions API.
  *
- * <p>Represents document data (e.g., PDF, text files) that can be included in interaction inputs or outputs.
- * Documents can be provided either as base64-encoded data or as a URI.
+ * <p>Represents document data (e.g., PDF, text files) that can be included in interaction inputs or
+ * outputs. Documents can be provided either as base64-encoded data or as a URI.
  *
  * <p>Example usage with data:
  *
@@ -66,6 +66,7 @@ public abstract class DocumentContent extends JsonSerializable implements Conten
    * The MIME type of the document.
    *
    * <p>Supported values:
+   *
    * <ul>
    *   <li>{@link DocumentMimeType.Known#APPLICATION_PDF} - PDF format
    * </ul>

@@ -24,13 +24,13 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * Custom serializer for Input that ensures proper polymorphic type information is
- * included when serializing lists of Content or Turn objects.
+ * Custom serializer for Input that ensures proper polymorphic type information is included when
+ * serializing lists of Content or Turn objects.
  *
  * <p>This is necessary because the @JsonValue annotation on a field typed as Object loses type
  * information for contained elements. This serializer explicitly handles the different cases
- * (String, List of Content, List of Turn) and ensures that polymorphic
- * content types include their "type" property.
+ * (String, List of Content, List of Turn) and ensures that polymorphic content types include their
+ * "type" property.
  */
 public class InputSerializer extends JsonSerializer<Input> {
 

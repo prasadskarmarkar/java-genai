@@ -16,10 +16,13 @@
 
 package com.google.genai.types.interactions;
 
+import static com.google.common.collect.ImmutableList.toImmutableList;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.google.auto.value.AutoValue;
+import com.google.common.collect.ImmutableList;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import com.google.genai.JsonSerializable;
 import com.google.genai.types.AgentConfig;
@@ -31,9 +34,6 @@ import com.google.genai.types.interactions.tools.Tool;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-
-import static com.google.common.collect.ImmutableList.toImmutableList;
-import com.google.common.collect.ImmutableList;
 
 /**
  * Configuration for creating an interaction.
@@ -95,6 +95,7 @@ public abstract class CreateInteractionConfig extends JsonSerializable {
    * <p>Represents the set of modalities that the model can return.
    *
    * <p>Supported values:
+   *
    * <ul>
    *   <li>{@link Modality.Known#TEXT} - Text content
    *   <li>{@link Modality.Known#IMAGE} - Image content
@@ -115,8 +116,8 @@ public abstract class CreateInteractionConfig extends JsonSerializable {
   /**
    * A list of tools the model may use to generate the next response.
    *
-   * <p>Use the dedicated Interactions tool types such as {@code Function}, {@code
-   * GoogleSearch}, {@code CodeExecution}, etc.
+   * <p>Use the dedicated Interactions tool types such as {@code Function}, {@code GoogleSearch},
+   * {@code CodeExecution}, etc.
    */
   @JsonProperty("tools")
   public abstract Optional<List<Tool>> tools();
@@ -133,9 +134,7 @@ public abstract class CreateInteractionConfig extends JsonSerializable {
   /** Builder for CreateInteractionConfig. */
   @AutoValue.Builder
   public abstract static class Builder {
-    /**
-     * For internal usage. Please use `CreateInteractionConfig.builder()` for instantiation.
-     */
+    /** For internal usage. Please use `CreateInteractionConfig.builder()` for instantiation. */
     @JsonCreator
     private static Builder create() {
       return new AutoValue_CreateInteractionConfig.Builder();
@@ -176,7 +175,6 @@ public abstract class CreateInteractionConfig extends JsonSerializable {
      */
     @JsonProperty("input")
     public abstract Builder input(Input input);
-
 
     /**
      * Convenience setter for input from a string.
@@ -517,7 +515,8 @@ public abstract class CreateInteractionConfig extends JsonSerializable {
      * <p>systemInstruction: Developer set system instruction.
      */
     @CanIgnoreReturnValue
-    public Builder systemInstruction(com.google.genai.types.Content.Builder systemInstructionBuilder) {
+    public Builder systemInstruction(
+        com.google.genai.types.Content.Builder systemInstructionBuilder) {
       return systemInstruction(systemInstructionBuilder.build());
     }
 

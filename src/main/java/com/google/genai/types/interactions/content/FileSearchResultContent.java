@@ -33,8 +33,7 @@ import java.util.Optional;
 @JsonDeserialize(builder = FileSearchResultContent.Builder.class)
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 @JsonTypeName("file_search_result")
-public abstract class FileSearchResultContent extends JsonSerializable
-    implements Content {
+public abstract class FileSearchResultContent extends JsonSerializable implements Content {
 
   @JsonProperty("result")
   public abstract Optional<List<FileSearchResult>> result();

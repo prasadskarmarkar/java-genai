@@ -24,7 +24,6 @@ import com.google.auto.value.AutoValue;
 import com.google.genai.JsonSerializable;
 import com.google.genai.types.ExcludeFromGeneratedCoverageReport;
 
-
 /**
  * Code execution tool for the Interactions API.
  *

@@ -32,8 +32,8 @@ import java.util.Optional;
 /**
  * URL context call content for the Interactions API.
  *
- * <p>Represents a request from the model to retrieve and analyze content from URLs. This content type
- * appears in interaction outputs when the model wants to access web pages for context.
+ * <p>Represents a request from the model to retrieve and analyze content from URLs. This content
+ * type appears in interaction outputs when the model wants to access web pages for context.
  *
  * <p>Example usage:
  *
@@ -54,8 +54,7 @@ import java.util.Optional;
 @JsonDeserialize(builder = UrlContextCallContent.Builder.class)
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 @JsonTypeName("url_context_call")
-public abstract class UrlContextCallContent extends JsonSerializable
-    implements Content {
+public abstract class UrlContextCallContent extends JsonSerializable implements Content {
 
   @JsonProperty("arguments")
   public abstract Optional<UrlContextCallArguments> arguments();
@@ -111,9 +110,6 @@ public abstract class UrlContextCallContent extends JsonSerializable
 
   @ExcludeFromGeneratedCoverageReport
   public static UrlContextCallContent of(List<String> urls, String id) {
-    return builder()
-        .arguments(UrlContextCallArguments.of(urls))
-        .id(id)
-        .build();
+    return builder().arguments(UrlContextCallArguments.of(urls)).id(id).build();
   }
 }

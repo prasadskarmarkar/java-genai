@@ -33,8 +33,7 @@ import java.util.Optional;
 @JsonDeserialize(builder = McpServerToolResultContent.Builder.class)
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 @JsonTypeName("mcp_server_tool_result")
-public abstract class McpServerToolResultContent extends JsonSerializable
-    implements Content {
+public abstract class McpServerToolResultContent extends JsonSerializable implements Content {
 
   @JsonProperty("call_id")
   public abstract String callId();
@@ -166,21 +165,13 @@ public abstract class McpServerToolResultContent extends JsonSerializable
 
   @ExcludeFromGeneratedCoverageReport
   public static McpServerToolResultContent of(String callId, Object result) {
-    return builder()
-        .callId(callId)
-        .result(result)
-        .build();
+    return builder().callId(callId).result(result).build();
   }
 
   @ExcludeFromGeneratedCoverageReport
   public static McpServerToolResultContent of(
       String callId, Object result, String name, String serverName) {
-    return builder()
-        .callId(callId)
-        .result(result)
-        .name(name)
-        .serverName(serverName)
-        .build();
+    return builder().callId(callId).result(result).name(name).serverName(serverName).build();
   }
 
   /** Convenience factory method with String result. */

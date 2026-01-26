@@ -23,8 +23,8 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Union type for interaction input. Can be a string, list of Content objects, or list
- * of Turn objects.
+ * Union type for interaction input. Can be a string, list of Content objects, or list of Turn
+ * objects.
  */
 @JsonSerialize(using = InputSerializer.class)
 public final class Input extends JsonSerializable {
@@ -97,8 +97,7 @@ public final class Input extends JsonSerializable {
   /**
    * Gets the underlying value.
    *
-   * @return The wrapped value (String, List&lt;Content&gt;, or
-   *     List&lt;Turn&gt;)
+   * @return The wrapped value (String, List&lt;Content&gt;, or List&lt;Turn&gt;)
    */
   public Object getValue() {
     return value;

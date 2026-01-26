@@ -25,7 +25,6 @@ import com.google.auto.value.AutoValue;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import com.google.genai.JsonSerializable;
 import com.google.genai.types.ExcludeFromGeneratedCoverageReport;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -102,11 +101,9 @@ public abstract class FileSearch extends JsonSerializable implements Tool {
       return fileSearchStoreNames(Arrays.asList(fileSearchStoreNames));
     }
 
-
     abstract Builder fileSearchStoreNames(Optional<List<String>> fileSearchStoreNames);
 
     /** Clears the value of fileSearchStoreNames field. */
-
     @CanIgnoreReturnValue
     public Builder clearFileSearchStoreNames() {
       return fileSearchStoreNames(Optional.empty());
@@ -120,11 +117,9 @@ public abstract class FileSearch extends JsonSerializable implements Tool {
     @JsonProperty("top_k")
     public abstract Builder topK(Integer topK);
 
-
     abstract Builder topK(Optional<Integer> topK);
 
     /** Clears the value of topK field. */
-
     @CanIgnoreReturnValue
     public Builder clearTopK() {
       return topK(Optional.empty());
@@ -138,11 +133,9 @@ public abstract class FileSearch extends JsonSerializable implements Tool {
     @JsonProperty("metadata_filter")
     public abstract Builder metadataFilter(String metadataFilter);
 
-
     abstract Builder metadataFilter(Optional<String> metadataFilter);
 
     /** Clears the value of metadataFilter field. */
-
     @CanIgnoreReturnValue
     public Builder clearMetadataFilter() {
       return metadataFilter(Optional.empty());

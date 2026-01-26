@@ -18,8 +18,6 @@ package com.google.genai;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import com.google.genai.Common.BuiltRequest;
 import com.google.genai.errors.GenAiIOException;
 import com.google.genai.types.HttpOptions;
@@ -34,13 +32,8 @@ import com.google.genai.types.interactions.DeleteInteractionResponse;
 import com.google.genai.types.interactions.GetInteractionConfig;
 import com.google.genai.types.interactions.GetInteractionParameters;
 import com.google.genai.types.interactions.Interaction;
-import com.google.genai.types.interactions.content.FunctionCallContent;
-import com.google.genai.types.interactions.content.FunctionResultContent;
 import java.io.IOException;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import okhttp3.Headers;
@@ -61,235 +54,88 @@ public final class Interactions {
     this.apiClient = apiClient;
   }
 
-  @ExcludeFromGeneratedCoverageReport
-  ObjectNode createInteractionConfigToMldev(JsonNode fromObject, ObjectNode parentObject) {
-    ObjectNode toObject = JsonSerializable.objectMapper().createObjectNode();
-
-    if (Common.getValueByPath(fromObject, new String[] {"input"}) != null) {
-      Common.setValueByPath(
-          parentObject,
-          new String[] {"input"},
-          Common.getValueByPath(fromObject, new String[] {"input"}));
+  /**
+   * Copies a field from source to target if it exists, without transformation.
+   *
+   * @param fromObject Source JSON node
+   * @param parentObject Target ObjectNode to populate
+   * @param fieldName Name of the field to copy
+   */
+  private void copyFieldIfPresent(JsonNode fromObject, ObjectNode parentObject, String fieldName) {
+    Object value = Common.getValueByPath(fromObject, new String[] {fieldName});
+    if (value != null) {
+      Common.setValueByPath(parentObject, new String[] {fieldName}, value);
     }
-
-    if (Common.getValueByPath(fromObject, new String[] {"model"}) != null) {
-      Common.setValueByPath(
-          parentObject,
-          new String[] {"model"},
-          Transformers.tModel(
-              this.apiClient, Common.getValueByPath(fromObject, new String[] {"model"})));
-    }
-
-    if (Common.getValueByPath(fromObject, new String[] {"agent"}) != null) {
-      Common.setValueByPath(
-          parentObject,
-          new String[] {"agent"},
-          Common.getValueByPath(fromObject, new String[] {"agent"}));
-    }
-
-    if (Common.getValueByPath(fromObject, new String[] {"background"}) != null) {
-      Common.setValueByPath(
-          parentObject,
-          new String[] {"background"},
-          Common.getValueByPath(fromObject, new String[] {"background"}));
-    }
-
-    if (Common.getValueByPath(fromObject, new String[] {"generationConfig"}) != null) {
-      Common.setValueByPath(
-          parentObject,
-          new String[] {"generationConfig"},
-          Common.getValueByPath(fromObject, new String[] {"generationConfig"}));
-    }
-
-    if (Common.getValueByPath(fromObject, new String[] {"agentConfig"}) != null) {
-      Common.setValueByPath(
-          parentObject,
-          new String[] {"agentConfig"},
-          Common.getValueByPath(fromObject, new String[] {"agentConfig"}));
-    }
-
-    if (Common.getValueByPath(fromObject, new String[] {"previousInteractionId"}) != null) {
-      Common.setValueByPath(
-          parentObject,
-          new String[] {"previousInteractionId"},
-          Common.getValueByPath(fromObject, new String[] {"previousInteractionId"}));
-    }
-
-    if (Common.getValueByPath(fromObject, new String[] {"responseFormat"}) != null) {
-      Common.setValueByPath(
-          parentObject,
-          new String[] {"responseFormat"},
-          Common.getValueByPath(fromObject, new String[] {"responseFormat"}));
-    }
-
-    if (Common.getValueByPath(fromObject, new String[] {"responseMimeType"}) != null) {
-      Common.setValueByPath(
-          parentObject,
-          new String[] {"responseMimeType"},
-          Common.getValueByPath(fromObject, new String[] {"responseMimeType"}));
-    }
-
-    if (Common.getValueByPath(fromObject, new String[] {"responseModalities"}) != null) {
-      Common.setValueByPath(
-          parentObject,
-          new String[] {"responseModalities"},
-          Common.getValueByPath(fromObject, new String[] {"responseModalities"}));
-    }
-
-    if (Common.getValueByPath(fromObject, new String[] {"store"}) != null) {
-      Common.setValueByPath(
-          parentObject,
-          new String[] {"store"},
-          Common.getValueByPath(fromObject, new String[] {"store"}));
-    }
-
-    if (Common.getValueByPath(fromObject, new String[] {"systemInstruction"}) != null) {
-      Common.setValueByPath(
-          parentObject,
-          new String[] {"systemInstruction"},
-          Transformers.tContent(
-              Common.getValueByPath(fromObject, new String[] {"systemInstruction"})));
-    }
-
-    // Tool types serialize directly with their type discriminator
-    if (Common.getValueByPath(fromObject, new String[] {"tools"}) != null) {
-      Common.setValueByPath(
-          parentObject,
-          new String[] {"tools"},
-          Common.getValueByPath(fromObject, new String[] {"tools"}));
-    }
-
-    return toObject;
   }
 
-  @ExcludeFromGeneratedCoverageReport
-  ObjectNode createInteractionConfigToVertex(JsonNode fromObject, ObjectNode parentObject) {
-    ObjectNode toObject = JsonSerializable.objectMapper().createObjectNode();
-
-    if (Common.getValueByPath(fromObject, new String[] {"input"}) != null) {
-      Common.setValueByPath(
-          parentObject,
-          new String[] {"input"},
-          Common.getValueByPath(fromObject, new String[] {"input"}));
+  /**
+   * Copies a field from source to target with a transformation function.
+   *
+   * @param fromObject Source JSON node
+   * @param parentObject Target ObjectNode to populate
+   * @param fieldName Name of the field to copy
+   * @param transformer Function to transform the value
+   */
+  private void copyFieldWithTransform(
+      JsonNode fromObject,
+      ObjectNode parentObject,
+      String fieldName,
+      java.util.function.Function<Object, Object> transformer) {
+    Object value = Common.getValueByPath(fromObject, new String[] {fieldName});
+    if (value != null) {
+      Common.setValueByPath(parentObject, new String[] {fieldName}, transformer.apply(value));
     }
-
-    if (Common.getValueByPath(fromObject, new String[] {"model"}) != null) {
-      Common.setValueByPath(
-          parentObject,
-          new String[] {"model"},
-          Transformers.tModel(
-              this.apiClient, Common.getValueByPath(fromObject, new String[] {"model"})));
-    }
-
-    if (Common.getValueByPath(fromObject, new String[] {"agent"}) != null) {
-      Common.setValueByPath(
-          parentObject,
-          new String[] {"agent"},
-          Common.getValueByPath(fromObject, new String[] {"agent"}));
-    }
-
-    if (Common.getValueByPath(fromObject, new String[] {"background"}) != null) {
-      Common.setValueByPath(
-          parentObject,
-          new String[] {"background"},
-          Common.getValueByPath(fromObject, new String[] {"background"}));
-    }
-
-    if (Common.getValueByPath(fromObject, new String[] {"generationConfig"}) != null) {
-      Common.setValueByPath(
-          parentObject,
-          new String[] {"generationConfig"},
-          Common.getValueByPath(fromObject, new String[] {"generationConfig"}));
-    }
-
-    if (Common.getValueByPath(fromObject, new String[] {"agentConfig"}) != null) {
-      Common.setValueByPath(
-          parentObject,
-          new String[] {"agentConfig"},
-          Common.getValueByPath(fromObject, new String[] {"agentConfig"}));
-    }
-
-    if (Common.getValueByPath(fromObject, new String[] {"previousInteractionId"}) != null) {
-      Common.setValueByPath(
-          parentObject,
-          new String[] {"previousInteractionId"},
-          Common.getValueByPath(fromObject, new String[] {"previousInteractionId"}));
-    }
-
-    if (Common.getValueByPath(fromObject, new String[] {"responseFormat"}) != null) {
-      Common.setValueByPath(
-          parentObject,
-          new String[] {"responseFormat"},
-          Common.getValueByPath(fromObject, new String[] {"responseFormat"}));
-    }
-
-    if (Common.getValueByPath(fromObject, new String[] {"responseMimeType"}) != null) {
-      Common.setValueByPath(
-          parentObject,
-          new String[] {"responseMimeType"},
-          Common.getValueByPath(fromObject, new String[] {"responseMimeType"}));
-    }
-
-    if (Common.getValueByPath(fromObject, new String[] {"responseModalities"}) != null) {
-      Common.setValueByPath(
-          parentObject,
-          new String[] {"responseModalities"},
-          Common.getValueByPath(fromObject, new String[] {"responseModalities"}));
-    }
-
-    if (Common.getValueByPath(fromObject, new String[] {"store"}) != null) {
-      Common.setValueByPath(
-          parentObject,
-          new String[] {"store"},
-          Common.getValueByPath(fromObject, new String[] {"store"}));
-    }
-
-    if (Common.getValueByPath(fromObject, new String[] {"systemInstruction"}) != null) {
-      Common.setValueByPath(
-          parentObject,
-          new String[] {"systemInstruction"},
-          Transformers.tContent(
-              Common.getValueByPath(fromObject, new String[] {"systemInstruction"})));
-    }
-
-    // Tool types serialize directly with their type discriminator
-    if (Common.getValueByPath(fromObject, new String[] {"tools"}) != null) {
-      Common.setValueByPath(
-          parentObject,
-          new String[] {"tools"},
-          Common.getValueByPath(fromObject, new String[] {"tools"}));
-    }
-
-    return toObject;
   }
 
+  /**
+   * Transforms CreateInteractionConfig to the request body format. This transformation is identical
+   * for both Vertex AI and MLDev platforms. Only the endpoint path differs (handled by
+   * ApiClient.buildMaybeVertexPath).
+   *
+   * @param fromObject Source JSON node containing the config
+   * @param parentObject Target ObjectNode to populate (modified in place)
+   */
   @ExcludeFromGeneratedCoverageReport
-  ObjectNode createInteractionParametersToMldev(
-      ApiClient apiClient, JsonNode fromObject, ObjectNode parentObject) {
+  void createInteractionConfig(JsonNode fromObject, ObjectNode parentObject) {
+    // Simple fields - no transformation
+    copyFieldIfPresent(fromObject, parentObject, "input");
+    copyFieldIfPresent(fromObject, parentObject, "agent");
+    copyFieldIfPresent(fromObject, parentObject, "background");
+    copyFieldIfPresent(fromObject, parentObject, "generationConfig");
+    copyFieldIfPresent(fromObject, parentObject, "agentConfig");
+    copyFieldIfPresent(fromObject, parentObject, "previousInteractionId");
+    copyFieldIfPresent(fromObject, parentObject, "responseFormat");
+    copyFieldIfPresent(fromObject, parentObject, "responseMimeType");
+    copyFieldIfPresent(fromObject, parentObject, "responseModalities");
+    copyFieldIfPresent(fromObject, parentObject, "store");
+    // Tool types serialize directly with their type discriminator
+    copyFieldIfPresent(fromObject, parentObject, "tools");
+
+    // Fields with transformation
+    // Note: Interactions API expects raw model string, not transformed
+    copyFieldIfPresent(fromObject, parentObject, "model");
+    copyFieldWithTransform(
+        fromObject,
+        parentObject,
+        "systemInstruction",
+        value -> JsonSerializable.toJsonNode(Transformers.tContent(value)));
+  }
+
+  /**
+   * Transforms CreateInteractionParameters to the request body. Platform-agnostic - works for both
+   * Vertex AI and MLDev.
+   *
+   * @param fromObject Source JSON node containing the parameters
+   * @return Transformed ObjectNode ready for the request body
+   */
+  @ExcludeFromGeneratedCoverageReport
+  ObjectNode createInteractionParameters(JsonNode fromObject) {
     ObjectNode toObject = JsonSerializable.objectMapper().createObjectNode();
 
     if (Common.getValueByPath(fromObject, new String[] {"config"}) != null) {
-      JsonNode unused =
-          createInteractionConfigToMldev(
-              JsonSerializable.toJsonNode(
-                  Common.getValueByPath(fromObject, new String[] {"config"})),
-              toObject);
-    }
-
-    return toObject;
-  }
-
-  @ExcludeFromGeneratedCoverageReport
-  ObjectNode createInteractionParametersToVertex(
-      ApiClient apiClient, JsonNode fromObject, ObjectNode parentObject) {
-    ObjectNode toObject = JsonSerializable.objectMapper().createObjectNode();
-
-    if (Common.getValueByPath(fromObject, new String[] {"config"}) != null) {
-      JsonNode unused =
-          createInteractionConfigToVertex(
-              JsonSerializable.toJsonNode(
-                  Common.getValueByPath(fromObject, new String[] {"config"})),
-              toObject);
+      createInteractionConfig(
+          JsonSerializable.toJsonNode(Common.getValueByPath(fromObject, new String[] {"config"})),
+          toObject);
     }
 
     return toObject;
@@ -324,24 +170,18 @@ public final class Interactions {
               + "Use 'generationConfig' instead.");
     }
 
-    CreateInteractionParameters.Builder parameterBuilder =
-        CreateInteractionParameters.builder();
+    CreateInteractionParameters.Builder parameterBuilder = CreateInteractionParameters.builder();
 
     if (!Common.isZero(config)) {
       parameterBuilder.config(config);
     }
     JsonNode parameterNode = JsonSerializable.toJsonNode(parameterBuilder.build());
 
-    ObjectNode body;
-    String path;
-    if (this.apiClient.vertexAI()) {
-      body = createInteractionParametersToVertex(this.apiClient, parameterNode, null);
-      path = "interactions";
-    } else {
-      body = createInteractionParametersToMldev(this.apiClient, parameterNode, null);
-      path = "interactions";
-    }
+    ObjectNode body = createInteractionParameters(parameterNode);
+    String path = "interactions";
 
+    // The "_query" key is used internally to store query parameters
+    // that will be appended to the URL
     JsonNode queryParams = body.get("_query");
     if (queryParams != null) {
       body.remove("_query");
@@ -353,7 +193,8 @@ public final class Interactions {
       requestHttpOptions = config.httpOptions();
     }
 
-    return new BuiltRequest(path, JsonSerializable.toJsonString(body), requestHttpOptions);
+    String requestBody = JsonSerializable.toJsonString(body);
+    return new BuiltRequest(path, requestBody, requestHttpOptions);
   }
 
   /** A shared processResponse function for both sync and async methods. */
@@ -368,25 +209,21 @@ public final class Interactions {
 
     JsonNode responseNode = JsonSerializable.stringToJsonNode(responseString);
 
-    return JsonSerializable.fromJsonNode(responseNode, Interaction.class);
-  }
-
-  // ===== GET INTERACTION METHODS =====
-
-  @ExcludeFromGeneratedCoverageReport
-  ObjectNode getInteractionParametersToMldev(
-      ApiClient apiClient, JsonNode fromObject, ObjectNode parentObject) {
-    return transformIdParameter(fromObject);
-  }
-
-  @ExcludeFromGeneratedCoverageReport
-  ObjectNode getInteractionParametersToVertex(
-      ApiClient apiClient, JsonNode fromObject, ObjectNode parentObject) {
-    return transformIdParameter(fromObject);
+    Interaction sdkResponse = JsonSerializable.fromJsonNode(responseNode, Interaction.class);
+    Headers responseHeaders = response.getHeaders();
+    if (responseHeaders == null) {
+      return sdkResponse;
+    }
+    Map<String, String> headers = new HashMap<>();
+    for (String headerName : responseHeaders.names()) {
+      headers.put(headerName, responseHeaders.get(headerName));
+    }
+    return sdkResponse.toBuilder().sdkHttpResponse(HttpResponse.builder().headers(headers)).build();
   }
 
   /** A shared buildRequest method for both sync and async methods. */
   BuiltRequest buildRequestForGet(String id, GetInteractionConfig config) {
+
     // Validation: id must be non-empty
     if (id == null || id.isEmpty()) {
       throw new IllegalArgumentException("Interaction ID must not be empty");
@@ -402,21 +239,15 @@ public final class Interactions {
     }
     JsonNode parameterNode = JsonSerializable.toJsonNode(parameterBuilder.build());
 
-    ObjectNode body;
-    String path;
-    if (this.apiClient.vertexAI()) {
-      body = getInteractionParametersToVertex(this.apiClient, parameterNode, null);
-      path = Common.formatMap("{id}", body.get("_url"));
-    } else {
-      body = getInteractionParametersToMldev(this.apiClient, parameterNode, null);
-      if (body.get("_url") != null) {
-        path = Common.formatMap("{id}", body.get("_url"));
-      } else {
-        path = "{id}";
-      }
-    }
+    // Transform ID parameter into URL placeholder using special "_url" key
+    // The "_url" key is used internally to store URL path parameters
+    ObjectNode body = transformIdParameter(parameterNode);
+
+    String path = body.get("_url") != null ? Common.formatMap("{id}", body.get("_url")) : "{id}";
     body.remove("_url");
 
+    // The "_query" key is used internally to store query parameters
+    // that will be appended to the URL
     JsonNode queryParams = body.get("_query");
     if (queryParams != null) {
       body.remove("_query");
@@ -443,25 +274,21 @@ public final class Interactions {
 
     JsonNode responseNode = JsonSerializable.stringToJsonNode(responseString);
 
-    return JsonSerializable.fromJsonNode(responseNode, Interaction.class);
-  }
-
-  // ===== CANCEL INTERACTION METHODS =====
-
-  @ExcludeFromGeneratedCoverageReport
-  ObjectNode cancelInteractionParametersToMldev(
-      ApiClient apiClient, JsonNode fromObject, ObjectNode parentObject) {
-    return transformIdParameter(fromObject);
-  }
-
-  @ExcludeFromGeneratedCoverageReport
-  ObjectNode cancelInteractionParametersToVertex(
-      ApiClient apiClient, JsonNode fromObject, ObjectNode parentObject) {
-    return transformIdParameter(fromObject);
+    Interaction sdkResponse = JsonSerializable.fromJsonNode(responseNode, Interaction.class);
+    Headers responseHeaders = response.getHeaders();
+    if (responseHeaders == null) {
+      return sdkResponse;
+    }
+    Map<String, String> headers = new HashMap<>();
+    for (String headerName : responseHeaders.names()) {
+      headers.put(headerName, responseHeaders.get(headerName));
+    }
+    return sdkResponse.toBuilder().sdkHttpResponse(HttpResponse.builder().headers(headers)).build();
   }
 
   /** A shared buildRequest method for both sync and async methods. */
   BuiltRequest buildRequestForCancel(String id, CancelInteractionConfig config) {
+
     // Validation: id must be non-empty
     if (id == null || id.isEmpty()) {
       throw new IllegalArgumentException("Interaction ID must not be empty");
@@ -477,23 +304,19 @@ public final class Interactions {
     }
     JsonNode parameterNode = JsonSerializable.toJsonNode(parameterBuilder.build());
 
-    ObjectNode body;
-    String path;
-    if (this.apiClient.vertexAI()) {
-      body = cancelInteractionParametersToVertex(this.apiClient, parameterNode, null);
-      // Cancel uses POST to /interactions/{id}/cancel
-      path = Common.formatMap("{id}/cancel", body.get("_url"));
-    } else {
-      body = cancelInteractionParametersToMldev(this.apiClient, parameterNode, null);
-      if (body.get("_url") != null) {
-        // Cancel uses POST to /interactions/{id}/cancel
-        path = Common.formatMap("{id}/cancel", body.get("_url"));
-      } else {
-        path = "{id}/cancel";
-      }
-    }
+    // Transform ID parameter into URL placeholder using special "_url" key
+    // The "_url" key is used internally to store URL path parameters
+    ObjectNode body = transformIdParameter(parameterNode);
+
+    // Cancel uses POST to /interactions/{id}/cancel
+    String path =
+        body.get("_url") != null
+            ? Common.formatMap("{id}/cancel", body.get("_url"))
+            : "{id}/cancel";
     body.remove("_url");
 
+    // The "_query" key is used internally to store query parameters
+    // that will be appended to the URL
     JsonNode queryParams = body.get("_query");
     if (queryParams != null) {
       body.remove("_query");
@@ -520,31 +343,16 @@ public final class Interactions {
 
     JsonNode responseNode = JsonSerializable.stringToJsonNode(responseString);
 
-    return JsonSerializable.fromJsonNode(responseNode, Interaction.class);
-  }
-
-  // ===== DELETE INTERACTION METHODS =====
-
-  @ExcludeFromGeneratedCoverageReport
-  ObjectNode deleteInteractionParametersToMldev(
-      ApiClient apiClient, JsonNode fromObject, ObjectNode parentObject) {
-    return transformIdParameter(fromObject);
-  }
-
-  @ExcludeFromGeneratedCoverageReport
-  ObjectNode deleteInteractionParametersToVertex(
-      ApiClient apiClient, JsonNode fromObject, ObjectNode parentObject) {
-    return transformIdParameter(fromObject);
-  }
-
-  @ExcludeFromGeneratedCoverageReport
-  ObjectNode deleteInteractionFromMldev(JsonNode fromObject, ObjectNode parentObject) {
-    return transformDeleteInteractionResponse(fromObject);
-  }
-
-  @ExcludeFromGeneratedCoverageReport
-  ObjectNode deleteInteractionFromVertex(JsonNode fromObject, ObjectNode parentObject) {
-    return transformDeleteInteractionResponse(fromObject);
+    Interaction sdkResponse = JsonSerializable.fromJsonNode(responseNode, Interaction.class);
+    Headers responseHeaders = response.getHeaders();
+    if (responseHeaders == null) {
+      return sdkResponse;
+    }
+    Map<String, String> headers = new HashMap<>();
+    for (String headerName : responseHeaders.names()) {
+      headers.put(headerName, responseHeaders.get(headerName));
+    }
+    return sdkResponse.toBuilder().sdkHttpResponse(HttpResponse.builder().headers(headers)).build();
   }
 
   /**
@@ -570,8 +378,8 @@ public final class Interactions {
   }
 
   /**
-   * Shared transformer for delete interaction responses.
-   * Extracts sdkHttpResponse from the API response.
+   * Shared transformer for delete interaction responses. Extracts sdkHttpResponse from the API
+   * response.
    *
    * @param fromObject Source JSON node from the API response
    * @return Transformed ObjectNode with sdkHttpResponse field
@@ -592,6 +400,7 @@ public final class Interactions {
 
   /** A shared buildRequest method for both sync and async methods. */
   BuiltRequest buildRequestForDelete(String id, DeleteInteractionConfig config) {
+
     // Validation: id must be non-empty
     if (id == null || id.isEmpty()) {
       throw new IllegalArgumentException("Interaction ID must not be empty");
@@ -607,21 +416,15 @@ public final class Interactions {
     }
     JsonNode parameterNode = JsonSerializable.toJsonNode(parameterBuilder.build());
 
-    ObjectNode body;
-    String path;
-    if (this.apiClient.vertexAI()) {
-      body = deleteInteractionParametersToVertex(this.apiClient, parameterNode, null);
-      path = Common.formatMap("{id}", body.get("_url"));
-    } else {
-      body = deleteInteractionParametersToMldev(this.apiClient, parameterNode, null);
-      if (body.get("_url") != null) {
-        path = Common.formatMap("{id}", body.get("_url"));
-      } else {
-        path = "{id}";
-      }
-    }
+    // Transform ID parameter into URL placeholder using special "_url" key
+    // The "_url" key is used internally to store URL path parameters
+    ObjectNode body = transformIdParameter(parameterNode);
+
+    String path = body.get("_url") != null ? Common.formatMap("{id}", body.get("_url")) : "{id}";
     body.remove("_url");
 
+    // The "_query" key is used internally to store query parameters
+    // that will be appended to the URL
     JsonNode queryParams = body.get("_query");
     if (queryParams != null) {
       body.remove("_query");
@@ -649,11 +452,8 @@ public final class Interactions {
 
     JsonNode responseNode = JsonSerializable.stringToJsonNode(responseString);
 
-    if (this.apiClient.vertexAI()) {
-      responseNode = deleteInteractionFromVertex(responseNode, null);
-    } else {
-      responseNode = deleteInteractionFromMldev(responseNode, null);
-    }
+    // Transform response - identical for both platforms
+    responseNode = transformDeleteInteractionResponse(responseNode);
 
     DeleteInteractionResponse sdkResponse =
         JsonSerializable.fromJsonNode(responseNode, DeleteInteractionResponse.class);
@@ -673,10 +473,10 @@ public final class Interactions {
    *
    * <p>Either {@code model} or {@code agent} must be specified in the config, but not both.
    *
-   * <p>If the config contains any {@code FunctionTool} with a callable method (created via {@code
-   * FunctionTool.fromMethod()}), Automatic Function Calling (AFC) will be enabled. The SDK will
-   * automatically execute the function when the model requests it and continue the conversation
-   * until a final response is generated.
+   * <p>When using function calling tools, the application must handle the function execution loop
+   * manually. If the interaction returns {@code status: "requires_action"}, extract the function
+   * calls from the outputs, execute them, and create a new interaction with the results using
+   * {@code previousInteractionId}.
    *
    * <p>Example usage for model-based interaction:
    *
@@ -698,17 +498,30 @@ public final class Interactions {
    * Interaction response = client.interactions.create(config);
    * }</pre>
    *
-   * <p>Example usage with Automatic Function Calling:
+   * <p>Example usage with manual function calling:
    *
    * <pre>{@code
-   * Method getWeather = MyClass.class.getMethod("getWeather", String.class);
    * CreateInteractionConfig config = CreateInteractionConfig.builder()
    *     .model("gemini-2.0-flash-exp")
    *     .input("What's the weather in Paris?")
-   *     .tools(FunctionTool.fromMethod(getWeather))
+   *     .tools(Function.of("getWeather", "Gets weather for a city", schema))
    *     .build();
-   * Interaction response = client.interactions.create(config);
-   * // The SDK automatically calls getWeather() and continues the conversation
+   *
+   * Interaction interaction = client.interactions.create(config);
+   *
+   * // Manual loop for function calling
+   * while ("requires_action".equals(interaction.status().toString())) {
+   *   // Extract and execute functions manually
+   *   List<FunctionResultContent> results = executeFunctions(interaction);
+   *
+   *   // Continue conversation with results
+   *   interaction = client.interactions.create(
+   *     config.toBuilder()
+   *       .previousInteractionId(interaction.id())
+   *       .inputFromContents(results)
+   *       .build()
+   *   );
+   * }
    * }</pre>
    *
    * <p>Note: The Interactions API is in beta and subject to change.
@@ -720,20 +533,6 @@ public final class Interactions {
    * @throws GenAiIOException if the API request fails
    */
   public Interaction create(CreateInteractionConfig config) {
-    // Check if AFC is enabled (any FunctionTool with a callable method)
-    if (InteractionsAfcUtil.hasCallableTool(config)) {
-      return createWithAfc(config);
-    }
-    return createWithoutAfc(config);
-  }
-
-  /**
-   * Creates an interaction without AFC - a single API call.
-   *
-   * @param config The configuration for creating the interaction
-   * @return The created Interaction
-   */
-  Interaction createWithoutAfc(CreateInteractionConfig config) {
     BuiltRequest builtRequest = buildRequestForCreate(config);
 
     try (ApiResponse response =
@@ -741,68 +540,6 @@ public final class Interactions {
             "post", builtRequest.path(), builtRequest.body(), builtRequest.httpOptions())) {
       return processResponseForCreate(response, config);
     }
-  }
-
-  /**
-   * Creates an interaction with AFC - handles function call loop automatically.
-   *
-   * @param config The configuration for creating the interaction
-   * @return The final Interaction with AFC history
-   */
-  private Interaction createWithAfc(CreateInteractionConfig config) {
-    ImmutableMap<String, Method> functionMap = InteractionsAfcUtil.getFunctionMap(config);
-    List<Interaction> afcHistory = new ArrayList<>();
-    String previousInteractionId = null;
-    CreateInteractionConfig currentConfig = config;
-    int maxRemoteCalls = InteractionsAfcUtil.DEFAULT_MAX_REMOTE_CALLS_AFC;
-
-    for (int i = 0; i < maxRemoteCalls; i++) {
-      Interaction response = createWithoutAfc(currentConfig);
-      afcHistory.add(response);
-
-      // Extract function calls from response
-      ImmutableList<FunctionCallContent> functionCalls =
-          InteractionsAfcUtil.extractFunctionCalls(response);
-
-      if (functionCalls.isEmpty()) {
-        // No more function calls - return final response with history
-        if (afcHistory.size() > 1) {
-          return response.toBuilder().automaticFunctionCallingHistory(afcHistory).build();
-        }
-        return response;
-      }
-
-      // Execute functions and get results
-      ImmutableList<FunctionResultContent> functionResults =
-          InteractionsAfcUtil.executeFunctionCalls(functionCalls, functionMap);
-
-      if (functionResults.isEmpty()) {
-        // No callable functions found - return current response
-        if (afcHistory.size() > 1) {
-          return response.toBuilder().automaticFunctionCallingHistory(afcHistory).build();
-        }
-        return response;
-      }
-
-      // Prepare next config with function results
-      previousInteractionId = response.id();
-
-      // Build new config with function results as input
-      CreateInteractionConfig.Builder nextConfigBuilder =
-          config.toBuilder().inputFromContents(InteractionsAfcUtil.toInputContents(functionResults));
-
-      if (previousInteractionId != null) {
-        nextConfigBuilder.previousInteractionId(previousInteractionId);
-      }
-
-      currentConfig = nextConfigBuilder.build();
-    }
-
-    // Max calls exceeded
-    throw new GenAiIOException(
-        "Automatic Function Calling exceeded maximum remote calls ("
-            + maxRemoteCalls
-            + "). Set more calls or disable AFC.");
   }
 
   /**

@@ -33,8 +33,7 @@ import java.util.Optional;
 @JsonDeserialize(builder = GoogleSearchResultContent.Builder.class)
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 @JsonTypeName("google_search_result")
-public abstract class GoogleSearchResultContent extends JsonSerializable
-    implements Content {
+public abstract class GoogleSearchResultContent extends JsonSerializable implements Content {
 
   @JsonProperty("signature")
   public abstract Optional<String> signature();

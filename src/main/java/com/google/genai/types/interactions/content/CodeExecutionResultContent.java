@@ -30,8 +30,8 @@ import java.util.Optional;
 /**
  * Code execution result content for the Interactions API.
  *
- * <p>Represents the result of executing code requested by the model. This content type appears
- * when providing the output from a code execution call back to the model.
+ * <p>Represents the result of executing code requested by the model. This content type appears when
+ * providing the output from a code execution call back to the model.
  *
  * <p>Example usage:
  *
@@ -50,8 +50,7 @@ import java.util.Optional;
 @JsonDeserialize(builder = CodeExecutionResultContent.Builder.class)
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 @JsonTypeName("code_execution_result")
-public abstract class CodeExecutionResultContent extends JsonSerializable
-    implements Content {
+public abstract class CodeExecutionResultContent extends JsonSerializable implements Content {
 
   @JsonProperty("result")
   public abstract Optional<String> result();

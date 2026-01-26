@@ -25,7 +25,6 @@ import com.google.auto.value.AutoValue;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import com.google.genai.JsonSerializable;
 import com.google.genai.types.ExcludeFromGeneratedCoverageReport;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -87,11 +86,9 @@ public abstract class ComputerUse extends JsonSerializable implements Tool {
     @JsonProperty("environment")
     public abstract Builder environment(String environment);
 
-    
     abstract Builder environment(Optional<String> environment);
 
     /** Clears the value of environment field. */
-    
     @CanIgnoreReturnValue
     public Builder clearEnvironment() {
       return environment(Optional.empty());
@@ -115,11 +112,10 @@ public abstract class ComputerUse extends JsonSerializable implements Tool {
       return excludedPredefinedFunctions(Arrays.asList(excludedPredefinedFunctions));
     }
 
-    
-    abstract Builder excludedPredefinedFunctions(Optional<List<String>> excludedPredefinedFunctions);
+    abstract Builder excludedPredefinedFunctions(
+        Optional<List<String>> excludedPredefinedFunctions);
 
     /** Clears the value of excludedPredefinedFunctions field. */
-    
     @CanIgnoreReturnValue
     public Builder clearExcludedPredefinedFunctions() {
       return excludedPredefinedFunctions(Optional.empty());

@@ -54,8 +54,7 @@ import java.util.Optional;
 @JsonDeserialize(builder = CodeExecutionCallContent.Builder.class)
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 @JsonTypeName("code_execution_call")
-public abstract class CodeExecutionCallContent extends JsonSerializable
-    implements Content {
+public abstract class CodeExecutionCallContent extends JsonSerializable implements Content {
 
   @JsonProperty("arguments")
   public abstract Optional<CodeExecutionCallArguments> arguments();
@@ -110,11 +109,7 @@ public abstract class CodeExecutionCallContent extends JsonSerializable
   }
 
   @ExcludeFromGeneratedCoverageReport
-  public static CodeExecutionCallContent of(
-      String language, String code, String id) {
-    return builder()
-        .arguments(CodeExecutionCallArguments.of(language, code))
-        .id(id)
-        .build();
+  public static CodeExecutionCallContent of(String language, String code, String id) {
+    return builder().arguments(CodeExecutionCallArguments.of(language, code)).id(id).build();
   }
 }

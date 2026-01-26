@@ -33,8 +33,8 @@ import java.util.Optional;
 /**
  * Text content for the Interactions API.
  *
- * <p>Represents textual information in interactions, either from user input or model output.
- * Text content can include optional annotations for citations and source attribution.
+ * <p>Represents textual information in interactions, either from user input or model output. Text
+ * content can include optional annotations for citations and source attribution.
  *
  * <p>Example usage:
  *

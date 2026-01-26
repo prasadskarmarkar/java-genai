@@ -25,8 +25,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
  * <p>This corresponds to Python's Summary type alias: {@code Summary = Union[TextContent,
  * ImageContent]}
  *
- * <p>Only TextContent and ImageContent can be used in thought summaries, which is a more
- * restricted set than the full Content union.
+ * <p>Only TextContent and ImageContent can be used in thought summaries, which is a more restricted
+ * set than the full Content union.
  */
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 @JsonSubTypes({

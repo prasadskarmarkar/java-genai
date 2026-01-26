@@ -64,8 +64,8 @@ public abstract class ToolChoiceConfig extends JsonSerializable {
   /**
    * Configuration specifying which tools are allowed.
    *
-   * <p>When set, this restricts the model to only use the specified tools. If not set, the
-   * behavior depends on the overall tool choice type.
+   * <p>When set, this restricts the model to only use the specified tools. If not set, the behavior
+   * depends on the overall tool choice type.
    */
   @JsonProperty("allowed_tools")
   public abstract Optional<AllowedTools> allowedTools();

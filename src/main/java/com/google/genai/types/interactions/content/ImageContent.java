@@ -32,8 +32,8 @@ import java.util.Optional;
 /**
  * Image content for the Interactions API.
  *
- * <p>Represents image data that can be included in interaction inputs or outputs.
- * Images can be provided either as base64-encoded data or as a URI.
+ * <p>Represents image data that can be included in interaction inputs or outputs. Images can be
+ * provided either as base64-encoded data or as a URI.
  *
  * <p>Example usage with data:
  *
@@ -68,6 +68,7 @@ public abstract class ImageContent extends JsonSerializable
    * The MIME type of the image.
    *
    * <p>Supported values:
+   *
    * <ul>
    *   <li>{@link ImageMimeType.Known#IMAGE_PNG} - PNG format
    *   <li>{@link ImageMimeType.Known#IMAGE_JPEG} - JPEG format
@@ -85,6 +86,7 @@ public abstract class ImageContent extends JsonSerializable
    * The resolution of the image.
    *
    * <p>Possible values:
+   *
    * <ul>
    *   <li>{@link MediaResolution#LOW} - Low resolution
    *   <li>{@link MediaResolution#MEDIUM} - Medium resolution

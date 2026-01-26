@@ -26,7 +26,6 @@ import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import com.google.genai.JsonSerializable;
 import com.google.genai.types.ExcludeFromGeneratedCoverageReport;
 import com.google.genai.types.interactions.AllowedTools;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -98,11 +97,9 @@ public abstract class McpServer extends JsonSerializable implements Tool {
     @JsonProperty("name")
     public abstract Builder name(String name);
 
-    
     abstract Builder name(Optional<String> name);
 
     /** Clears the value of name field. */
-    
     @CanIgnoreReturnValue
     public Builder clearName() {
       return name(Optional.empty());
@@ -116,11 +113,9 @@ public abstract class McpServer extends JsonSerializable implements Tool {
     @JsonProperty("url")
     public abstract Builder url(String url);
 
-    
     abstract Builder url(Optional<String> url);
 
     /** Clears the value of url field. */
-    
     @CanIgnoreReturnValue
     public Builder clearUrl() {
       return url(Optional.empty());
@@ -134,11 +129,9 @@ public abstract class McpServer extends JsonSerializable implements Tool {
     @JsonProperty("headers")
     public abstract Builder headers(Map<String, String> headers);
 
-    
     abstract Builder headers(Optional<Map<String, String>> headers);
 
     /** Clears the value of headers field. */
-    
     @CanIgnoreReturnValue
     public Builder clearHeaders() {
       return headers(Optional.empty());
@@ -162,11 +155,9 @@ public abstract class McpServer extends JsonSerializable implements Tool {
       return allowedTools(Arrays.asList(allowedTools));
     }
 
-
     abstract Builder allowedTools(Optional<List<AllowedTools>> allowedTools);
 
     /** Clears the value of allowedTools field. */
-    
     @CanIgnoreReturnValue
     public Builder clearAllowedTools() {
       return allowedTools(Optional.empty());

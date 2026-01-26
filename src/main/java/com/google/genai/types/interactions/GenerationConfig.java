@@ -60,7 +60,9 @@ public abstract class GenerationConfig extends JsonSerializable {
   @JsonProperty("temperature")
   public abstract Optional<Float> temperature();
 
-  /** Nucleus sampling parameter. Only tokens with cumulative probability up to topP are considered. */
+  /**
+   * Nucleus sampling parameter. Only tokens with cumulative probability up to topP are considered.
+   */
   @JsonProperty("top_p")
   public abstract Optional<Float> topP();
 
@@ -121,10 +123,7 @@ public abstract class GenerationConfig extends JsonSerializable {
   /** Builder for GenerationConfig. */
   @AutoValue.Builder
   public abstract static class Builder {
-    /**
-     * For internal usage. Please use {@code GenerationConfig.builder()} for
-     * instantiation.
-     */
+    /** For internal usage. Please use {@code GenerationConfig.builder()} for instantiation. */
     @JsonCreator
     private static Builder create() {
       return new AutoValue_GenerationConfig.Builder();

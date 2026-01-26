@@ -28,9 +28,9 @@ import java.util.Optional;
 /**
  * Configuration for speech generation in the Interactions API.
  *
- * <p>This class controls how the model generates speech output, including voice selection,
- * language preferences, and speaker identification for multi-speaker scenarios. It is specific to
- * the Interactions API and has a simpler structure than speech configuration classes used in other
+ * <p>This class controls how the model generates speech output, including voice selection, language
+ * preferences, and speaker identification for multi-speaker scenarios. It is specific to the
+ * Interactions API and has a simpler structure than speech configuration classes used in other
  * APIs.
  *
  * <p>The Interactions API is available in both Vertex AI and Gemini API.
@@ -84,9 +84,7 @@ public abstract class SpeechConfig extends JsonSerializable {
   /** Builder for SpeechConfig. */
   @AutoValue.Builder
   public abstract static class Builder {
-    /**
-     * For internal usage. Please use {@code SpeechConfig.builder()} for instantiation.
-     */
+    /** For internal usage. Please use {@code SpeechConfig.builder()} for instantiation. */
     @JsonCreator
     private static Builder create() {
       return new AutoValue_SpeechConfig.Builder();

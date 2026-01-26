@@ -17,13 +17,13 @@
 package com.google.genai.types.interactions;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.google.auto.value.AutoValue;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import com.google.genai.JsonSerializable;
 import com.google.genai.types.ExcludeFromGeneratedCoverageReport;
+import com.google.genai.types.HttpResponse;
 import com.google.genai.types.UsageMetadata;
 import com.google.genai.types.interactions.content.Content;
 import java.time.Instant;
@@ -68,8 +68,8 @@ public abstract class Interaction extends JsonSerializable {
   /**
    * The output content from the interaction.
    *
-   * <p>Note: Outputs use Content (discriminated union with type field), not the
-   * standard Content type with parts.
+   * <p>Note: Outputs use Content (discriminated union with type field), not the standard Content
+   * type with parts.
    */
   @JsonProperty("outputs")
   public abstract Optional<List<Content>> outputs();
@@ -93,6 +93,10 @@ public abstract class Interaction extends JsonSerializable {
   /** Token usage statistics for the interaction. */
   @JsonProperty("usage")
   public abstract Optional<UsageMetadata> usage();
+
+  /** Used to retain the full HTTP response. */
+  @JsonProperty("sdkHttpResponse")
+  public abstract Optional<HttpResponse> sdkHttpResponse();
 
   /** Instantiates a builder for Interaction. */
   @ExcludeFromGeneratedCoverageReport
@@ -330,6 +334,39 @@ public abstract class Interaction extends JsonSerializable {
     @CanIgnoreReturnValue
     public Builder clearUsage() {
       return usage(Optional.empty());
+    }
+
+    /**
+     * Setter for sdkHttpResponse.
+     *
+     * <p>sdkHttpResponse: Used to retain the full HTTP response.
+     */
+    @JsonProperty("sdkHttpResponse")
+    public abstract Builder sdkHttpResponse(HttpResponse sdkHttpResponse);
+
+    /**
+     * Setter for sdkHttpResponse builder.
+     *
+     * <p>sdkHttpResponse: Used to retain the full HTTP response.
+     */
+    @CanIgnoreReturnValue
+    public Builder sdkHttpResponse(HttpResponse.Builder sdkHttpResponseBuilder) {
+      return sdkHttpResponse(sdkHttpResponseBuilder.build());
+    }
+
+    /** Internal setter for sdkHttpResponse with Optional. */
+    @ExcludeFromGeneratedCoverageReport
+    abstract Builder sdkHttpResponse(Optional<HttpResponse> sdkHttpResponse);
+
+    /**
+     * Clear method for sdkHttpResponse.
+     *
+     * <p>Removes the sdkHttpResponse field.
+     */
+    @ExcludeFromGeneratedCoverageReport
+    @CanIgnoreReturnValue
+    public Builder clearSdkHttpResponse() {
+      return sdkHttpResponse(Optional.empty());
     }
 
     /** Builds the Interaction instance. */

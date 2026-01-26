@@ -54,8 +54,7 @@ import java.util.Optional;
 @JsonDeserialize(builder = GoogleSearchCallContent.Builder.class)
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 @JsonTypeName("google_search_call")
-public abstract class GoogleSearchCallContent extends JsonSerializable
-    implements Content {
+public abstract class GoogleSearchCallContent extends JsonSerializable implements Content {
 
   @JsonProperty("arguments")
   public abstract Optional<GoogleSearchCallArguments> arguments();
@@ -111,9 +110,6 @@ public abstract class GoogleSearchCallContent extends JsonSerializable
 
   @ExcludeFromGeneratedCoverageReport
   public static GoogleSearchCallContent of(List<String> queries, String id) {
-    return builder()
-        .arguments(GoogleSearchCallArguments.of(queries))
-        .id(id)
-        .build();
+    return builder().arguments(GoogleSearchCallArguments.of(queries)).id(id).build();
   }
 }

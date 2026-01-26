@@ -32,8 +32,8 @@ import java.util.Optional;
 /**
  * Video content for the Interactions API.
  *
- * <p>Represents video data that can be included in interaction inputs or outputs.
- * Videos can be provided either as base64-encoded data or as a URI.
+ * <p>Represents video data that can be included in interaction inputs or outputs. Videos can be
+ * provided either as base64-encoded data or as a URI.
  *
  * <p>Example usage with data:
  *
@@ -67,6 +67,7 @@ public abstract class VideoContent extends JsonSerializable implements Content {
    * The MIME type of the video.
    *
    * <p>Supported values:
+   *
    * <ul>
    *   <li>{@link VideoMimeType.Known#VIDEO_MP4} - MP4 format
    *   <li>{@link VideoMimeType.Known#VIDEO_MPEG} - MPEG format
@@ -88,6 +89,7 @@ public abstract class VideoContent extends JsonSerializable implements Content {
    * The resolution of the video.
    *
    * <p>Possible values:
+   *
    * <ul>
    *   <li>{@link MediaResolution#LOW} - Low resolution
    *   <li>{@link MediaResolution#MEDIUM} - Medium resolution

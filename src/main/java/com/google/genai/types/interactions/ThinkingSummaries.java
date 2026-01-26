@@ -72,9 +72,8 @@ public class ThinkingSummaries {
      * Automatically include thinking summaries when appropriate.
      *
      * <p>In AUTO mode, the model determines whether to include summaries of its thinking process
-     * based on the context and the complexity of the reasoning performed. Summaries are more
-     * likely to be included for complex tasks where the reasoning process provides valuable
-     * insight.
+     * based on the context and the complexity of the reasoning performed. Summaries are more likely
+     * to be included for complex tasks where the reasoning process provides valuable insight.
      */
     AUTO,
 

@@ -31,9 +31,9 @@ import java.util.Optional;
 /**
  * Represents a conversation turn in the Interactions API.
  *
- * <p>A turn contains the content of a single message in a conversation along with the role
- * (either 'user' or 'model') that produced it. Turns are used to build conversation history
- * and maintain context across multiple interactions.
+ * <p>A turn contains the content of a single message in a conversation along with the role (either
+ * 'user' or 'model') that produced it. Turns are used to build conversation history and maintain
+ * context across multiple interactions.
  *
  * <p>Example usage:
  *

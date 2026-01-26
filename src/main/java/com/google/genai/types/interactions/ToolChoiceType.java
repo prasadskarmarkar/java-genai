@@ -68,8 +68,8 @@ public class ToolChoiceType {
      * The model decides whether to use tools based on the context.
      *
      * <p>In AUTO mode, the model will analyze the user's request and determine whether calling a
-     * tool would be helpful. The model has full autonomy to use tools or generate a direct
-     * response as appropriate.
+     * tool would be helpful. The model has full autonomy to use tools or generate a direct response
+     * as appropriate.
      */
     AUTO,
 
@@ -77,8 +77,8 @@ public class ToolChoiceType {
      * The model must use at least one of the available tools.
      *
      * <p>In ANY mode, the model is required to make a tool call rather than generating a direct
-     * text response. If multiple tools are available, the model chooses which one(s) to call
-     * based on the context.
+     * text response. If multiple tools are available, the model chooses which one(s) to call based
+     * on the context.
      */
     ANY,
 
@@ -94,8 +94,8 @@ public class ToolChoiceType {
     /**
      * The model must use tools that have been validated.
      *
-     * <p>In VALIDATED mode, the model is restricted to using only tools that have passed
-     * validation checks. This provides an additional safety layer for tool usage.
+     * <p>In VALIDATED mode, the model is restricted to using only tools that have passed validation
+     * checks. This provides an additional safety layer for tool usage.
      */
     VALIDATED
   }
