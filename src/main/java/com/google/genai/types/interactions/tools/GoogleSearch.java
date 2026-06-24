@@ -17,27 +17,24 @@
 package com.google.genai.types.interactions.tools;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.google.auto.value.AutoValue;
+import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import com.google.genai.JsonSerializable;
 import com.google.genai.types.ExcludeFromGeneratedCoverageReport;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * Google Search tool for the Interactions API.
  *
- * <p>Enables the model to search the web using Google Search.
- *
- * <p>Example usage:
- *
- * <pre>{@code
- * GoogleSearch searchTool = GoogleSearch.builder().build();
- * }</pre>
- *
- * <p>The Interactions API is available in both Vertex AI and Gemini API.
- *
- * <p>Note: The Interactions API is in beta and subject to change.
+ * <p>Enables the model to search the web using Google Search. The {@code searchTypes} field
+ * controls which search modalities are enabled: {@code "web_search"}, {@code "image_search"},
+ * {@code "enterprise_web_search"}.
  */
 @AutoValue
 @JsonDeserialize(builder = GoogleSearch.Builder.class)
@@ -45,28 +42,44 @@ import com.google.genai.types.ExcludeFromGeneratedCoverageReport;
 @JsonTypeName("google_search")
 public abstract class GoogleSearch extends JsonSerializable implements Tool {
 
-  /** Instantiates a builder for GoogleSearch. */
+  @JsonProperty("search_types")
+  public abstract Optional<List<String>> searchTypes();
+
   @ExcludeFromGeneratedCoverageReport
   public static Builder builder() {
     return new AutoValue_GoogleSearch.Builder();
   }
 
-  /** Creates a builder with the same values as this instance. */
   public abstract Builder toBuilder();
 
-  /** Builder for GoogleSearch. */
   @AutoValue.Builder
   public abstract static class Builder {
-    /** For internal usage. Please use {@code GoogleSearch.builder()} for instantiation. */
     @JsonCreator
     private static Builder create() {
       return new AutoValue_GoogleSearch.Builder();
     }
 
+    @JsonProperty("search_types")
+    public abstract Builder searchTypes(List<String> searchTypes);
+
+    @ExcludeFromGeneratedCoverageReport
+    abstract Builder searchTypes(Optional<List<String>> searchTypes);
+
+    @ExcludeFromGeneratedCoverageReport
+    @CanIgnoreReturnValue
+    public Builder clearSearchTypes() {
+      return searchTypes(Optional.empty());
+    }
+
+    @ExcludeFromGeneratedCoverageReport
+    @CanIgnoreReturnValue
+    public Builder searchTypes(String... searchTypes) {
+      return searchTypes(Arrays.asList(searchTypes));
+    }
+
     public abstract GoogleSearch build();
   }
 
-  /** Deserializes a JSON string to a GoogleSearch object. */
   @ExcludeFromGeneratedCoverageReport
   public static GoogleSearch fromJson(String jsonString) {
     return JsonSerializable.fromJsonString(jsonString, GoogleSearch.class);

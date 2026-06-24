@@ -433,7 +433,7 @@ public class InteractionEventStreamTest {
   @Test
   public void testDeserializeInteractionStart() {
     String sseData =
-        "data: {\"event_type\":\"interaction.start\",\"event_id\":\"evt-4\",\"interaction\":{\"id\":\"int-123\",\"status\":\"in_progress\"}}\n\n"
+        "data: {\"event_type\":\"interaction.created\",\"event_id\":\"evt-4\",\"interaction\":{\"id\":\"int-123\",\"status\":\"in_progress\"}}\n\n"
             + "data: [DONE]\n";
 
     try (InteractionEventStream<InteractionSseEvent> stream = createStream(sseData)) {
@@ -455,7 +455,7 @@ public class InteractionEventStreamTest {
   @Test
   public void testDeserializeInteractionComplete() {
     String sseData =
-        "data: {\"event_type\":\"interaction.complete\",\"event_id\":\"evt-5\",\"interaction\":{\"id\":\"int-456\",\"status\":\"completed\"}}\n\n"
+        "data: {\"event_type\":\"interaction.completed\",\"event_id\":\"evt-5\",\"interaction\":{\"id\":\"int-456\",\"status\":\"completed\"}}\n\n"
             + "data: [DONE]\n";
 
     try (InteractionEventStream<InteractionSseEvent> stream = createStream(sseData)) {
@@ -499,8 +499,8 @@ public class InteractionEventStreamTest {
   public void testFullStreamSequence() {
     // Test a complete streaming sequence
     String sseData =
-        "event: interaction.start\n"
-            + "data: {\"event_type\":\"interaction.start\",\"event_id\":\"e1\",\"interaction\":{\"id\":\"int-001\",\"status\":\"in_progress\"}}\n\n"
+        "event: interaction.created\n"
+            + "data: {\"event_type\":\"interaction.created\",\"event_id\":\"e1\",\"interaction\":{\"id\":\"int-001\",\"status\":\"in_progress\"}}\n\n"
             + "event: content.start\n"
             + "data: {\"event_type\":\"content.start\",\"event_id\":\"e2\",\"index\":0}\n\n"
             + "event: content.delta\n"
@@ -509,8 +509,8 @@ public class InteractionEventStreamTest {
             + "data: {\"event_type\":\"content.delta\",\"event_id\":\"e4\",\"index\":0,\"delta\":{\"type\":\"text\",\"text\":\"World!\"}}\n\n"
             + "event: content.stop\n"
             + "data: {\"event_type\":\"content.stop\",\"event_id\":\"e5\",\"index\":0}\n\n"
-            + "event: interaction.complete\n"
-            + "data: {\"event_type\":\"interaction.complete\",\"event_id\":\"e6\",\"interaction\":{\"id\":\"int-001\",\"status\":\"completed\"}}\n\n"
+            + "event: interaction.completed\n"
+            + "data: {\"event_type\":\"interaction.completed\",\"event_id\":\"e6\",\"interaction\":{\"id\":\"int-001\",\"status\":\"completed\"}}\n\n"
             + "data: [DONE]\n";
 
     try (InteractionEventStream<InteractionSseEvent> stream = createStream(sseData)) {

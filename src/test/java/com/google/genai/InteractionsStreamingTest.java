@@ -89,9 +89,9 @@ public class InteractionsStreamingTest {
   @Test
   public void testCreateStreamWithModel() {
     String sseData =
-        "data: {\"event_type\":\"interaction.start\",\"event_id\":\"e1\",\"interaction\":{\"id\":\"int-001\",\"status\":\"in_progress\"}}\n\n"
+        "data: {\"event_type\":\"interaction.created\",\"event_id\":\"e1\",\"interaction\":{\"id\":\"int-001\",\"status\":\"in_progress\"}}\n\n"
             + "data: {\"event_type\":\"content.delta\",\"event_id\":\"e2\",\"index\":0,\"delta\":{\"type\":\"text\",\"text\":\"Hello\"}}\n\n"
-            + "data: {\"event_type\":\"interaction.complete\",\"event_id\":\"e3\",\"interaction\":{\"id\":\"int-001\",\"status\":\"completed\"}}\n\n"
+            + "data: {\"event_type\":\"interaction.completed\",\"event_id\":\"e3\",\"interaction\":{\"id\":\"int-001\",\"status\":\"completed\"}}\n\n"
             + "data: [DONE]\n";
     mockSseResponse(sseData);
 
@@ -117,9 +117,9 @@ public class InteractionsStreamingTest {
   @Test
   public void testCreateStreamWithAgent() {
     String sseData =
-        "data: {\"event_type\":\"interaction.start\",\"event_id\":\"e1\",\"interaction\":{\"id\":\"int-002\",\"status\":\"in_progress\"}}\n\n"
+        "data: {\"event_type\":\"interaction.created\",\"event_id\":\"e1\",\"interaction\":{\"id\":\"int-002\",\"status\":\"in_progress\"}}\n\n"
             + "data: {\"event_type\":\"content.delta\",\"event_id\":\"e2\",\"index\":0,\"delta\":{\"type\":\"text\",\"text\":\"Research results\"}}\n\n"
-            + "data: {\"event_type\":\"interaction.complete\",\"event_id\":\"e3\",\"interaction\":{\"id\":\"int-002\",\"status\":\"completed\"}}\n\n"
+            + "data: {\"event_type\":\"interaction.completed\",\"event_id\":\"e3\",\"interaction\":{\"id\":\"int-002\",\"status\":\"completed\"}}\n\n"
             + "data: [DONE]\n";
     mockSseResponse(sseData);
 
@@ -217,9 +217,9 @@ public class InteractionsStreamingTest {
   @Test
   public void testGetStreamById() {
     String sseData =
-        "data: {\"event_type\":\"interaction.start\",\"event_id\":\"e1\",\"interaction\":{\"id\":\"int-123\",\"status\":\"in_progress\"}}\n\n"
+        "data: {\"event_type\":\"interaction.created\",\"event_id\":\"e1\",\"interaction\":{\"id\":\"int-123\",\"status\":\"in_progress\"}}\n\n"
             + "data: {\"event_type\":\"content.delta\",\"event_id\":\"e2\",\"index\":0,\"delta\":{\"type\":\"text\",\"text\":\"Resumed content\"}}\n\n"
-            + "data: {\"event_type\":\"interaction.complete\",\"event_id\":\"e3\",\"interaction\":{\"id\":\"int-123\",\"status\":\"completed\"}}\n\n"
+            + "data: {\"event_type\":\"interaction.completed\",\"event_id\":\"e3\",\"interaction\":{\"id\":\"int-123\",\"status\":\"completed\"}}\n\n"
             + "data: [DONE]\n";
     mockSseResponse(sseData);
 
@@ -283,7 +283,7 @@ public class InteractionsStreamingTest {
   public void testGetStreamWithLastEventId() throws Exception {
     String sseData =
         "data: {\"event_type\":\"content.delta\",\"event_id\":\"e5\",\"index\":0,\"delta\":{\"type\":\"text\",\"text\":\"Continued\"}}\n\n"
-            + "data: {\"event_type\":\"interaction.complete\",\"event_id\":\"e6\",\"interaction\":{\"id\":\"int-123\",\"status\":\"completed\"}}\n\n"
+            + "data: {\"event_type\":\"interaction.completed\",\"event_id\":\"e6\",\"interaction\":{\"id\":\"int-123\",\"status\":\"completed\"}}\n\n"
             + "data: [DONE]\n";
     mockSseResponse(sseData);
 
@@ -429,7 +429,7 @@ public class InteractionsStreamingTest {
   @Test
   public void testCreateStreamWithApiVersion() {
     String sseData =
-        "data: {\"event_type\":\"interaction.complete\",\"interaction\":{\"id\":\"int-001\",\"status\":\"completed\"}}\n\n"
+        "data: {\"event_type\":\"interaction.completed\",\"interaction\":{\"id\":\"int-001\",\"status\":\"completed\"}}\n\n"
             + "data: [DONE]\n";
     mockSseResponse(sseData);
 
@@ -455,7 +455,7 @@ public class InteractionsStreamingTest {
   @Test
   public void testGetStreamWithApiVersion() {
     String sseData =
-        "data: {\"event_type\":\"interaction.complete\",\"interaction\":{\"id\":\"int-001\",\"status\":\"completed\"}}\n\n"
+        "data: {\"event_type\":\"interaction.completed\",\"interaction\":{\"id\":\"int-001\",\"status\":\"completed\"}}\n\n"
             + "data: [DONE]\n";
     mockSseResponse(sseData);
 
@@ -498,7 +498,7 @@ public class InteractionsStreamingTest {
   public void testStreamWithManyEvents() {
     StringBuilder sseBuilder = new StringBuilder();
     sseBuilder.append(
-        "data: {\"event_type\":\"interaction.start\",\"interaction\":{\"id\":\"int-001\",\"status\":\"in_progress\"}}\n\n");
+        "data: {\"event_type\":\"interaction.created\",\"interaction\":{\"id\":\"int-001\",\"status\":\"in_progress\"}}\n\n");
     sseBuilder.append("data: {\"event_type\":\"content.start\",\"index\":0}\n\n");
 
     // Add 50 content deltas
@@ -511,7 +511,7 @@ public class InteractionsStreamingTest {
 
     sseBuilder.append("data: {\"event_type\":\"content.stop\",\"index\":0}\n\n");
     sseBuilder.append(
-        "data: {\"event_type\":\"interaction.complete\",\"interaction\":{\"id\":\"int-001\",\"status\":\"completed\"}}\n\n");
+        "data: {\"event_type\":\"interaction.completed\",\"interaction\":{\"id\":\"int-001\",\"status\":\"completed\"}}\n\n");
     sseBuilder.append("data: [DONE]\n");
 
     mockSseResponse(sseBuilder.toString());
@@ -534,7 +534,7 @@ public class InteractionsStreamingTest {
   @Test
   public void testGetStreamWithNullConfig() {
     String sseData =
-        "data: {\"event_type\":\"interaction.complete\",\"interaction\":{\"id\":\"int-001\",\"status\":\"completed\"}}\n\n"
+        "data: {\"event_type\":\"interaction.completed\",\"interaction\":{\"id\":\"int-001\",\"status\":\"completed\"}}\n\n"
             + "data: [DONE]\n";
     mockSseResponse(sseData);
 
@@ -585,7 +585,7 @@ public class InteractionsStreamingTest {
   @Test
   public void testCreateStreamWithResponseModalities() throws Exception {
     String sseData =
-        "data: {\"event_type\":\"interaction.complete\",\"interaction\":{\"id\":\"int-001\",\"status\":\"completed\"}}\n\n"
+        "data: {\"event_type\":\"interaction.completed\",\"interaction\":{\"id\":\"int-001\",\"status\":\"completed\"}}\n\n"
             + "data: [DONE]\n";
     mockSseResponse(sseData);
 

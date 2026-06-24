@@ -190,7 +190,7 @@ public class AsyncInteractionsExecutionTest {
     String responseJson =
         "{\"id\":\""
             + INTERACTION_ID
-            + "\",\"status\":\"in_progress\",\"outputs\":[{\"type\":\"text\",\"text\":\"Response\"}]}";
+            + "\",\"status\":\"in_progress\",\"steps\":[{\"type\":\"model_output\",\"content\":[{\"type\":\"text\",\"text\":\"Response\"}]}]}";
     CompletableFuture<ApiResponse> futureResponse =
         CompletableFuture.completedFuture(createMockedJsonResponse(responseJson));
     when(mockedClient.asyncRequest(anyString(), anyString(), anyString(), any()))
@@ -203,8 +203,8 @@ public class AsyncInteractionsExecutionTest {
 
     assertNotNull(interaction);
     assertEquals(INTERACTION_ID, interaction.id());
-    assertTrue(interaction.outputs().isPresent());
-    assertEquals(1, interaction.outputs().get().size());
+    assertFalse(interaction.getModelOutputContents().isEmpty());
+    assertEquals(1, interaction.getModelOutputContents().size());
   }
 
   // ==================== Async Cancel Tests ====================
@@ -283,7 +283,7 @@ public class AsyncInteractionsExecutionTest {
   @Test
   public void testAsyncCreateStreamReturnsCompletableFuture() {
     String sseData =
-        "data: {\"event_type\":\"interaction.complete\",\"interaction\":{\"id\":\"int-001\",\"status\":\"completed\"}}\n\n"
+        "data: {\"event_type\":\"interaction.completed\",\"interaction\":{\"id\":\"int-001\",\"status\":\"completed\"}}\n\n"
             + "data: [DONE]\n";
     CompletableFuture<ApiResponse> futureResponse =
         CompletableFuture.completedFuture(createMockedSseResponse(sseData));
@@ -303,7 +303,7 @@ public class AsyncInteractionsExecutionTest {
   @Test
   public void testAsyncGetStreamReturnsCompletableFuture() {
     String sseData =
-        "data: {\"event_type\":\"interaction.complete\",\"interaction\":{\"id\":\"int-001\",\"status\":\"completed\"}}\n\n"
+        "data: {\"event_type\":\"interaction.completed\",\"interaction\":{\"id\":\"int-001\",\"status\":\"completed\"}}\n\n"
             + "data: [DONE]\n";
     CompletableFuture<ApiResponse> futureResponse =
         CompletableFuture.completedFuture(createMockedSseResponse(sseData));
@@ -468,7 +468,7 @@ public class AsyncInteractionsExecutionTest {
     String responseJson2 =
         "{\"id\":\""
             + INTERACTION_ID
-            + "\",\"status\":\"completed\",\"outputs\":[{\"type\":\"text\",\"text\":\"Result\"}]}";
+            + "\",\"status\":\"completed\",\"steps\":[{\"type\":\"model_output\",\"content\":[{\"type\":\"text\",\"text\":\"Result\"}]}]}";
 
     AtomicInteger callCount = new AtomicInteger(0);
     when(mockedClient.asyncRequest(anyString(), anyString(), anyString(), any()))
@@ -492,8 +492,8 @@ public class AsyncInteractionsExecutionTest {
             .get(5, TimeUnit.SECONDS);
 
     assertNotNull(result);
-    assertTrue(result.outputs().isPresent());
-    assertEquals(1, result.outputs().get().size());
+    assertFalse(result.getModelOutputContents().isEmpty());
+    assertEquals(1, result.getModelOutputContents().size());
   }
 
   // ==================== Validation Tests ====================

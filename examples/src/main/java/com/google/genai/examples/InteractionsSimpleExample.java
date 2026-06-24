@@ -17,12 +17,11 @@
 /**
  * Usage:
  *
- * <p>1. Set an API key environment variable. You can find a list of available API keys here:
- * https://aistudio.google.com/app/apikey
+ * <p>1. Get an AI Studio API key from https://aistudio.google.com/app/apikey
  *
  * <p>export GOOGLE_API_KEY=YOUR_API_KEY
  *
- * <p>2. Compile the java package and run the sample code.
+ * <p>2. Compile and run:
  *
  * <p>mvn clean compile
  *
@@ -31,40 +30,38 @@
 package com.google.genai.examples;
 
 import com.google.genai.Client;
+import com.google.genai.types.HttpOptions;
 import com.google.genai.types.interactions.Interaction;
 import com.google.genai.types.interactions.content.Content;
 import com.google.genai.types.interactions.content.TextContent;
 
 /**
- * Example: Simple Text Interaction
+ * Example: Simple Text Interaction using the Interactions API.
  *
- * <p>Demonstrates the simplest way to create an interaction using the convenience overload:
- * {@code create(model, text)}
- *
- * <p>This is the most concise way to interact with the Interactions API when you just need to send
- * a simple text message and get a response.
+ * <p>The Interactions API requires {@code apiVersion("v1.2.0")} in the HTTP options. The API key
+ * must be a public Gemini Developer API key from AI Studio (starts with {@code AIza}).
  *
  * <p>Note: The Interactions API is in beta and subject to change.
  */
 public final class InteractionsSimpleExample {
 
   public static void main(String[] args) {
-    // Instantiate the client. The client gets the API key from the environment variable
-    // `GOOGLE_API_KEY`.
-    Client client = new Client();
+    // The Interactions API requires apiVersion "v1.2.0".
+    // Set GOOGLE_API_KEY to an AI Studio key from https://aistudio.google.com/app/apikey
+    Client client = Client.builder()
+        .httpOptions(HttpOptions.builder().apiVersion("v1.2.0").build())
+        .build();
 
     System.out.println("=== Simple Text Interaction ===\n");
 
     try {
-      // Simplest possible interaction - just model and text!
       Interaction response = client.interactions.create(
-          "gemini-3-flash-preview",
+          "gemini-2.5-flash",
           "What is the capital of France?"
       );
 
       System.out.println("Status: " + response.status());
       System.out.println("Response: " + getTextOutput(response));
-
       System.out.println("\n=== Example completed ===");
 
     } catch (Exception e) {
@@ -73,16 +70,13 @@ public final class InteractionsSimpleExample {
     }
   }
 
-  /** Extracts the first text output from an interaction response. */
   private static String getTextOutput(Interaction interaction) {
-    if (!interaction.outputs().isPresent() || interaction.outputs().get().isEmpty()) {
+    if (interaction.getModelOutputContents().isEmpty()) {
       return "(no output)";
     }
-
-    for (Content output : interaction.outputs().get()) {
+    for (Content output : interaction.getModelOutputContents()) {
       if (output instanceof TextContent) {
-        TextContent textContent = (TextContent) output;
-        return textContent.text().orElse("(empty)");
+        return ((TextContent) output).text().orElse("(empty)");
       }
     }
     return "(no text output)";

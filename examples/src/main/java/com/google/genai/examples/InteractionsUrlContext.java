@@ -103,8 +103,8 @@ public final class InteractionsUrlContext {
     System.out.println("Response received. Interaction ID: " + response.id());
     System.out.println();
 
-    if (response.outputs().isPresent()) {
-      for (Content content : response.outputs().get()) {
+    if (!response.getModelOutputContents().isEmpty()) {
+      for (Content content : response.getModelOutputContents()) {
         if (content instanceof TextContent) {
           System.out.println("Text: " + ((TextContent) content).text().orElse("(empty)"));
           System.out.println();

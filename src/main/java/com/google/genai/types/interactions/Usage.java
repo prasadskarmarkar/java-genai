@@ -95,6 +95,10 @@ public abstract class Usage extends JsonSerializable {
   @JsonProperty("total_tokens")
   public abstract Optional<Integer> totalTokens();
 
+  /** A breakdown of grounding tool usage counts by tool type. */
+  @JsonProperty("grounding_tool_count")
+  public abstract Optional<List<GroundingToolCount>> groundingToolCount();
+
   /** Instantiates a builder for Usage. */
   @ExcludeFromGeneratedCoverageReport
   public static Builder builder() {
@@ -331,6 +335,23 @@ public abstract class Usage extends JsonSerializable {
     @CanIgnoreReturnValue
     public Builder clearTotalTokens() {
       return totalTokens(Optional.empty());
+    }
+
+    @JsonProperty("grounding_tool_count")
+    public abstract Builder groundingToolCount(List<GroundingToolCount> groundingToolCount);
+
+    @CanIgnoreReturnValue
+    public Builder groundingToolCount(GroundingToolCount... groundingToolCount) {
+      return groundingToolCount(Arrays.asList(groundingToolCount));
+    }
+
+    @ExcludeFromGeneratedCoverageReport
+    abstract Builder groundingToolCount(Optional<List<GroundingToolCount>> groundingToolCount);
+
+    @ExcludeFromGeneratedCoverageReport
+    @CanIgnoreReturnValue
+    public Builder clearGroundingToolCount() {
+      return groundingToolCount(Optional.empty());
     }
 
     public abstract Usage build();

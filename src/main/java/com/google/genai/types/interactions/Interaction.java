@@ -25,10 +25,15 @@ import com.google.genai.JsonSerializable;
 import com.google.genai.types.ExcludeFromGeneratedCoverageReport;
 import com.google.genai.types.HttpResponse;
 import com.google.genai.types.interactions.content.Content;
+import com.google.genai.types.interactions.steps.ModelOutputStep;
+import com.google.genai.types.interactions.steps.Step;
+import com.google.genai.types.interactions.tools.Tool;
 import java.time.Instant;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Represents an interaction with a model or agent.
@@ -39,20 +44,13 @@ import java.util.Optional;
  */
 @AutoValue
 @JsonDeserialize(builder = Interaction.Builder.class)
-public abstract class   Interaction extends JsonSerializable {
-  /**
-   * Unique identifier for the interaction.
-   *
-   * <p>This field is always present in API responses and is required.
-   */
+public abstract class Interaction extends JsonSerializable {
+
+  /** Unique identifier for the interaction. */
   @JsonProperty("id")
   public abstract String id();
 
-  /**
-   * The status of the interaction.
-   *
-   * <p>This field is always present in API responses and is required.
-   */
+  /** The status of the interaction. */
   @JsonProperty("status")
   public abstract InteractionStatus status();
 
@@ -68,22 +66,13 @@ public abstract class   Interaction extends JsonSerializable {
   @JsonProperty("object")
   public abstract Optional<String> object();
 
-  /**
-   * The output content from the interaction.
-   *
-   * <p>Note: Outputs use Content (discriminated union with type field), not the standard Content
-   * type with parts.
-   */
-  @JsonProperty("outputs")
-  public abstract Optional<List<Content>> outputs();
+  /** The steps that make up the interaction. */
+  @JsonProperty("steps")
+  public abstract Optional<List<Step>> steps();
 
   /** The ID of the previous interaction for conversation continuity. */
   @JsonProperty("previous_interaction_id")
   public abstract Optional<String> previousInteractionId();
-
-  /** The role in the conversation. */
-  @JsonProperty("role")
-  public abstract Optional<String> role();
 
   /** The creation timestamp. */
   @JsonProperty("created")
@@ -97,9 +86,53 @@ public abstract class   Interaction extends JsonSerializable {
   @JsonProperty("usage")
   public abstract Optional<Usage> usage();
 
+  /** The environment ID for the interaction. Populated if environment config was set. */
+  @JsonProperty("environment_id")
+  public abstract Optional<String> environmentId();
+
+  /** Developer set system instruction (echoed back in the response). */
+  @JsonProperty("system_instruction")
+  public abstract Optional<String> systemInstruction();
+
+  /** Tools available to the model (echoed back in the response). */
+  @JsonProperty("tools")
+  public abstract Optional<List<Tool>> tools();
+
+  /** The requested response modalities. */
+  @JsonProperty("response_modalities")
+  public abstract Optional<List<ResponseModality>> responseModalities();
+
+  /** The service tier used for the interaction. */
+  @JsonProperty("service_tier")
+  public abstract Optional<String> serviceTier();
+
+  /** Webhook configuration for this interaction. */
+  @JsonProperty("webhook_config")
+  public abstract Optional<Object> webhookConfig();
+
+  /** The cached content used as context. */
+  @JsonProperty("cached_content")
+  public abstract Optional<String> cachedContent();
+
   /** Used to retain the full HTTP response. */
   @JsonProperty("sdkHttpResponse")
   public abstract Optional<HttpResponse> sdkHttpResponse();
+
+  /**
+   * Returns all content items from {@link ModelOutputStep} steps, flattened into a single list.
+   *
+   * <p>This is a convenience method replacing the former {@code outputs()} accessor. Use this to
+   * access the model's generated content without manually iterating over steps.
+   */
+  public List<Content> getModelOutputContents() {
+    if (!steps().isPresent()) {
+      return Collections.emptyList();
+    }
+    return steps().get().stream()
+        .filter(s -> s instanceof ModelOutputStep)
+        .flatMap(s -> ((ModelOutputStep) s).content().orElse(Collections.emptyList()).stream())
+        .collect(Collectors.toList());
+  }
 
   /** Instantiates a builder for Interaction. */
   @ExcludeFromGeneratedCoverageReport
@@ -113,293 +146,240 @@ public abstract class   Interaction extends JsonSerializable {
   /** Builder for Interaction. */
   @AutoValue.Builder
   public abstract static class Builder {
-    /** For internal usage. Please use `Interaction.builder()` for instantiation. */
     @JsonCreator
     private static Builder create() {
       return new AutoValue_Interaction.Builder();
     }
 
-    /**
-     * Setter for id.
-     *
-     * <p>id: Unique identifier for the interaction. This field is required.
-     */
     @JsonProperty("id")
     public abstract Builder id(String id);
 
-    /**
-     * Setter for status.
-     *
-     * <p>status: The status of the interaction. This field is required.
-     */
     @JsonProperty("status")
     public abstract Builder status(InteractionStatus status);
 
-    /**
-     * Setter for agent.
-     *
-     * <p>agent: The agent identifier.
-     */
     @JsonProperty("agent")
     public abstract Builder agent(String agent);
 
-    /** Internal setter for agent with Optional. */
     @ExcludeFromGeneratedCoverageReport
     abstract Builder agent(Optional<String> agent);
 
-    /**
-     * Clear method for agent.
-     *
-     * <p>Removes the agent field.
-     */
     @ExcludeFromGeneratedCoverageReport
     @CanIgnoreReturnValue
     public Builder clearAgent() {
       return agent(Optional.empty());
     }
 
-    /**
-     * Setter for model.
-     *
-     * <p>model: The model used for the interaction.
-     */
     @JsonProperty("model")
     public abstract Builder model(String model);
 
-    /** Internal setter for model with Optional. */
     @ExcludeFromGeneratedCoverageReport
     abstract Builder model(Optional<String> model);
 
-    /**
-     * Clear method for model.
-     *
-     * <p>Removes the model field.
-     */
     @ExcludeFromGeneratedCoverageReport
     @CanIgnoreReturnValue
     public Builder clearModel() {
       return model(Optional.empty());
     }
 
-    /**
-     * Setter for object.
-     *
-     * <p>object: The object type identifier.
-     */
     @JsonProperty("object")
     public abstract Builder object(String object);
 
-    /** Internal setter for object with Optional. */
     @ExcludeFromGeneratedCoverageReport
     abstract Builder object(Optional<String> object);
 
-    /**
-     * Clear method for object.
-     *
-     * <p>Removes the object field.
-     */
     @ExcludeFromGeneratedCoverageReport
     @CanIgnoreReturnValue
     public Builder clearObject() {
       return object(Optional.empty());
     }
 
-    /**
-     * Setter for outputs.
-     *
-     * <p>outputs: The output content from the interaction.
-     */
-    @JsonProperty("outputs")
-    public abstract Builder outputs(List<Content> outputs);
+    @JsonProperty("steps")
+    public abstract Builder steps(List<Step> steps);
 
-    /**
-     * Setter for outputs (varargs convenience method).
-     *
-     * <p>outputs: The output content from the interaction.
-     */
-    @CanIgnoreReturnValue
-    public Builder outputs(Content... outputs) {
-      return outputs(Arrays.asList(outputs));
-    }
-
-    /** Internal setter for outputs with Optional. */
-    @ExcludeFromGeneratedCoverageReport
-    abstract Builder outputs(Optional<List<Content>> outputs);
-
-    /**
-     * Clear method for outputs.
-     *
-     * <p>Removes the outputs field.
-     */
     @ExcludeFromGeneratedCoverageReport
     @CanIgnoreReturnValue
-    public Builder clearOutputs() {
-      return outputs(Optional.empty());
+    public Builder steps(Step... steps) {
+      return steps(Arrays.asList(steps));
     }
 
-    /**
-     * Setter for previousInteractionId.
-     *
-     * <p>previousInteractionId: The ID of the previous interaction for conversation continuity.
-     */
+    @ExcludeFromGeneratedCoverageReport
+    abstract Builder steps(Optional<List<Step>> steps);
+
+    @ExcludeFromGeneratedCoverageReport
+    @CanIgnoreReturnValue
+    public Builder clearSteps() {
+      return steps(Optional.empty());
+    }
+
     @JsonProperty("previous_interaction_id")
     public abstract Builder previousInteractionId(String previousInteractionId);
 
-    /** Internal setter for previousInteractionId with Optional. */
     @ExcludeFromGeneratedCoverageReport
     abstract Builder previousInteractionId(Optional<String> previousInteractionId);
 
-    /**
-     * Clear method for previousInteractionId.
-     *
-     * <p>Removes the previousInteractionId field.
-     */
     @ExcludeFromGeneratedCoverageReport
     @CanIgnoreReturnValue
     public Builder clearPreviousInteractionId() {
       return previousInteractionId(Optional.empty());
     }
 
-    /**
-     * Setter for role.
-     *
-     * <p>role: The role in the conversation.
-     */
-    @JsonProperty("role")
-    public abstract Builder role(String role);
-
-    /** Internal setter for role with Optional. */
-    @ExcludeFromGeneratedCoverageReport
-    abstract Builder role(Optional<String> role);
-
-    /**
-     * Clear method for role.
-     *
-     * <p>Removes the role field.
-     */
-    @ExcludeFromGeneratedCoverageReport
-    @CanIgnoreReturnValue
-    public Builder clearRole() {
-      return role(Optional.empty());
-    }
-
-    /**
-     * Setter for created.
-     *
-     * <p>created: The creation timestamp.
-     */
     @JsonProperty("created")
     public abstract Builder created(Instant created);
 
-    /** Internal setter for created with Optional. */
     @ExcludeFromGeneratedCoverageReport
     abstract Builder created(Optional<Instant> created);
 
-    /**
-     * Clear method for created.
-     *
-     * <p>Removes the created field.
-     */
     @ExcludeFromGeneratedCoverageReport
     @CanIgnoreReturnValue
     public Builder clearCreated() {
       return created(Optional.empty());
     }
 
-    /**
-     * Setter for updated.
-     *
-     * <p>updated: The last update timestamp.
-     */
     @JsonProperty("updated")
     public abstract Builder updated(Instant updated);
 
-    /** Internal setter for updated with Optional. */
     @ExcludeFromGeneratedCoverageReport
     abstract Builder updated(Optional<Instant> updated);
 
-    /**
-     * Clear method for updated.
-     *
-     * <p>Removes the updated field.
-     */
     @ExcludeFromGeneratedCoverageReport
     @CanIgnoreReturnValue
     public Builder clearUpdated() {
       return updated(Optional.empty());
     }
 
-    /**
-     * Setter for usage.
-     *
-     * <p>usage: Token usage statistics for the interaction.
-     */
     @JsonProperty("usage")
     public abstract Builder usage(Usage usage);
 
-    /**
-     * Setter for usage builder.
-     *
-     * <p>usage: Token usage statistics for the interaction.
-     */
     @CanIgnoreReturnValue
     public Builder usage(Usage.Builder usageBuilder) {
       return usage(usageBuilder.build());
     }
 
-    /** Internal setter for usage with Optional. */
     @ExcludeFromGeneratedCoverageReport
     abstract Builder usage(Optional<Usage> usage);
 
-    /**
-     * Clear method for usage.
-     *
-     * <p>Removes the usage field.
-     */
     @ExcludeFromGeneratedCoverageReport
     @CanIgnoreReturnValue
     public Builder clearUsage() {
       return usage(Optional.empty());
     }
 
-    /**
-     * Setter for sdkHttpResponse.
-     *
-     * <p>sdkHttpResponse: Used to retain the full HTTP response.
-     */
+    @JsonProperty("environment_id")
+    public abstract Builder environmentId(String environmentId);
+
+    @ExcludeFromGeneratedCoverageReport
+    abstract Builder environmentId(Optional<String> environmentId);
+
+    @ExcludeFromGeneratedCoverageReport
+    @CanIgnoreReturnValue
+    public Builder clearEnvironmentId() {
+      return environmentId(Optional.empty());
+    }
+
+    @JsonProperty("system_instruction")
+    public abstract Builder systemInstruction(String systemInstruction);
+
+    @ExcludeFromGeneratedCoverageReport
+    abstract Builder systemInstruction(Optional<String> systemInstruction);
+
+    @ExcludeFromGeneratedCoverageReport
+    @CanIgnoreReturnValue
+    public Builder clearSystemInstruction() {
+      return systemInstruction(Optional.empty());
+    }
+
+    @JsonProperty("tools")
+    public abstract Builder tools(List<Tool> tools);
+
+    @ExcludeFromGeneratedCoverageReport
+    @CanIgnoreReturnValue
+    public Builder tools(Tool... tools) {
+      return tools(Arrays.asList(tools));
+    }
+
+    @ExcludeFromGeneratedCoverageReport
+    abstract Builder tools(Optional<List<Tool>> tools);
+
+    @ExcludeFromGeneratedCoverageReport
+    @CanIgnoreReturnValue
+    public Builder clearTools() {
+      return tools(Optional.empty());
+    }
+
+    @JsonProperty("response_modalities")
+    public abstract Builder responseModalities(List<ResponseModality> responseModalities);
+
+    @ExcludeFromGeneratedCoverageReport
+    @CanIgnoreReturnValue
+    public Builder responseModalities(ResponseModality... responseModalities) {
+      return responseModalities(Arrays.asList(responseModalities));
+    }
+
+    @ExcludeFromGeneratedCoverageReport
+    abstract Builder responseModalities(Optional<List<ResponseModality>> responseModalities);
+
+    @ExcludeFromGeneratedCoverageReport
+    @CanIgnoreReturnValue
+    public Builder clearResponseModalities() {
+      return responseModalities(Optional.empty());
+    }
+
+    @JsonProperty("service_tier")
+    public abstract Builder serviceTier(String serviceTier);
+
+    @ExcludeFromGeneratedCoverageReport
+    abstract Builder serviceTier(Optional<String> serviceTier);
+
+    @ExcludeFromGeneratedCoverageReport
+    @CanIgnoreReturnValue
+    public Builder clearServiceTier() {
+      return serviceTier(Optional.empty());
+    }
+
+    @JsonProperty("webhook_config")
+    public abstract Builder webhookConfig(Object webhookConfig);
+
+    @ExcludeFromGeneratedCoverageReport
+    abstract Builder webhookConfig(Optional<Object> webhookConfig);
+
+    @ExcludeFromGeneratedCoverageReport
+    @CanIgnoreReturnValue
+    public Builder clearWebhookConfig() {
+      return webhookConfig(Optional.empty());
+    }
+
+    @JsonProperty("cached_content")
+    public abstract Builder cachedContent(String cachedContent);
+
+    @ExcludeFromGeneratedCoverageReport
+    abstract Builder cachedContent(Optional<String> cachedContent);
+
+    @ExcludeFromGeneratedCoverageReport
+    @CanIgnoreReturnValue
+    public Builder clearCachedContent() {
+      return cachedContent(Optional.empty());
+    }
+
     @JsonProperty("sdkHttpResponse")
     public abstract Builder sdkHttpResponse(HttpResponse sdkHttpResponse);
 
-    /**
-     * Setter for sdkHttpResponse builder.
-     *
-     * <p>sdkHttpResponse: Used to retain the full HTTP response.
-     */
     @CanIgnoreReturnValue
     public Builder sdkHttpResponse(HttpResponse.Builder sdkHttpResponseBuilder) {
       return sdkHttpResponse(sdkHttpResponseBuilder.build());
     }
 
-    /** Internal setter for sdkHttpResponse with Optional. */
     @ExcludeFromGeneratedCoverageReport
     abstract Builder sdkHttpResponse(Optional<HttpResponse> sdkHttpResponse);
 
-    /**
-     * Clear method for sdkHttpResponse.
-     *
-     * <p>Removes the sdkHttpResponse field.
-     */
     @ExcludeFromGeneratedCoverageReport
     @CanIgnoreReturnValue
     public Builder clearSdkHttpResponse() {
       return sdkHttpResponse(Optional.empty());
     }
 
-    /** Builds the Interaction instance. */
     public abstract Interaction build();
   }
 
-  /** Deserializes an Interaction from a JSON string. */
   @ExcludeFromGeneratedCoverageReport
   public static Interaction fromJson(String jsonString) {
     return JsonSerializable.fromJsonString(jsonString, Interaction.class);

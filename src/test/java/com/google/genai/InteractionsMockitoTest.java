@@ -17,6 +17,7 @@
 package com.google.genai;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -199,7 +200,7 @@ public class InteractionsMockitoTest {
             + "\"model\":\""
             + MODEL_ID
             + "\","
-            + "\"outputs\":[{\"type\":\"text\",\"text\":\"Response text\"}]"
+            + "\"steps\":[{\"type\":\"model_output\",\"content\":[{\"type\":\"text\",\"text\":\"Response text\"}]}]"
             + "}";
     ResponseBody body = ResponseBody.create(responseJson, MediaType.get("application/json"));
     when(mockedResponse.getBody()).thenReturn(body);
@@ -216,8 +217,8 @@ public class InteractionsMockitoTest {
     assertEquals(INTERACTION_ID, result.id());
     assertTrue(result.model().isPresent());
     assertEquals(MODEL_ID, result.model().get());
-    assertTrue(result.outputs().isPresent());
-    assertEquals(1, result.outputs().get().size());
+    assertFalse(result.getModelOutputContents().isEmpty());
+    assertEquals(1, result.getModelOutputContents().size());
   }
 
   @Test
@@ -317,7 +318,7 @@ public class InteractionsMockitoTest {
             + INTERACTION_ID
             + "\","
             + "\"status\":\"completed\","
-            + "\"outputs\":[{\"type\":\"text\",\"text\":\"Retrieved response\"}]"
+            + "\"steps\":[{\"type\":\"model_output\",\"content\":[{\"type\":\"text\",\"text\":\"Retrieved response\"}]}]"
             + "}";
     ResponseBody body = ResponseBody.create(responseJson, MediaType.get("application/json"));
     when(mockedResponse.getBody()).thenReturn(body);
@@ -334,7 +335,7 @@ public class InteractionsMockitoTest {
 
     // Assert
     assertNotNull(result);
-    assertTrue(result.outputs().isPresent());
+    assertFalse(result.getModelOutputContents().isEmpty());
     assertTrue(config.apiVersion().isPresent());
     assertEquals("v1beta", config.apiVersion().get());
   }
@@ -351,9 +352,8 @@ public class InteractionsMockitoTest {
             + "\"model\":\""
             + MODEL_ID
             + "\","
-            + "\"outputs\":["
-            + "{\"type\":\"text\",\"text\":\"First output\"},"
-            + "{\"type\":\"text\",\"text\":\"Second output\"}"
+            + "\"steps\":["
+            + "{\"type\":\"model_output\",\"content\":[{\"type\":\"text\",\"text\":\"First output\"},{\"type\":\"text\",\"text\":\"Second output\"}]}"
             + "],"
             + "\"created\":\"2025-01-22T10:00:00Z\","
             + "\"updated\":\"2025-01-22T10:01:00Z\","
@@ -373,8 +373,8 @@ public class InteractionsMockitoTest {
 
     // Assert - Verify complex response is fully parsed
     assertEquals(INTERACTION_ID, result.id());
-    assertTrue(result.outputs().isPresent());
-    assertEquals(2, result.outputs().get().size());
+    assertFalse(result.getModelOutputContents().isEmpty());
+    assertEquals(2, result.getModelOutputContents().size());
     assertTrue(result.created().isPresent());
     assertTrue(result.updated().isPresent());
     assertTrue(result.usage().isPresent());
@@ -623,7 +623,7 @@ public class InteractionsMockitoTest {
             + "\"model\":\"" + MODEL_ID + "\","
             + "\"created\":\"2025-01-24T10:00:00Z\","
             + "\"updated\":\"2025-01-24T10:01:00Z\","
-            + "\"outputs\":[{\"type\":\"text\",\"text\":\"Response\"}],"
+            + "\"steps\":[{\"type\":\"model_output\",\"content\":[{\"type\":\"text\",\"text\":\"Response\"}]}],"
             + "\"usage\":{\"total_token_count\":150,\"prompt_token_count\":50,\"candidates_token_count\":100},"
             + "\"previous_interaction_id\":\"prev-123\""
             + "}";
@@ -644,7 +644,7 @@ public class InteractionsMockitoTest {
     assertTrue(result.model().isPresent());
     assertTrue(result.created().isPresent());
     assertTrue(result.updated().isPresent());
-    assertTrue(result.outputs().isPresent());
+    assertFalse(result.getModelOutputContents().isEmpty());
     assertTrue(result.usage().isPresent());
     assertTrue(result.previousInteractionId().isPresent());
   }

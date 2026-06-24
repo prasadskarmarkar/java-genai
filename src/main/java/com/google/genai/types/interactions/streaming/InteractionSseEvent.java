@@ -30,13 +30,13 @@ import java.util.Optional;
  * <p>Event sequence for a typical streaming interaction:
  *
  * <ol>
- *   <li>{@link InteractionEvent} with {@code event_type="interaction.start"} - Interaction has
- *       begun
- *   <li>{@link ContentStart} - A new content item is starting (one per output)
+ *   <li>{@link InteractionEvent} with {@code event_type="interaction.created"} - Stream began
+ *   <li>{@link StepStart} - A new step has started
+ *   <li>{@link ContentStart} - A new content item is starting within a step
  *   <li>{@link ContentDelta} - Incremental content updates (multiple per content)
  *   <li>{@link ContentStop} - Content item has completed
- *   <li>{@link InteractionEvent} with {@code event_type="interaction.complete"} - Interaction has
- *       finished
+ *   <li>{@link StepStop} - A step has completed
+ *   <li>{@link InteractionEvent} with {@code event_type="interaction.completed"} - Stream finished
  * </ol>
  *
  * <p>Additionally:
@@ -62,12 +62,15 @@ import java.util.Optional;
     property = "event_type",
     visible = true)
 @JsonSubTypes({
-  @JsonSubTypes.Type(value = InteractionEvent.class, name = "interaction.start"),
-  @JsonSubTypes.Type(value = InteractionEvent.class, name = "interaction.complete"),
+  @JsonSubTypes.Type(value = InteractionEvent.class, name = "interaction.created"),
+  @JsonSubTypes.Type(value = InteractionEvent.class, name = "interaction.completed"),
   @JsonSubTypes.Type(value = InteractionStatusUpdate.class, name = "interaction.status_update"),
   @JsonSubTypes.Type(value = ContentStart.class, name = "content.start"),
   @JsonSubTypes.Type(value = ContentDelta.class, name = "content.delta"),
   @JsonSubTypes.Type(value = ContentStop.class, name = "content.stop"),
+  @JsonSubTypes.Type(value = StepStart.class, name = "step.start"),
+  @JsonSubTypes.Type(value = StepDelta.class, name = "step.delta"),
+  @JsonSubTypes.Type(value = StepStop.class, name = "step.stop"),
   @JsonSubTypes.Type(value = ErrorEvent.class, name = "error")
 })
 public interface InteractionSseEvent {

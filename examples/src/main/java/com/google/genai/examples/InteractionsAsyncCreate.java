@@ -101,8 +101,8 @@ public final class InteractionsAsyncCreate {
     System.out.println("  Interaction ID: " + interaction.id());
     System.out.println("  Status: " + interaction.status());
 
-    if (interaction.outputs().isPresent() && !interaction.outputs().get().isEmpty()) {
-      for (Content output : interaction.outputs().get()) {
+    if (!interaction.getModelOutputContents().isEmpty()) {
+      for (Content output : interaction.getModelOutputContents()) {
         if (output instanceof TextContent) {
           System.out.println("  Text: " + ((TextContent) output).text().orElse("(empty)"));
         } else {

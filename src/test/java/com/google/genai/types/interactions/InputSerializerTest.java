@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.google.genai.types.interactions.content.ImageContent;
 import com.google.genai.types.interactions.content.TextContent;
+import com.google.genai.types.interactions.UrlCitation;
 import java.util.Arrays;
 import org.junit.jupiter.api.Test;
 
@@ -365,7 +366,7 @@ public class InputSerializerTest {
   @Test
   public void testSerializeComplexContent() {
     // Arrange - content with annotations
-    Annotation annotation = Annotation.of(0, 10, "https://example.com");
+    UrlCitation annotation = UrlCitation.builder().url("https://example.com").startIndex(0).endIndex(10).build();
     TextContent text = TextContent.builder()
         .text("Source text")
         .annotations(annotation)
@@ -379,7 +380,7 @@ public class InputSerializerTest {
     assertTrue(json.contains("\"type\":\"text\""));
     assertTrue(json.contains("\"text\":\"Source text\""));
     assertTrue(json.contains("\"annotations\""));
-    assertTrue(json.contains("\"source\":\"https://example.com\""));
+    assertTrue(json.contains("\"url\":\"https://example.com\""));
   }
 
   @Test

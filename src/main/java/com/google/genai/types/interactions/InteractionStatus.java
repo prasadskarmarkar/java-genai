@@ -71,7 +71,13 @@ public class InteractionStatus {
     FAILED("failed"),
 
     /** The interaction has been cancelled. */
-    CANCELLED("cancelled");
+    CANCELLED("cancelled"),
+
+    /** The interaction completed but with incomplete results (e.g., max tokens hit). */
+    INCOMPLETE("incomplete"),
+
+    /** The interaction was halted because the token budget was exceeded. */
+    BUDGET_EXCEEDED("budget_exceeded");
 
     private final String value;
 

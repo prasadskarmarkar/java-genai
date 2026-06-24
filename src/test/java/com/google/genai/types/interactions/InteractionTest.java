@@ -25,6 +25,7 @@ import com.google.genai.types.interactions.GenerationConfig;
 import com.google.genai.types.interactions.content.Content;
 import com.google.genai.types.interactions.content.TextContent;
 import com.google.genai.types.interactions.content.ThoughtContent;
+import com.google.genai.types.interactions.steps.ModelOutputStep;
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
@@ -41,7 +42,6 @@ public class InteractionTest {
             .id("test-id")
             .status(new InteractionStatus(InteractionStatus.Known.COMPLETED))
             .model("gemini-2.5-flash")
-            .role("user")
             .build();
 
     // Assert
@@ -49,8 +49,6 @@ public class InteractionTest {
     assertEquals(new InteractionStatus(InteractionStatus.Known.COMPLETED), interaction.status());
     assertTrue(interaction.model().isPresent());
     assertEquals("gemini-2.5-flash", interaction.model().get());
-    assertTrue(interaction.role().isPresent());
-    assertEquals("user", interaction.role().get());
   }
 
   @Test
@@ -63,13 +61,13 @@ public class InteractionTest {
         Interaction.builder()
             .id("test-id")
             .status(new InteractionStatus(InteractionStatus.Known.COMPLETED))
-            .outputs(textContent)
+            .steps(ModelOutputStep.builder().content(textContent).build())
             .build();
 
     // Assert
-    assertTrue(interaction.outputs().isPresent());
-    assertEquals(1, interaction.outputs().get().size());
-    assertTrue(interaction.outputs().get().get(0) instanceof TextContent);
+    assertFalse(interaction.getModelOutputContents().isEmpty());
+    assertEquals(1, interaction.getModelOutputContents().size());
+    assertTrue(interaction.getModelOutputContents().get(0) instanceof TextContent);
   }
 
   @Test
@@ -277,11 +275,9 @@ public class InteractionTest {
     List<Turn> turns =
         Arrays.asList(
             Turn.builder()
-                .role("user")
                 .content(TextContent.builder().text("Hello").build())
                 .build(),
             Turn.builder()
-                .role("model")
                 .content(TextContent.builder().text("Hi there").build())
                 .build());
 
@@ -305,12 +301,10 @@ public class InteractionTest {
     // Arrange
     Turn turn1 =
         Turn.builder()
-            .role("user")
             .content(TextContent.builder().text("Question").build())
             .build();
     Turn turn2 =
         Turn.builder()
-            .role("model")
             .content(TextContent.builder().text("Answer").build())
             .build();
 
@@ -408,14 +402,12 @@ public class InteractionTest {
             .build();
 
     // Act
-    Interaction modified = original.toBuilder().role("assistant").build();
+    Interaction modified = original.toBuilder().model("gemini-2.5-pro").build();
 
     // Assert
     assertEquals("test-id", modified.id());
     assertEquals(new InteractionStatus(InteractionStatus.Known.COMPLETED), modified.status());
-    assertEquals("gemini-2.5-flash", modified.model().get());
-    assertTrue(modified.role().isPresent());
-    assertEquals("assistant", modified.role().get());
+    assertEquals("gemini-2.5-pro", modified.model().get());
   }
 
   @Test
@@ -609,8 +601,8 @@ public class InteractionTest {
     // Arrange - create turns using both methods
     Turn factoryTurn = Turn.user("Test message");
     Turn builderTurn = Turn.builder()
-        .role("user")
         .content(TextContent.of("Test message"))
+        .role("user")
         .build();
 
     // Assert - they should produce equivalent JSON

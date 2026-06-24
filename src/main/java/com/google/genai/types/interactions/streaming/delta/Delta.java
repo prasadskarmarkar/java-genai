@@ -55,7 +55,11 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
   @JsonSubTypes.Type(value = McpServerToolCallDelta.class, name = "mcp_server_tool_call"),
   @JsonSubTypes.Type(value = McpServerToolResultDelta.class, name = "mcp_server_tool_result"),
   @JsonSubTypes.Type(value = FileSearchCallDelta.class, name = "file_search_call"),
-  @JsonSubTypes.Type(value = FileSearchResultDelta.class, name = "file_search_result")
+  @JsonSubTypes.Type(value = FileSearchResultDelta.class, name = "file_search_result"),
+  @JsonSubTypes.Type(value = ArgumentsDelta.class, name = "arguments_delta"),
+  @JsonSubTypes.Type(value = GoogleMapsCallDelta.class, name = "google_maps_call"),
+  @JsonSubTypes.Type(value = GoogleMapsResultDelta.class, name = "google_maps_result"),
+  @JsonSubTypes.Type(value = TextAnnotationDelta.class, name = "text_annotation_delta")
 })
 public interface Delta {
   // Marker interface - Jackson handles type discrimination via annotations

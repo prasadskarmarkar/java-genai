@@ -325,7 +325,7 @@ public class StreamingEventsTest {
 
     // Assert
     assertTrue(event.eventType().isPresent());
-    assertEquals("interaction.start", event.eventType().get());
+    assertEquals("interaction.created", event.eventType().get());
     assertTrue(event.isStart());
     assertFalse(event.isComplete());
   }
@@ -340,7 +340,7 @@ public class StreamingEventsTest {
 
     // Assert
     assertTrue(event.eventType().isPresent());
-    assertEquals("interaction.complete", event.eventType().get());
+    assertEquals("interaction.completed", event.eventType().get());
     assertFalse(event.isStart());
     assertTrue(event.isComplete());
   }
@@ -393,7 +393,7 @@ public class StreamingEventsTest {
     String json = event.toJson();
 
     // Assert
-    assertTrue(json.contains("\"event_type\":\"interaction.start\""));
+    assertTrue(json.contains("\"event_type\":\"interaction.created\""));
     assertTrue(json.contains("\"event_id\":\"int-evt-ser\""));
   }
 
@@ -410,8 +410,8 @@ public class StreamingEventsTest {
   @Test
   public void testInteractionEventConstants() {
     // Assert
-    assertEquals("interaction.start", InteractionEvent.EVENT_TYPE_START);
-    assertEquals("interaction.complete", InteractionEvent.EVENT_TYPE_COMPLETE);
+    assertEquals("interaction.created", InteractionEvent.EVENT_TYPE_START);
+    assertEquals("interaction.completed", InteractionEvent.EVENT_TYPE_COMPLETE);
   }
 
   // ========== InteractionStatusUpdate Tests ==========
@@ -570,7 +570,7 @@ public class StreamingEventsTest {
   @Test
   public void testPolymorphicDeserializationInteractionStart() {
     // Arrange
-    String json = "{\"event_type\":\"interaction.start\",\"event_id\":\"poly-int-start\"}";
+    String json = "{\"event_type\":\"interaction.created\",\"event_id\":\"poly-int-start\"}";
     JsonNode jsonNode = JsonSerializable.stringToJsonNode(json);
 
     // Act
@@ -586,7 +586,7 @@ public class StreamingEventsTest {
   @Test
   public void testPolymorphicDeserializationInteractionComplete() {
     // Arrange
-    String json = "{\"event_type\":\"interaction.complete\",\"event_id\":\"poly-int-complete\"}";
+    String json = "{\"event_type\":\"interaction.completed\",\"event_id\":\"poly-int-complete\"}";
     JsonNode jsonNode = JsonSerializable.stringToJsonNode(json);
 
     // Act

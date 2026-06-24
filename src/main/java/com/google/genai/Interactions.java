@@ -326,7 +326,7 @@ public final class Interactions {
    *
    * <pre>{@code
    * Interaction response = client.interactions.create("gemini-2.5-flash", "What is 2+2?");
-   * System.out.println(response.outputs());
+   * System.out.println(response.getModelOutputContents());
    * }</pre>
    *
    * <p>Note: The Interactions API is in beta and subject to change.

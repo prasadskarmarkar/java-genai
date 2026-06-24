@@ -20,22 +20,25 @@ import com.google.genai.Client;
 import com.google.genai.types.interactions.CreateInteractionConfig;
 import com.google.genai.types.interactions.GoogleSearchResult;
 import com.google.genai.types.interactions.Interaction;
-import com.google.genai.types.interactions.content.Content;
-import com.google.genai.types.interactions.content.GoogleSearchCallContent;
-import com.google.genai.types.interactions.content.GoogleSearchResultContent;
 import com.google.genai.types.interactions.content.TextContent;
+import com.google.genai.types.interactions.steps.GoogleSearchCallStep;
+import com.google.genai.types.interactions.steps.GoogleSearchResultStep;
+import com.google.genai.types.interactions.steps.ModelOutputStep;
+import com.google.genai.types.interactions.steps.Step;
 import com.google.genai.types.interactions.tools.GoogleSearch;
 import java.util.List;
 
 /**
- * Example: Google Search Tool with the Interactions API
+ * Example: Google Search Tool with the Interactions API.
  *
- * <p>Demonstrates how to use the GoogleSearch tool to enable the model to search the web.
+ * <p>In the step-based response model, Google Search calls appear as {@link GoogleSearchCallStep}
+ * and results as {@link GoogleSearchResultStep} in the interaction's {@code steps} list. The final
+ * model text output arrives in a {@link ModelOutputStep}.
  *
  * <p>To run this example:
  * <ol>
- *   <li>Set the GOOGLE_API_KEY environment variable: {@code export GOOGLE_API_KEY=YOUR_API_KEY}
- *   <li>Compile the examples: {@code mvn clean compile}
+ *   <li>Set: {@code export GOOGLE_API_KEY=YOUR_API_KEY}
+ *   <li>Compile: {@code mvn clean compile}
  *   <li>Run: {@code mvn exec:java -Dexec.mainClass="com.google.genai.examples.InteractionsGoogleSearch"}
  * </ol>
  *
@@ -79,37 +82,43 @@ public final class InteractionsGoogleSearch {
   }
 
   private static void printResults(Interaction interaction) {
-    System.out.println("Results:");
-    System.out.println("  Interaction ID: " + interaction.id());
-    System.out.println("  Status: " + interaction.status());
+    System.out.println("Interaction ID: " + interaction.id());
+    System.out.println("Status: " + interaction.status());
 
-    if (!interaction.outputs().isPresent() || interaction.outputs().get().isEmpty()) {
-      System.out.println("  Outputs: (none)");
+    if (!interaction.steps().isPresent() || interaction.steps().get().isEmpty()) {
+      System.out.println("No steps in response.");
       return;
     }
 
-    for (Content output : interaction.outputs().get()) {
-      if (output instanceof TextContent) {
-        System.out.println("  Text: " + ((TextContent) output).text().orElse("(empty)"));
-      } else if (output instanceof GoogleSearchCallContent) {
-        GoogleSearchCallContent searchCall = (GoogleSearchCallContent) output;
-        System.out.println("  GoogleSearchCall: id=" + searchCall.id());
-        if (searchCall.arguments().isPresent()) {
-          System.out.println("    queries: " + searchCall.arguments().get().queries().orElse(List.of()));
-        }
-      } else if (output instanceof GoogleSearchResultContent) {
-        GoogleSearchResultContent searchResult = (GoogleSearchResultContent) output;
-        System.out.println("  GoogleSearchResult: callId=" + searchResult.callId().orElse("N/A"));
-        if (searchResult.result().isPresent()) {
-          List<GoogleSearchResult> results = searchResult.result().get();
-          System.out.println("    results count: " + results.size());
-          for (int i = 0; i < Math.min(3, results.size()); i++) {
-            GoogleSearchResult result = results.get(i);
-            System.out.println("    [" + (i + 1) + "] " + result.title().orElse("N/A"));
+    for (Step step : interaction.steps().get()) {
+      if (step instanceof GoogleSearchCallStep) {
+        GoogleSearchCallStep callStep = (GoogleSearchCallStep) step;
+        System.out.println("\n[GoogleSearchCall] id=" + callStep.id().orElse("?"));
+        callStep.arguments().ifPresent(args ->
+            System.out.println("  queries: " + args.queries().orElse(List.of())));
+
+      } else if (step instanceof GoogleSearchResultStep) {
+        GoogleSearchResultStep resultStep = (GoogleSearchResultStep) step;
+        System.out.println("\n[GoogleSearchResult] callId=" + resultStep.callId().orElse("?"));
+        resultStep.result().ifPresent(results -> {
+          List<GoogleSearchResult> items = (List<GoogleSearchResult>) results;
+          System.out.println("  " + items.size() + " result(s):");
+          for (int i = 0; i < Math.min(3, items.size()); i++) {
+            System.out.println("  [" + (i + 1) + "] " + items.get(i).title().orElse("N/A")
+                + " — " + items.get(i).url().orElse(""));
           }
-        }
-      } else {
-        System.out.println("  " + output.getClass().getSimpleName());
+        });
+
+      } else if (step instanceof ModelOutputStep) {
+        ModelOutputStep outputStep = (ModelOutputStep) step;
+        System.out.println("\n[ModelOutput]");
+        outputStep.content().ifPresent(contents -> {
+          for (com.google.genai.types.interactions.content.Content c : contents) {
+            if (c instanceof TextContent) {
+              System.out.println("  " + ((TextContent) c).text().orElse("(empty)"));
+            }
+          }
+        });
       }
     }
   }

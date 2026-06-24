@@ -248,12 +248,12 @@ public final class InteractionsCreateExample {
     System.out.println("  Interaction ID: " + interaction.id());
     System.out.println("  Status: " + interaction.status());
 
-    if (!interaction.outputs().isPresent() || interaction.outputs().get().isEmpty()) {
+    if (interaction.getModelOutputContents().isEmpty()) {
       System.out.println("  Outputs: (none)");
       return;
     }
 
-    for (Content output : interaction.outputs().get()) {
+    for (Content output : interaction.getModelOutputContents()) {
       if (output instanceof TextContent) {
         TextContent t = (TextContent) output;
         String text = t.text().orElse("(empty)");

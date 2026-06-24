@@ -43,5 +43,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
   @JsonSubTypes.Type(value = ComputerUse.class, name = "computer_use"),
   @JsonSubTypes.Type(value = McpServer.class, name = "mcp_server"),
   @JsonSubTypes.Type(value = FileSearch.class, name = "file_search"),
+  @JsonSubTypes.Type(value = GoogleMaps.class, name = "google_maps"),
+  @JsonSubTypes.Type(value = Retrieval.class, name = "retrieval"),
 })
 public interface Tool {}

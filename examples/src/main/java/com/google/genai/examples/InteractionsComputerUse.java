@@ -131,8 +131,8 @@ public final class InteractionsComputerUse {
       System.out.println("Response received. Interaction ID: " + response.id());
       System.out.println();
 
-      if (response.outputs().isPresent()) {
-        for (Content content : response.outputs().get()) {
+      if (!response.getModelOutputContents().isEmpty()) {
+        for (Content content : response.getModelOutputContents()) {
           System.out.println("Content Type: " + content.getClass().getSimpleName());
 
           if (content instanceof TextContent) {

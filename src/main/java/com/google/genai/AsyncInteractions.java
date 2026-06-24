@@ -60,7 +60,7 @@ public final class AsyncInteractions {
    *     .build();
    * CompletableFuture<Interaction> future = client.async.interactions.create(config);
    * future.thenAccept(interaction -> {
-   *     System.out.println("Response: " + interaction.outputs());
+   *     System.out.println("Response: " + interaction.getModelOutputContents());
    * });
    * }</pre>
    *
@@ -106,7 +106,7 @@ public final class AsyncInteractions {
    *     "gemini-2.5-flash",
    *     "What is the capital of France?");
    * future.thenAccept(interaction -> {
-   *     System.out.println("Response: " + interaction.outputs());
+   *     System.out.println("Response: " + interaction.getModelOutputContents());
    * });
    * }</pre>
    *

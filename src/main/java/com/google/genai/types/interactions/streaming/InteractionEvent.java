@@ -50,11 +50,11 @@ import java.util.Optional;
 public abstract class InteractionEvent extends JsonSerializable
     implements InteractionSseEvent {
 
-  /** Event type value for interaction start. */
-  public static final String EVENT_TYPE_START = "interaction.start";
+  /** Event type value for interaction created (stream started). */
+  public static final String EVENT_TYPE_START = "interaction.created";
 
-  /** Event type value for interaction complete. */
-  public static final String EVENT_TYPE_COMPLETE = "interaction.complete";
+  /** Event type value for interaction completed (stream finished). */
+  public static final String EVENT_TYPE_COMPLETE = "interaction.completed";
 
   @ExcludeFromGeneratedCoverageReport
   public static Builder builder() {

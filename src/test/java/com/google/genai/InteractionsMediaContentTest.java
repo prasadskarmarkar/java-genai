@@ -16,6 +16,7 @@
 
 package com.google.genai;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -605,6 +606,6 @@ public class InteractionsMediaContentTest {
     // Assert
     assertNotNull(interaction);
     assertNotNull(interaction.id());
-    assertTrue(interaction.outputs().isPresent());
+    assertFalse(interaction.getModelOutputContents().isEmpty());
   }
 }

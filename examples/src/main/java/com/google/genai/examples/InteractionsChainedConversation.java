@@ -248,11 +248,11 @@ public final class InteractionsChainedConversation {
   }
 
   private static String getTextOutput(Interaction interaction) {
-    if (!interaction.outputs().isPresent() || interaction.outputs().get().isEmpty()) {
+    if (interaction.getModelOutputContents().isEmpty()) {
       return "(no output)";
     }
 
-    for (Content output : interaction.outputs().get()) {
+    for (Content output : interaction.getModelOutputContents()) {
       if (output instanceof TextContent) {
         TextContent textContent = (TextContent) output;
         return textContent.text().orElse("(empty)");

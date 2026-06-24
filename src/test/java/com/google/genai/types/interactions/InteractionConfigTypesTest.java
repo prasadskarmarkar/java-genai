@@ -492,8 +492,8 @@ public class InteractionConfigTypesTest {
 
   @Test
   public void testInteractionStatusEnumCount() {
-    // Verify we have exactly 6 statuses (including UNSPECIFIED)
-    assertEquals(6, InteractionStatus.Known.values().length);
+    // Verify we have exactly 8 statuses (including UNSPECIFIED)
+    assertEquals(8, InteractionStatus.Known.values().length);
   }
 
   // ========== GoogleSearchResult Tests ==========

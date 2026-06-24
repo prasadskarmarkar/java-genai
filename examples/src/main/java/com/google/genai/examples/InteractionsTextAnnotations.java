@@ -33,168 +33,127 @@
 package com.google.genai.examples;
 
 import com.google.genai.Client;
-import com.google.genai.types.interactions.Interaction;
 import com.google.genai.types.interactions.Annotation;
+import com.google.genai.types.interactions.FileCitation;
+import com.google.genai.types.interactions.Interaction;
+import com.google.genai.types.interactions.PlaceCitation;
+import com.google.genai.types.interactions.UrlCitation;
 import com.google.genai.types.interactions.content.Content;
 import com.google.genai.types.interactions.content.TextContent;
 import java.util.List;
 
 /**
- * TextContent Annotations Testing Example
+ * Example: Text Annotations (Citations) with the Interactions API.
  *
- * <p>This example demonstrates testing for the annotations field in TextContent responses
- * from the Interactions API. The annotations field provides citation information for
- * model-generated content.
- *
- * <p>Structure: TextContent contains:
- * - type: "text"
- * - text: The actual text content
- * - annotations: Optional array of Annotation objects for citations
- *
- * <p>Each Annotation contains:
- * - start_index: Start byte position of cited segment
- * - end_index: End byte position of cited segment (exclusive)
- * - source: Source reference (URL, title, etc.)
- *
- * <p>This example tests various prompts to see if the API returns annotations.
+ * <p>Demonstrates how to access citation annotations on TextContent responses. Each annotation is a
+ * discriminated union: {@link UrlCitation}, {@link FileCitation}, or {@link PlaceCitation}.
  *
  * <p>Note: The Interactions API is in beta and subject to change.
  */
 public final class InteractionsTextAnnotations {
 
+  private static final String MODEL = "gemini-3-flash-preview";
+
   public static void main(String[] args) {
     Client client = new Client();
 
-    System.out.println("=== TextContent Annotations Testing Example ===\n");
-    System.out.println("Testing if the Interactions API returns annotations in TextContent\n");
+    System.out.println("=== Interactions API: Text Annotations Example ===\n");
 
-    // Test Case 1: Simple factual question
+    testAnnotations(client, "Factual question", "What is the capital of France?");
+
     testAnnotations(
         client,
-        "Test Case 1: Simple Factual Question",
-        "What is the capital of France?");
-
-    // Test Case 2: Question that might trigger citations
-    testAnnotations(
-        client,
-        "Test Case 2: Request with Explicit Citation Request",
+        "Citation request",
         "Tell me about climate change and cite your sources.");
 
-    // Test Case 3: Research-oriented question
     testAnnotations(
         client,
-        "Test Case 3: Research Question",
-        "What are the latest advancements in quantum computing? Please provide citations.");
-
-    // Test Case 4: Grounding/search request
-    testAnnotations(
-        client,
-        "Test Case 4: Grounding Request",
-        "Search for information about the Paris Agreement and summarize it with citations.");
+        "Research question",
+        "What are the latest advancements in quantum computing? Provide citations.");
 
     System.out.println("\n=== All test cases completed ===");
   }
 
-  private static final String MODEL = "gemini-3-flash-preview";
-
-  /**
-   * Test helper that makes an API call and checks for annotations in the response.
-   */
-  private static void testAnnotations(Client client, String testName, String prompt) {
-    System.out.println("\n--- " + testName + " ---\n");
-
+  private static void testAnnotations(Client client, String label, String prompt) {
+    System.out.println("\n--- " + label + " ---");
     try {
-      // Using the convenience overload: create(model, text)
-      System.out.println("=== REQUEST ===");
-      System.out.println("Model: " + MODEL);
-      System.out.println("Input: " + prompt);
-      System.out.println();
-
       Interaction response = client.interactions.create(MODEL, prompt);
-
-      System.out.println("=== RESPONSE ===");
-      System.out.println(response.toJson());
-      System.out.println();
-
       analyzeAnnotations(response);
-
     } catch (Exception e) {
-      System.err.println("ERROR in " + testName + ":");
-      System.err.println("  Exception: " + e.getClass().getName());
-      System.err.println("  Message: " + e.getMessage());
-      e.printStackTrace();
+      System.err.println("Error: " + e.getMessage());
     }
   }
 
-  /**
-   * Analyzes interaction outputs to find and display annotations.
-   */
   private static void analyzeAnnotations(Interaction interaction) {
-    System.out.println("Results:");
-
-    if (!interaction.outputs().isPresent() || interaction.outputs().get().isEmpty()) {
-      System.out.println("  ❌ No outputs found in response");
+    List<Content> outputs = interaction.getModelOutputContents();
+    if (outputs.isEmpty()) {
+      System.out.println("  No model output.");
       return;
     }
 
-    boolean foundAnnotations = false;
-    int textContentCount = 0;
     int totalAnnotations = 0;
+    for (Content content : outputs) {
+      if (!(content instanceof TextContent)) {
+        continue;
+      }
+      TextContent text = (TextContent) content;
+      System.out.println("  Text: " + text.text().orElse("(empty)"));
 
-    for (Content content : interaction.outputs().get()) {
-      if (content instanceof TextContent) {
-        textContentCount++;
-        TextContent textContent = (TextContent) content;
+      if (!text.annotations().isPresent() || text.annotations().get().isEmpty()) {
+        System.out.println("  (no annotations)");
+        continue;
+      }
 
-        System.out.println("\n  TextContent #" + textContentCount + ":");
-        System.out.println("    Text: " + textContent.text().orElse("(empty)"));
+      List<Annotation> annotations = text.annotations().get();
+      totalAnnotations += annotations.size();
+      System.out.println("  Annotations (" + annotations.size() + "):");
 
-        if (textContent.annotations().isPresent() && !textContent.annotations().get().isEmpty()) {
-          foundAnnotations = true;
-          List<Annotation> annotations = textContent.annotations().get();
-          totalAnnotations += annotations.size();
-
-          System.out.println("    ✅ ANNOTATIONS FOUND: " + annotations.size() + " annotation(s)");
-
-          for (int i = 0; i < annotations.size(); i++) {
-            Annotation ann = annotations.get(i);
-            System.out.println("\n      Annotation " + (i + 1) + ":");
-            System.out.println("        Start Index: " + ann.startIndex().orElse(null));
-            System.out.println("        End Index: " + ann.endIndex().orElse(null));
-            System.out.println("        Source: " + ann.source().orElse("(none)"));
-
-            // Show the cited text segment if indices are present
-            if (ann.startIndex().isPresent()
-                && ann.endIndex().isPresent()
-                && textContent.text().isPresent()) {
-              String text = textContent.text().get();
-              int start = ann.startIndex().get();
-              int end = ann.endIndex().get();
-              if (start >= 0 && end <= text.length() && start < end) {
-                String citedText = text.substring(start, end);
-                System.out.println("        Cited Text: \"" + citedText + "\"");
-              }
-            }
-          }
-        } else {
-          System.out.println("    ❌ No annotations found in this TextContent");
-        }
+      for (int i = 0; i < annotations.size(); i++) {
+        Annotation ann = annotations.get(i);
+        System.out.println("    [" + (i + 1) + "] " + describeAnnotation(ann, text));
       }
     }
 
-    System.out.println("\n  SUMMARY:");
-    System.out.println("    Total TextContent blocks: " + textContentCount);
-    System.out.println("    Total annotations found: " + totalAnnotations);
+    System.out.println("  Total annotations: " + totalAnnotations);
+  }
 
-    if (foundAnnotations) {
-      System.out.println("    ✅ SUCCESS: The API returned annotations!");
-    } else {
-      System.out.println("    ⚠️  The API did not return annotations for this request.");
-      System.out.println("       This could mean:");
-      System.out.println("       - The model didn't use external sources");
-      System.out.println("       - The annotations feature may not be enabled yet");
-      System.out.println("       - This specific prompt didn't trigger citations");
+  private static String describeAnnotation(Annotation ann, TextContent textContent) {
+    if (ann instanceof UrlCitation) {
+      UrlCitation url = (UrlCitation) ann;
+      StringBuilder sb = new StringBuilder("UrlCitation");
+      url.url().ifPresent(u -> sb.append(" url=").append(u));
+      url.title().ifPresent(t -> sb.append(" title=\"").append(t).append("\""));
+      appendRange(sb, url.startIndex().orElse(null), url.endIndex().orElse(null), textContent);
+      return sb.toString();
+    } else if (ann instanceof FileCitation) {
+      FileCitation file = (FileCitation) ann;
+      StringBuilder sb = new StringBuilder("FileCitation");
+      file.fileName().ifPresent(f -> sb.append(" file=").append(f));
+      file.documentUri().ifPresent(u -> sb.append(" uri=").append(u));
+      appendRange(sb, file.startIndex().orElse(null), file.endIndex().orElse(null), textContent);
+      return sb.toString();
+    } else if (ann instanceof PlaceCitation) {
+      PlaceCitation place = (PlaceCitation) ann;
+      StringBuilder sb = new StringBuilder("PlaceCitation");
+      place.name().ifPresent(n -> sb.append(" name=").append(n));
+      place.placeId().ifPresent(p -> sb.append(" placeId=").append(p));
+      appendRange(sb, place.startIndex().orElse(null), place.endIndex().orElse(null), textContent);
+      return sb.toString();
     }
+    return ann.getClass().getSimpleName();
+  }
+
+  private static void appendRange(
+      StringBuilder sb, Integer start, Integer end, TextContent textContent) {
+    if (start == null || end == null) {
+      return;
+    }
+    sb.append(" [").append(start).append(",").append(end).append(")");
+    textContent.text().ifPresent(t -> {
+      if (start >= 0 && end <= t.length() && start < end) {
+        sb.append(" \"").append(t, start, end).append("\"");
+      }
+    });
   }
 
   private InteractionsTextAnnotations() {}

@@ -23,135 +23,133 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-/** Tests for Annotation type. */
+/** Tests for Annotation discriminated union subtypes. */
 public class AnnotationTest {
 
   @Test
-  public void testAnnotationBuilder() {
-    // Arrange & Act
-    Annotation annotation =
-        Annotation.builder()
+  public void testUrlCitationBuilder() {
+    UrlCitation citation =
+        UrlCitation.builder()
+            .url("https://example.com/source1")
+            .title("Example Source")
             .startIndex(0)
             .endIndex(25)
-            .source("https://example.com/source1")
             .build();
 
-    // Assert
-    assertTrue(annotation.startIndex().isPresent());
-    assertEquals(0, annotation.startIndex().get());
-    assertTrue(annotation.endIndex().isPresent());
-    assertEquals(25, annotation.endIndex().get());
-    assertTrue(annotation.source().isPresent());
-    assertEquals("https://example.com/source1", annotation.source().get());
+    assertTrue(citation.url().isPresent());
+    assertEquals("https://example.com/source1", citation.url().get());
+    assertTrue(citation.title().isPresent());
+    assertEquals("Example Source", citation.title().get());
+    assertTrue(citation.startIndex().isPresent());
+    assertEquals(0, citation.startIndex().get());
+    assertTrue(citation.endIndex().isPresent());
+    assertEquals(25, citation.endIndex().get());
   }
 
   @Test
-  public void testAnnotationOfFactoryMethod() {
-    // Arrange & Act
-    Annotation annotation = Annotation.of(10, 50, "Wikipedia: AI Article");
+  public void testUrlCitationOptionalFields() {
+    UrlCitation citation = UrlCitation.builder().url("https://example.com").build();
 
-    // Assert
-    assertTrue(annotation.startIndex().isPresent());
-    assertEquals(10, annotation.startIndex().get());
-    assertTrue(annotation.endIndex().isPresent());
-    assertEquals(50, annotation.endIndex().get());
-    assertTrue(annotation.source().isPresent());
-    assertEquals("Wikipedia: AI Article", annotation.source().get());
+    assertTrue(citation.url().isPresent());
+    assertFalse(citation.title().isPresent());
+    assertFalse(citation.startIndex().isPresent());
+    assertFalse(citation.endIndex().isPresent());
   }
 
   @Test
-  public void testAnnotationWithOptionalFields() {
-    // Arrange & Act - Build annotation with only source
-    Annotation annotation = Annotation.builder().source("https://source.com").build();
+  public void testFileCitationBuilder() {
+    FileCitation citation =
+        FileCitation.builder()
+            .documentUri("gs://bucket/doc.pdf")
+            .fileName("doc.pdf")
+            .source("Excerpt from document")
+            .pageNumber(3)
+            .startIndex(10)
+            .endIndex(50)
+            .build();
 
-    // Assert
-    assertFalse(annotation.startIndex().isPresent());
-    assertFalse(annotation.endIndex().isPresent());
-    assertTrue(annotation.source().isPresent());
-    assertEquals("https://source.com", annotation.source().get());
+    assertTrue(citation.documentUri().isPresent());
+    assertEquals("gs://bucket/doc.pdf", citation.documentUri().get());
+    assertTrue(citation.fileName().isPresent());
+    assertEquals("doc.pdf", citation.fileName().get());
+    assertTrue(citation.pageNumber().isPresent());
+    assertEquals(3, citation.pageNumber().get());
+    assertTrue(citation.startIndex().isPresent());
+    assertEquals(10, citation.startIndex().get());
   }
 
   @Test
-  public void testAnnotationClearMethods() {
-    // Arrange
-    Annotation.Builder builder =
-        Annotation.builder()
+  public void testPlaceCitationBuilder() {
+    PlaceCitation citation =
+        PlaceCitation.builder()
+            .placeId("ChIJN1t_tDeuEmsRUsoyG83frY4")
+            .name("Google Sydney")
+            .url("https://maps.google.com/place/google-sydney")
             .startIndex(0)
-            .endIndex(10)
-            .source("https://example.com");
+            .endIndex(15)
+            .build();
 
-    // Act - Clear fields
-    builder.clearStartIndex();
-    builder.clearEndIndex();
-    builder.clearSource();
-    Annotation annotation = builder.build();
-
-    // Assert
-    assertFalse(annotation.startIndex().isPresent());
-    assertFalse(annotation.endIndex().isPresent());
-    assertFalse(annotation.source().isPresent());
+    assertTrue(citation.placeId().isPresent());
+    assertEquals("ChIJN1t_tDeuEmsRUsoyG83frY4", citation.placeId().get());
+    assertTrue(citation.name().isPresent());
+    assertEquals("Google Sydney", citation.name().get());
+    assertTrue(citation.startIndex().isPresent());
+    assertEquals(0, citation.startIndex().get());
   }
 
   @Test
-  public void testAnnotationJsonSerialization() {
-    // Arrange
-    Annotation annotation = Annotation.of(0, 25, "https://example.com/source1");
+  public void testUrlCitationJsonSerialization() {
+    UrlCitation citation =
+        UrlCitation.builder()
+            .url("https://example.com/source1")
+            .startIndex(0)
+            .endIndex(25)
+            .build();
 
-    // Act
-    String json = annotation.toJson();
+    String json = citation.toJson();
 
-    // Assert
     assertNotNull(json);
+    assertTrue(json.contains("\"url\":\"https://example.com/source1\""));
     assertTrue(json.contains("\"start_index\":0"));
     assertTrue(json.contains("\"end_index\":25"));
-    assertTrue(json.contains("\"source\":\"https://example.com/source1\""));
+    assertTrue(json.contains("\"type\":\"url_citation\""));
   }
 
   @Test
-  public void testAnnotationJsonDeserialization() {
-    // Arrange
-    String json =
-        "{\"start_index\":15,\"end_index\":30,\"source\":\"https://example.com/citation\"}";
+  public void testUrlCitationClearMethods() {
+    UrlCitation.Builder builder =
+        UrlCitation.builder().url("https://example.com").startIndex(0).endIndex(10);
 
-    // Act
-    Annotation annotation = Annotation.fromJson(json);
+    builder.clearStartIndex();
+    builder.clearEndIndex();
+    UrlCitation citation = builder.build();
 
-    // Assert
-    assertTrue(annotation.startIndex().isPresent());
-    assertEquals(15, annotation.startIndex().get());
-    assertTrue(annotation.endIndex().isPresent());
-    assertEquals(30, annotation.endIndex().get());
-    assertTrue(annotation.source().isPresent());
-    assertEquals("https://example.com/citation", annotation.source().get());
+    assertTrue(citation.url().isPresent());
+    assertFalse(citation.startIndex().isPresent());
+    assertFalse(citation.endIndex().isPresent());
   }
 
   @Test
-  public void testAnnotationRoundTripSerialization() {
-    // Arrange
-    Annotation original = Annotation.of(5, 20, "https://source.org");
+  public void testUrlCitationToBuilder() {
+    UrlCitation original =
+        UrlCitation.builder().url("https://example.com").startIndex(10).endIndex(50).build();
 
-    // Act - Serialize and deserialize
-    String json = original.toJson();
-    Annotation deserialized = Annotation.fromJson(json);
+    UrlCitation modified = original.toBuilder().url("https://new-source.com").build();
 
-    // Assert - Fields match
-    assertEquals(original.startIndex(), deserialized.startIndex());
-    assertEquals(original.endIndex(), deserialized.endIndex());
-    assertEquals(original.source(), deserialized.source());
-  }
-
-  @Test
-  public void testAnnotationToBuilder() {
-    // Arrange
-    Annotation original = Annotation.of(10, 50, "https://example.com");
-
-    // Act - Modify via toBuilder
-    Annotation modified = original.toBuilder().source("https://new-source.com").build();
-
-    // Assert - Original unchanged, modified has new source
-    assertEquals("https://example.com", original.source().get());
-    assertEquals("https://new-source.com", modified.source().get());
+    assertEquals("https://example.com", original.url().get());
+    assertEquals("https://new-source.com", modified.url().get());
     assertEquals(original.startIndex(), modified.startIndex());
     assertEquals(original.endIndex(), modified.endIndex());
+  }
+
+  @Test
+  public void testAnnotationIsInterface() {
+    UrlCitation urlCitation = UrlCitation.builder().url("https://example.com").build();
+    FileCitation fileCitation = FileCitation.builder().documentUri("gs://bucket/doc.pdf").build();
+    PlaceCitation placeCitation = PlaceCitation.builder().placeId("place123").build();
+
+    assertTrue(urlCitation instanceof Annotation);
+    assertTrue(fileCitation instanceof Annotation);
+    assertTrue(placeCitation instanceof Annotation);
   }
 }

@@ -209,7 +209,7 @@ public final class InteractionsThoughtContent {
   private static void analyzeContent(Interaction interaction) {
     System.out.println("CONTENT ANALYSIS:");
 
-    if (!interaction.outputs().isPresent() || interaction.outputs().get().isEmpty()) {
+    if (interaction.getModelOutputContents().isEmpty()) {
       System.out.println("  No outputs found in response");
       return;
     }
@@ -218,9 +218,9 @@ public final class InteractionsThoughtContent {
     int textCount = 0;
     int otherCount = 0;
 
-    System.out.println("\n  Analyzing " + interaction.outputs().get().size() + " output(s):");
+    System.out.println("\n  Analyzing " + interaction.getModelOutputContents().size() + " output(s):");
 
-    for (Content content : interaction.outputs().get()) {
+    for (Content content : interaction.getModelOutputContents()) {
       System.out.println("\n    Content Type: " + content.getClass().getSimpleName());
 
       if (content instanceof ThoughtContent) {
@@ -277,9 +277,9 @@ public final class InteractionsThoughtContent {
     }
 
     // Display final text output
-    if (interaction.outputs().isPresent() && !interaction.outputs().get().isEmpty()) {
+    if (!interaction.getModelOutputContents().isEmpty()) {
       System.out.println("\n  FINAL TEXT OUTPUT:");
-      for (Content output : interaction.outputs().get()) {
+      for (Content output : interaction.getModelOutputContents()) {
         if (output instanceof TextContent) {
           System.out.println("    " + ((TextContent) output).text().orElse("(empty)"));
         }
